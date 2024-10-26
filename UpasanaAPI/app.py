@@ -1,12 +1,21 @@
 from flask import Flask, request, jsonify
 import psycopg2
-from config import get_db_connection, release_db_connection
+from model import db,Booking,User
+from booking import create_booking
+from datetime import datetime
+from config import get_db_connection, release_db_connection,Config
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
 from flask_cors import CORS
-
+import logging
 
 app = Flask(__name__)
+app.config.from_object(Config)
+
+
+# Initialize SQLAlchemy with app
+db.init_app(app)
+logging.basicConfig(level=logging.INFO)
 CORS(app)
 
 def validate_email(email):
@@ -17,6 +26,46 @@ def validate_mobile_number(mobile_number):
     pattern = r'^\d{10}$'  # Assuming a 10-digit mobile number
     return re.match(pattern, mobile_number)
 
+@app.route('/book', methods=['POST'])
+def book():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    zone = data.get('zone')
+    mahaprasad = data.get('mahaprasad', False)
+    booking_date_str = data.get('booking_date')
+
+    # Convert booking_date from string to date object
+    try:
+        booking_date = datetime.strptime(booking_date_str, '%Y-%m-%d').date()
+    except ValueError:
+        return jsonify({"error": "Invalid date format. Use YYYY-MM-DD."}), 400
+
+    # Call the create_booking function
+    return create_booking(user_id, zone, booking_date, mahaprasad)
+
+@app.route('/bookings', methods=['GET'])
+def get_all_bookings():
+    try:
+        # Fetch all bookings
+        bookings = Booking.query.all()
+        
+        # Convert booking data into a JSON-serializable format
+        booking_list = []
+        for booking in bookings:
+            booking_data = {
+                'id': booking.id,
+                'user_id': booking.user_id,
+                'booking_date': booking.booking_date.strftime('%Y-%m-%d'),
+                'zone': booking.zone,
+                'mahaprasad': booking.mahaprasad,
+                'created_at': booking.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            }
+            booking_list.append(booking_data)
+
+        return jsonify(booking_list), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 # Step 2: API route for inserting data into users table
 @app.route('/register', methods=['POST'])
 def register_user():
