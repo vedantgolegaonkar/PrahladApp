@@ -1,23 +1,19 @@
 from flask import Flask, request, jsonify
 import psycopg2
 from model import db,Booking,User
-from booking import create_booking
+from Booking import create_booking
 from datetime import datetime
 from config import get_db_connection, release_db_connection,Config
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
 from flask_cors import CORS
 import logging
-<<<<<<< HEAD
-=======
 
 # Set up basic logging configuration
 logging.basicConfig(level=logging.INFO)
->>>>>>> 88ffada7d0d8737981e7e6a24c3b0ca80a6c87ce
 
 app = Flask(__name__)
 app.config.from_object(Config)
-
 
 # Initialize SQLAlchemy with app
 db.init_app(app)
