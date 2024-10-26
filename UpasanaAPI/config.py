@@ -2,6 +2,9 @@ import psycopg2
 from psycopg2 import pool
 
 class Config:
+    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:admin123@localhost/Upasana"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
     # Database configurationclear
     DB_HOST = "localhost"
     DB_PORT = "5432"
