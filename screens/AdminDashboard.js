@@ -38,6 +38,7 @@ const AdminDashboard = () => {
       <Tab.Screen name="Notifications" component={NotificationsScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
+
   );
 };
 

@@ -62,3 +62,7 @@ password: A
 If you still face any issues logging in that may be due to the credentials change. Just go to the LoginScreen.js file in the screns folder, there you will find a an object named as **userCredentials**. The object has the latest credentials. Use that credentials to login.
 
 If you want to login with the admin account. You can find the latest credentials in the AdminLoginScreen.js file in the screens folder. There you will find a an object named as **adminCredentials**. The object has the latest credentials. Use that credentials to login.
+
+
+APP_ENV=development npx expo start
+APP_ENV=production npx expo start --no-dev --minify

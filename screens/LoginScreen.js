@@ -7,47 +7,95 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import Constants from 'expo-constants';
+import Toast from "react-native-toast-message";
+
 
 const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
-  const [email, setEmail] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
-
-  const userCredentials = {
-    email: "U",
-    password: "U",
-  };
+  
 
   const adminCredentials = {
-    email: "A",
+    mobileNumber: '8825784512',
     password: "A",
   };
-
-  const handleLogin = () => {
-    if (!email.trim()) {
-      Alert.alert("Error", "Email is Required");
-      return;
-    }
-
-    if (!password.trim()) {
-      Alert.alert("Error", "Password is Required");
-      return;
-    }
-
-    if (
-      email === adminCredentials.email &&
-      password === adminCredentials.password
-    ) {
-      onAdminLogin();
-    } else {
-      if (
-        email === userCredentials.email &&
-        password === userCredentials.password
-      ) {
-        onLogin();
-      } else {
-        Alert.alert("Error", "Invalid email or password");
+  
+    // Determine the environment safely
+    const appEnv = (Constants.manifest && Constants.manifest.releaseChannel) || 'dev';
+    const envConfig = Constants.manifest?.extra?.[appEnv] || { apiUrl: 'http://192.168.1.9:5000' }; // Default API URL
+  
+    // Use the environment-specific API URL
+    const apiUrl = envConfig.apiUrl;
+  
+    const handleLogin = async () => {
+      // Basic validation for mobile number and password fields
+      if (!mobileNumber.trim()) {
+        Alert.alert("Error", "Mobile Number is Required");
+        return;
       }
-    }
+      if (!password.trim()) {
+        Alert.alert("Error", "Password is Required");
+        return;
+      }
+    
+      if (
+        mobileNumber === adminCredentials.mobileNumber &&
+        password === adminCredentials.password
+      ) {
+        onAdminLogin();
+          return;
+        }
+
+      // Create the payload for the login request
+      const payload = {
+        mobile_number: mobileNumber.trim(),
+        password: password.trim(),
+      };
+    
+      try {
+        console.log('###################');
+        console.log('URL IS', `${apiUrl}/login`);
+        console.log('###################');
+        console.log('PAYLOAD IS', JSON.stringify(payload));
+        console.log('###################');
+    
+        // Send the login request to the backend
+        const response = await fetch(`${apiUrl}/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+    
+        console.log('RESPONSE IS ******', JSON.stringify(response));
+    
+        // Check if the login was successful
+        if (!response.ok) {
+          throw new Error("Login failed. Please check your mobile number and password.");
+        }
+    
+        const data = await response.json(); // Parse the response
+        Toast.show({
+          type: "success",
+          text1: "Login Successful",
+          text2: "You have been logged in successfully",
+        });
+    
+        // Optionally, navigate to the home page or dashboard after successful login
+       onLogin(navigation);
+    
+      } catch (error) {
+        Toast.show({
+          type: "error",
+          text1: "Login Failed",
+          text2: error.message || "An error occurred during login.",
+        });
+      }
+      
+    
+      
   };
 
   return (
@@ -55,9 +103,9 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
       <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
+        placeholder="Mobile Number"
+        value={mobileNumber}
+        onChangeText={setMobileNumber}
       />
       <TextInput
         style={styles.input}

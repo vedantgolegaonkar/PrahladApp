@@ -10,6 +10,7 @@ import Toast from "react-native-toast-message";
 import AdminDashboard from "../screens/AdminDashboard";
 import UserDashboard from "../screens/UserDashboard";
 import SlotBookingScreen from "../screens/SlotBookingScreen";
+import MembersDetailsScreen from "../screens/MembersDetailsScreen";
 
 
 const Stack = createStackNavigator();
@@ -96,6 +97,8 @@ const AppNavigator = () => {
            component={AdminDashboard}
            options={{ headerShown: false }}
          />
+         <Stack.Screen name="MemberDetails" component={MembersDetailsScreen} />
+
        </Stack.Navigator>
         ) : isAdminLoggedIn ? (
           <Stack.Navigator>
@@ -104,6 +107,7 @@ const AppNavigator = () => {
               component={AdminDashboard}
               options={{ headerShown: false }}
             />
+
           </Stack.Navigator>
         ) : (
           <Stack.Navigator>
