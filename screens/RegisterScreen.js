@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Toast from "react-native-toast-message";
+import Constants from 'expo-constants';
 
 const RegisterScreen = ({ navigation, onRegister }) => {
   const [firstName, setFirstName] = useState("");
@@ -30,9 +31,28 @@ const RegisterScreen = ({ navigation, onRegister }) => {
   const [anugrahit, setAnugrahit] = useState("no");
   const [gender, setGender] = useState("male");
 
-  const handleRegistration = () => {
-    if (!firstName.trim()) {
-      Alert.alert("Error", "FirstName is Required");
+  // Determine the environment safely
+  const appEnv = (Constants.manifest && Constants.manifest.releaseChannel) || 'dev';
+  // How to get this IP 
+  //cmd -->
+  //  ipconfig --Will Give
+  //        -->IPv4 Address. . . . . . . . . . . : 192.168.1.9
+  //Replace in apiUrl: 'http://192.168.1.9:5000'
+
+  const envConfig = Constants.manifest?.extra?.[appEnv] || { apiUrl: 'http://192.168.1.9:5000' }; // Default API URL
+
+  // Use the environment-specific API URL
+  const apiUrl = envConfig.apiUrl;
+
+  const handleRegistration = async () => {
+    console.log('###################');
+      console.log('URL IS',  `${appEnv}`);
+      console.log('###################');
+      console.log('###################');
+      console.log('envConfig IS',  JSON.stringify(Constants.manifest));
+      console.log('###################');
+     if (!firstName.trim()) {
+      Alert.alert("Error", "First Name is Required");
       return;
     }
     if (!lastName.trim()) {
@@ -47,7 +67,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       Alert.alert("Error", "Password is Required");
       return;
     }
-    if (!confirmPassword.trim()) {
+    if (password.trim() !== confirmPassword.trim()) {
       Alert.alert("Error", "Passwords do not match");
       return;
     }
@@ -67,6 +87,10 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       Alert.alert("Error", "Landmark is Required");
       return;
     }
+    if (!city.trim()) {
+      Alert.alert("Error", "City is Required");
+      return;
+    }
     if (!state.trim()) {
       Alert.alert("Error", "State is Required");
       return;
@@ -82,39 +106,68 @@ const RegisterScreen = ({ navigation, onRegister }) => {
     if (!gender.trim()) {
       Alert.alert("Error", "Gender is Required");
       return;
-    } 
-    if (password.trim() !== confirmPassword.trim()) {
-      Alert.alert("Error", "Passwords do not match");
-      return;
-    } if (
-      firstName.trim() &&
-      lastName.trim() &&
-      email.trim() &&
-      password.trim() &&
-      confirmPassword.trim() &&
-      password.trim() === confirmPassword.trim() &&
-      mobileNumber.trim() &&
-      fullAddress.trim() &&
-      area.trim() &&
-      landmark.trim() &&
-      city.trim() &&
-      state.trim() &&
-      pincode.trim()
-    ) {
-      onRegister(navigation);
+    }
+
+    // Create the JSON payload
+    const payload = {
+      first_name: firstName.trim(),
+      middle_name: middleName.trim(),
+      last_name: lastName.trim(),
+      email: email.trim(),
+      password: password.trim(),
+      confirm_password: confirmPassword.trim(),
+      mobile_number: mobileNumber.trim(),
+      alternate_mobile_number: altMobileNumber.trim(),
+      flat_no: flatNo.trim(),
+      full_address: fullAddress.trim(),
+      area: area.trim(),
+      landmark: landmark.trim(),
+      city: city.trim(),
+      state: state.trim(),
+      pincode: pincode.trim(),
+      anugrahit: anugrahit.trim(),
+      gender: gender.trim(),
+    };
+
+    // Send the registration request
+    try {
+
+      console.log('###################');
+      console.log('URL IS',  `${apiUrl}/register`);
+      console.log('###################');
+      console.log('###################');
+      console.log('PAYLOAD IS',  JSON.stringify(payload));
+      console.log('###################');
+      const response = await fetch(`${apiUrl}/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      console.log('RESPONSE IS ******',JSON.stringify(response));
+      if (!response.ok) {
+        
+        throw new Error("Registration failed. Please try again.");
+      }
+
+      const data = await response.json(); // Parse the response
       Toast.show({
         type: "success",
         text1: "Registration Successful",
         text2: "You have been registered successfully",
       });
+
+      // Optionally, you can navigate to another screen or reset form state
+      onRegister(navigation);
+
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Registration Failed",
+        text2: error.message || "An error occurred during registration.",
+      });
     }
-       else {
-        Toast.show({
-          type: "error",
-          text1: "Registration Failed",
-          text2: "Please fill in all the required fields",
-        })
-      }
   };
 
   return (

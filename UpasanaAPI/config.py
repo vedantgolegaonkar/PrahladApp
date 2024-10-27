@@ -2,12 +2,12 @@ import psycopg2
 from psycopg2 import pool
 
 class Config:
-    # Database configuration
+    # Database configurationclear
     DB_HOST = "localhost"
     DB_PORT = "5432"
     DB_NAME = "Upasana"
     DB_USER = "postgres"
-    DB_PASSWORD = "1234"
+    DB_PASSWORD = "Siddhant007*"
     
     # Create connection pool for better performance
     connection_pool = pool.SimpleConnectionPool(1, 20,
