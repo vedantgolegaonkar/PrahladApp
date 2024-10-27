@@ -301,6 +301,32 @@ def get_user_by_id(user_id):
         cursor.close()
         conn.close()
 
+# Example route to get bookings with user details
+@app.route('/bookings-with-users', methods=['GET'])
+def get_bookings_with_users():
+    # Perform the join query between Booking and User tables
+    results = (
+        db.session.query(Booking, User)
+        .join(User, User.id == Booking.user_id)
+        .all()
+    )
+    
+    # Format the data for JSON response
+    bookings_with_users = [
+        {
+           
+            "booking_date": booking.booking_date,
+            "zone": booking.zone,
+           
+            "user_first_name": user.first_name,
+            "user_last_name": user.last_name,
+            "user_member_id": user.id
+        }
+        for booking, user in results
+    ]
+    
+    return jsonify(bookings_with_users)
+
 # User login route
 @app.route('/login', methods=['POST'])
 def login():
