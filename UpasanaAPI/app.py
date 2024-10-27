@@ -9,14 +9,11 @@ import re
 from flask_cors import CORS
 import logging
 
-
 # Set up basic logging configuration
 logging.basicConfig(level=logging.INFO)
 
-
 app = Flask(__name__)
 app.config.from_object(Config)
-
 
 # Initialize SQLAlchemy with app
 db.init_app(app)
@@ -245,6 +242,54 @@ def delete_user(user_id):
             return jsonify({"error": "User not found"}), 404
 
         return jsonify({"message": "User deleted successfully"}), 200
+
+    except psycopg2.DatabaseError as db_err:
+        logging.error(f"Database error: {str(db_err)}")
+        return jsonify({"error": "Database error occurred"}), 500
+    except Exception as e:
+        logging.error(f"Error: {str(e)}")
+        return jsonify({"error": "An unexpected error occurred"}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+# Route to get user profile by ID
+@app.route('/users/<int:user_id>', methods=['GET'])
+def get_user_by_id(user_id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Fetch user by ID from the users table
+        cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+        user = cursor.fetchone()
+
+        # Check if the user exists
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        # Map the fetched data to a dictionary
+        user_data = {
+            'id': user[0],
+            'first_name': user[1],
+            'middle_name': user[2],
+            'last_name': user[3],
+            'email': user[4],
+            'mobile_number': user[7],
+            'alternate_mobile_number': user[8],
+            'flat_no': user[9],
+            'full_address': user[10],
+            'area': user[11],
+            'landmark': user[12],
+            'city': user[13],
+            'state': user[14],
+            'pincode': user[15],
+            'anugrahit': user[16],
+            'gender': user[17],
+            'unique_family_code': user[18],
+        }
+
+        return jsonify(user_data), 200
 
     except psycopg2.DatabaseError as db_err:
         logging.error(f"Database error: {str(db_err)}")
