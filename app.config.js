@@ -1,7 +1,5 @@
-// app.config.js
-
 export default ({ config }) => {
-  const environment = process.env.APP_ENV || 'development';
+  const environment = process.env.APP_ENV || "dev"; // Use "dev" as default if APP_ENV is not set
 
   // Define common settings
   const commonSettings = {
@@ -37,22 +35,20 @@ export default ({ config }) => {
   // Define environment-specific settings
   const envConfig = {
     dev: {
-      extra: {
-        apiUrl: "http://192.168.1.9:5000",
-        environment: "dev",
-      },
+      apiUrl: "http://192.168.1.9:5000",
+      environment: "dev",
     },
     prod: {
-      extra: {
-        apiUrl: "https://api.prahladapp.com",
-        environment: "prd",
-      },
+      apiUrl: "https://upasana-app-gdm2p.ondigitalocean.app",
+      environment: "prod",
     },
   };
 
   // Merge common settings with environment-specific settings
   return {
     ...commonSettings,
-    ...envConfig[environment],
+    extra: {
+      ...envConfig[environment],
+    },
   };
 };

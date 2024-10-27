@@ -30,27 +30,15 @@ const RegisterScreen = ({ navigation, onRegister }) => {
   const [pincode, setPincode] = useState("");
   const [anugrahit, setAnugrahit] = useState("no");
   const [gender, setGender] = useState("male");
-
-  // Determine the environment safely
-  const appEnv = (Constants.manifest && Constants.manifest.releaseChannel) || 'dev';
-  // How to get this IP 
-  //cmd -->
-  //  ipconfig --Will Give
-  //        -->IPv4 Address. . . . . . . . . . . : 192.168.1.9
-  //Replace in apiUrl: 'http://192.168.1.9:5000'
-
-  const envConfig = Constants.manifest?.extra?.[appEnv] || { apiUrl: 'http://192.168.1.9:5000' }; // Default API URL
-
-  // Use the environment-specific API URL
-  const apiUrl = envConfig.apiUrl;
+  
+  // Get `apiUrl` from the extra config
+  const apiUrl = Constants.expoConfig?.extra?.apiUrl || 'http://localhost:5000';
 
   const handleRegistration = async () => {
+   
     console.log('###################');
-      console.log('URL IS',  `${appEnv}`);
-      console.log('###################');
-      console.log('###################');
-      console.log('envConfig IS',  JSON.stringify(Constants.manifest));
-      console.log('###################');
+    console.log('API URL IS',  `${apiUrl}/register`);
+    console.log('###################');
      if (!firstName.trim()) {
       Alert.alert("Error", "First Name is Required");
       return;
@@ -131,10 +119,6 @@ const RegisterScreen = ({ navigation, onRegister }) => {
 
     // Send the registration request
     try {
-
-      console.log('###################');
-      console.log('URL IS',  `${apiUrl}/register`);
-      console.log('###################');
       console.log('###################');
       console.log('PAYLOAD IS',  JSON.stringify(payload));
       console.log('###################');

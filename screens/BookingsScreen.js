@@ -9,7 +9,10 @@ const BookingsScreen = () => {
   // Function to fetch bookings from the server
   const fetchBookings = async () => {
     try {
-      const response = await fetch("http://192.168.1.9:5000/api/bookings");
+      // Get `apiUrl` from the extra config
+  const apiUrl = Constants.expoConfig?.extra?.apiUrl || 'http://localhost:5000';
+  
+      const response = await fetch(`${apiUrl}/api/bookings`);
       if (response.ok) {
         const data = await response.json();
         setBookings(data);

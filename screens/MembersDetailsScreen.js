@@ -15,7 +15,11 @@ const MemberDetailsScreen = ({ route, navigation }) => {
 
     const handleSave = async () => {
     try {
-      const response = await fetch(`http://192.168.1.9:5000/users/${editableMember.id}`, {
+      
+  // Get `apiUrl` from the extra config
+  const apiUrl = Constants.expoConfig?.extra?.apiUrl || 'http://localhost:5000';
+
+      const response = await fetch(`${apiUrl}/users/${editableMember.id}`, {
         method: 'PUT', // or 'PATCH', depending on your API
         headers: {
           'Content-Type': 'application/json',

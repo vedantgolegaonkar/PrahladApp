@@ -21,12 +21,10 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
     password: "A",
   };
   
-    // Determine the environment safely
-    const appEnv = (Constants.manifest && Constants.manifest.releaseChannel) || 'dev';
-    const envConfig = Constants.manifest?.extra?.[appEnv] || { apiUrl: 'http://192.168.1.9:5000' }; // Default API URL
-  
-    // Use the environment-specific API URL
-    const apiUrl = envConfig.apiUrl;
+   
+  // Get `apiUrl` from the extra config
+  const apiUrl = Constants.expoConfig?.extra?.apiUrl || 'http://localhost:5000';
+
   
     const handleLogin = async () => {
       // Basic validation for mobile number and password fields
