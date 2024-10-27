@@ -11,7 +11,7 @@ import AdminDashboard from "../screens/AdminDashboard";
 import UserDashboard from "../screens/UserDashboard";
 import SlotBookingScreen from "../screens/SlotBookingScreen";
 import MembersDetailsScreen from "../screens/MembersDetailsScreen";
-
+import AllBookingListing from "../screens/AllBookingListing";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();

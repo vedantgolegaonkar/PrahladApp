@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import psycopg2
 from model import db,Booking,User
-from booking import create_booking
+from Booking import create_booking
 from datetime import datetime
 from config import get_db_connection, release_db_connection,Config
 from werkzeug.security import generate_password_hash, check_password_hash
