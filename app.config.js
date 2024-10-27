@@ -1,37 +1,6 @@
 export default ({ config }) => {
   const environment = process.env.APP_ENV || "dev"; // Use "dev" as default if APP_ENV is not set
 
-  // Define common settings
-  const commonSettings = {
-    name: "PrahladApp",
-    slug: "PrahladApp",
-    version: "1.0.0",
-    orientation: "portrait",
-    icon: "./assets/icon.png",  // Set your icon path
-    userInterfaceStyle: "light",
-    splash: {
-      image: "./assets/splash.png",  // Set your splash image path
-      resizeMode: "contain",
-      backgroundColor: "#ffffff",
-    },
-    ios: {
-      supportsTablet: true,
-    },
-    android: {
-      adaptiveIcon: {
-        foregroundImage: "./assets/adaptive-icon.png",  // Set your adaptive icon foreground image path
-        backgroundColor: "#ffffff",
-      },
-      permissions: [
-        "INTERNET",                // Allow network access
-        "ACCESS_NETWORK_STATE"      // Allow checking network state
-      ],
-    },
-    web: {
-      favicon: "./assets/favicon.png",  // Set your favicon path
-    },
-  };
-
   // Define environment-specific settings
   const envConfig = {
     dev: {
@@ -46,9 +15,18 @@ export default ({ config }) => {
 
   // Merge common settings with environment-specific settings
   return {
-    ...commonSettings,
+    ...config,
     extra: {
-      ...envConfig[environment],
+      ...config.extra, // Keep existing extra settings
+      ...envConfig[environment], // Merge environment-specific settings
+    },
+    version: "1.0.0", // Specify your app version
+    android: {
+      ...config.android,
+      package: "com.upasana.app", // Set your unique package name here
+    },
+    cli: {
+      appVersionSource: "config", // Ensure the source is set to "config"
     },
   };
 };
