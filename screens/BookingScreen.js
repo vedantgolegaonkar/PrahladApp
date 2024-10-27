@@ -1,11 +1,38 @@
-// This Screen is of the User Panel
-
-import React from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+// BookingScreen.js - User Panel
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, FlatList, Alert } from "react-native";
 import { useBooking } from "../context/BookingContext";
 
 const BookingScreen = () => {
   const { bookings } = useBooking();
+
+  // Function to send the updated booking to the server
+  const updateBookingOnServer = async (booking) => {
+    try {
+      const response = await fetch("http://192.168.1.9:5000/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(booking),
+      });
+
+      if (!response.ok) {
+        Alert.alert("Error", "Failed to update booking on server");
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while updating booking");
+    }
+  };
+
+  // Send bookings to the server when there's a change
+  useEffect(() => {
+    if (bookings.length > 0) {
+      bookings.forEach((booking) => {
+        updateBookingOnServer(booking);
+      });
+    }
+  }, [bookings]);
 
   return (
     <View style={styles.container}>
@@ -16,12 +43,22 @@ const BookingScreen = () => {
           renderItem={({ item }) => (
             <View style={styles.bookingCard}>
               <View style={styles.bookingDetails}>
-                <Text style={styles.bookingLabel}>Date: </Text>
+                <Text style={styles.bookingLabel}>Date:</Text>
                 <Text style={styles.bookingText}>{item.date}</Text>
               </View>
 
               <View style={styles.bookingDetails}>
-                <Text style={styles.bookingLabel}>Status: </Text>
+                <Text style={styles.bookingLabel}>Timeslot:</Text>
+                <Text style={styles.bookingText}>{item.timeslot}</Text>
+              </View>
+
+              <View style={styles.bookingDetails}>
+                <Text style={styles.bookingLabel}>Mahaprasad:</Text>
+                <Text style={styles.bookingText}>{item.mahaprasad}</Text>
+              </View>
+
+              <View style={styles.bookingDetails}>
+                <Text style={styles.bookingLabel}>Status:</Text>
                 <Text
                   style={[
                     styles.bookingText,
@@ -31,20 +68,6 @@ const BookingScreen = () => {
                   ]}
                 >
                   {item.status}
-                </Text>
-              </View>
-
-              <View style={styles.bookingDetails}>
-                <Text style={styles.bookingLabel}>MahaPrasad: </Text>
-                <Text
-                  style={[
-                    styles.bookingText,
-                    item.MahaPrasadStatus === "Available"
-                      ? styles.statusConfirmed
-                      : styles.statusCancelled,
-                  ]}
-                >
-                  {item.MahaPrasadStatus}
                 </Text>
               </View>
             </View>
@@ -59,7 +82,6 @@ const BookingScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "#f4f4f4" },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 16, color: "#333" },
   bookingCard: {
     backgroundColor: "#fff",
     borderRadius: 8,
@@ -76,14 +98,14 @@ const styles = StyleSheet.create({
   bookingDetails: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: " 5",
+    marginBottom: 5,
   },
   bookingLabel: { fontWeight: "bold", color: "#333" },
   bookingText: { color: "#555" },
   statusConfirmed: { color: "#4CAF50", fontWeight: "bold" },
   statusCancelled: { color: "#F44336", fontWeight: "bold" },
   noBookingsText: {
-    fontSize: 10,
+    fontSize: 16,
     textAlign: "center",
     marginTop: 20,
     color: "#999",

@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify
 import psycopg2
-from config import get_db_connection, release_db_connection
+from model import db,Booking,User
+from Booking import create_booking
+from datetime import datetime
+from config import get_db_connection, release_db_connection,Config
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
 from flask_cors import CORS
@@ -10,6 +13,11 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
+app.config.from_object(Config)
+
+# Initialize SQLAlchemy with app
+db.init_app(app)
+logging.basicConfig(level=logging.INFO)
 CORS(app)
 
 def validate_email(email):
@@ -20,6 +28,46 @@ def validate_mobile_number(mobile_number):
     pattern = r'^\d{10}$'  # Assuming a 10-digit mobile number
     return re.match(pattern, mobile_number)
 
+@app.route('/book', methods=['POST'])
+def book():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    zone = data.get('zone')
+    mahaprasad = data.get('mahaprasad', False)
+    booking_date_str = data.get('booking_date')
+
+    # Convert booking_date from string to date object
+    try:
+        booking_date = datetime.strptime(booking_date_str, '%Y-%m-%d').date()
+    except ValueError:
+        return jsonify({"error": "Invalid date format. Use YYYY-MM-DD."}), 400
+
+    # Call the create_booking function
+    return create_booking(user_id, zone, booking_date, mahaprasad)
+
+@app.route('/bookings', methods=['GET'])
+def get_all_bookings():
+    try:
+        # Fetch all bookings
+        bookings = Booking.query.all()
+        
+        # Convert booking data into a JSON-serializable format
+        booking_list = []
+        for booking in bookings:
+            booking_data = {
+                'id': booking.id,
+                'user_id': booking.user_id,
+                'booking_date': booking.booking_date.strftime('%Y-%m-%d'),
+                'zone': booking.zone,
+                'mahaprasad': booking.mahaprasad,
+                'created_at': booking.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            }
+            booking_list.append(booking_data)
+
+        return jsonify(booking_list), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 # Step 2: API route for inserting data into users table
 @app.route('/register', methods=['POST'])
 def register_user():
@@ -194,6 +242,54 @@ def delete_user(user_id):
             return jsonify({"error": "User not found"}), 404
 
         return jsonify({"message": "User deleted successfully"}), 200
+
+    except psycopg2.DatabaseError as db_err:
+        logging.error(f"Database error: {str(db_err)}")
+        return jsonify({"error": "Database error occurred"}), 500
+    except Exception as e:
+        logging.error(f"Error: {str(e)}")
+        return jsonify({"error": "An unexpected error occurred"}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+# Route to get user profile by ID
+@app.route('/users/<int:user_id>', methods=['GET'])
+def get_user_by_id(user_id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Fetch user by ID from the users table
+        cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+        user = cursor.fetchone()
+
+        # Check if the user exists
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        # Map the fetched data to a dictionary
+        user_data = {
+            'id': user[0],
+            'first_name': user[1],
+            'middle_name': user[2],
+            'last_name': user[3],
+            'email': user[4],
+            'mobile_number': user[7],
+            'alternate_mobile_number': user[8],
+            'flat_no': user[9],
+            'full_address': user[10],
+            'area': user[11],
+            'landmark': user[12],
+            'city': user[13],
+            'state': user[14],
+            'pincode': user[15],
+            'anugrahit': user[16],
+            'gender': user[17],
+            'unique_family_code': user[18],
+        }
+
+        return jsonify(user_data), 200
 
     except psycopg2.DatabaseError as db_err:
         logging.error(f"Database error: {str(db_err)}")
