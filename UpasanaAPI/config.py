@@ -2,12 +2,15 @@ import psycopg2
 from psycopg2 import pool
 
 class Config:
+    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:admin123@localhost/Upasana"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
     # Database configurationclear
     DB_HOST = "localhost"
     DB_PORT = "5432"
     DB_NAME = "Upasana"
     DB_USER = "postgres"
-    DB_PASSWORD = "Siddhant007*"
+    DB_PASSWORD = "admin123"
     
     # Create connection pool for better performance
     connection_pool = pool.SimpleConnectionPool(1, 20,

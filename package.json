@@ -2,6 +2,7 @@
   "name": "prahladapp",
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
+
   "scripts": {
     "start:dev": "cross-env EXPO_APP_ENV=dev npx expo start",
     "start:prod": "cross-env EXPO_APP_ENV=prod npx expo start --no-dev --minify",
