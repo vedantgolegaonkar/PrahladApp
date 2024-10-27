@@ -14,7 +14,7 @@ const MembersScreen = ({navigation}) => {
 
   const fetchMembers = async () => {
     try {
-      const response = await fetch('http://192.168.1.9:5000/users'); // Replace with your API URL
+      const response = await fetch('http://192.168.1.7:5000/users'); // Replace with your API URL
       const data = await response.json();
       setMembers(data);
       setLoading(false);

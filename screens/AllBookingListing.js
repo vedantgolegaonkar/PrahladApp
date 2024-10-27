@@ -11,7 +11,7 @@ const AllBookingListing = ({ navigation }) => {
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch('http://192.168.1.9:5000/bookings'); // Replace with your API URL
+      const response = await fetch('http://192.168.1.7:5000/bookings'); // Replace with your API URL
       const data = await response.json();
       setBookings(data);
       setLoading(false);

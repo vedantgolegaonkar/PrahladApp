@@ -6,7 +6,7 @@ pip install -r requirements.txt
 **How to Open Python service to be accessible from Expo App**
 ---DONT FORGET TO RESTART PYTHON SERVICE ONCE CHANGES ARE APPLIED
 ---PLEASE VERIFY BY USING IP BASED URL FROM BROWSER
---- LIKE http://192.168.1.9:5000/users
+--- LIKE http://192.168.1.7:5000/users
 **CHATGPT PROMPT**
 I have started my python service like python app.py
 help me to make sure that service is accissibleby IP

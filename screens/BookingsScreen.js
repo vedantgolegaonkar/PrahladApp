@@ -9,7 +9,7 @@ const BookingsScreen = () => {
   // Function to fetch bookings from the server
   const fetchBookings = async () => {
     try {
-      const response = await fetch("http://192.168.1.9:5000/bookings");
+      const response = await fetch("http://192.168.1.7:5000/bookings");
       if (response.ok) {
         const data = await response.json();
         setBookings(data);

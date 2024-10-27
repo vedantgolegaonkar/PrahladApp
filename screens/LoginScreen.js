@@ -1,3 +1,4 @@
+// LoginScreen.js
 import React, { useState } from "react";
 import {
   View,
@@ -10,92 +11,71 @@ import {
 import Constants from 'expo-constants';
 import Toast from "react-native-toast-message";
 
-
 const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
-  
 
   const adminCredentials = {
     mobileNumber: '8825784512',
     password: "A",
   };
-  
-    // Determine the environment safely
-    const appEnv = (Constants.manifest && Constants.manifest.releaseChannel) || 'dev';
-    const envConfig = Constants.manifest?.extra?.[appEnv] || { apiUrl: 'http://192.168.1.9:5000' }; // Default API URL
-  
-    // Use the environment-specific API URL
-    const apiUrl = envConfig.apiUrl;
-  
-    const handleLogin = async () => {
-      // Basic validation for mobile number and password fields
-      if (!mobileNumber.trim()) {
-        Alert.alert("Error", "Mobile Number is Required");
-        return;
-      }
-      if (!password.trim()) {
-        Alert.alert("Error", "Password is Required");
-        return;
-      }
-    
-      if (
-        mobileNumber === adminCredentials.mobileNumber &&
-        password === adminCredentials.password
-      ) {
-        onAdminLogin();
-          return;
-        }
 
-      // Create the payload for the login request
-      const payload = {
-        mobile_number: mobileNumber.trim(),
-        password: password.trim(),
-      };
-    
-      try {
-        console.log('###################');
-        console.log('URL IS', `${apiUrl}/login`);
-        console.log('###################');
-        console.log('PAYLOAD IS', JSON.stringify(payload));
-        console.log('###################');
-    
-        // Send the login request to the backend
-        const response = await fetch(`${apiUrl}/login`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
-    
-        console.log('RESPONSE IS ******', JSON.stringify(response));
-    
-        // Check if the login was successful
-        if (!response.ok) {
-          throw new Error("Login failed. Please check your mobile number and password.");
-        }
-    
-        const data = await response.json(); // Parse the response
-        Toast.show({
-          type: "success",
-          text1: "Login Successful",
-          text2: "You have been logged in successfully",
-        });
-    
-        // Optionally, navigate to the home page or dashboard after successful login
-       onLogin(navigation);
-    
-      } catch (error) {
-        Toast.show({
-          type: "error",
-          text1: "Login Failed",
-          text2: error.message || "An error occurred during login.",
-        });
+  const appEnv = (Constants.manifest && Constants.manifest.releaseChannel) || 'dev';
+  const envConfig = Constants.manifest?.extra?.[appEnv] || { apiUrl: 'http://192.168.1.7:5000' };
+  const apiUrl = envConfig.apiUrl;
+
+  const handleLogin = async () => {
+    if (!mobileNumber.trim()) {
+      Alert.alert("Error", "Mobile Number is Required");
+      return;
+    }
+    if (!password.trim()) {
+      Alert.alert("Error", "Password is Required");
+      return;
+    }
+
+    if (
+      mobileNumber === adminCredentials.mobileNumber &&
+      password === adminCredentials.password
+    ) {
+      onAdminLogin();
+      return;
+    }
+
+    const payload = {
+      mobile_number: mobileNumber.trim(),
+      password: password.trim(),
+    };
+
+    try {
+      const response = await fetch(`${apiUrl}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Login failed. Please check your mobile number and password.");
       }
-      
-    
-      
+
+      const data = await response.json();
+      Toast.show({
+        type: "success",
+        text1: "Login Successful",
+        text2: "You have been logged in successfully",
+      });
+
+      onLogin(navigation);
+
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Login Failed",
+        text2: error.message || "An error occurred during login.",
+      });
+    }
   };
 
   return (
