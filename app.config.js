@@ -21,12 +21,13 @@ export default ({ config }) => {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/adaptive-icon.png",  // Set your adaptive icon foreground image path
+        foregroundImage: "",  // Set your adaptive icon foreground image path
         backgroundColor: "#ffffff",
       },
       permissions: [
         "INTERNET",                // Allow network access
-        "ACCESS_NETWORK_STATE"      // Allow checking network state
+        "ACCESS_NETWORK_STATE" ,     // Allow checking network state
+        ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
       ],
     },
     web: {

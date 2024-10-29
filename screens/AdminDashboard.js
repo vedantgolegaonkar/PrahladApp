@@ -6,7 +6,7 @@ import BookingsScreen from "./BookingsScreen";
 import NotificationsScreen from "./NotificationsScreen";
 import SettingsScreen from "./SettingsScreen";
 import { Ionicons } from "@expo/vector-icons";
-import PdfScreen from "./PdfScreen"
+import PDFScreen from "./PdfScreen"
 const Tab = createBottomTabNavigator();
 
 const AdminDashboard = () => {
@@ -38,7 +38,7 @@ const AdminDashboard = () => {
       <Tab.Screen name="Dashboard" component={DashboardScreen} />
       <Tab.Screen name="Members" component={MembersScreen} />
       <Tab.Screen name="Bookings" component={BookingsScreen} />
-      <Tab.Screen name="Pdf" component={PdfScreen} />
+      <Tab.Screen name="Pdf" component={PDFScreen} />
       <Tab.Screen name="Notifications" component={NotificationsScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>

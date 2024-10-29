@@ -10,7 +10,6 @@ import Toast from "react-native-toast-message";
 import AdminDashboard from "../screens/AdminDashboard";
 import UserDashboard from "../screens/UserDashboard";
 import SlotBookingScreen from "../screens/SlotBookingScreen";
-import MembersDetailsScreen from "../screens/MembersDetailsScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -85,20 +84,7 @@ const AppNavigator = () => {
     </Tab.Navigator>
   );
 
-  // Bottom Tab Navigator for Admin
-  const AdminTabNavigator = () => (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="AdminDashboard"
-        component={AdminDashboard}
-        options={{ headerShown: false }}
-      />
-      <Tab.Screen
-        name="MembersDetails"
-        component={MembersDetailsScreen}
-      />
-    </Tab.Navigator>
-  );
+
 
   return (
     <NavigationContainer>
@@ -112,11 +98,11 @@ const AppNavigator = () => {
         </Stack.Navigator>
       ) : isAdminLoggedIn ? (
         <Stack.Navigator>
-          <Stack.Screen
-            name="AdminTabNavigator"
-            component={AdminTabNavigator}
-            options={{ headerShown: false }}
-          />
+<Stack.Screen
+              name="AdminDashboard"
+              component={AdminDashboard}
+              options={{ headerShown: false }}
+            />
         </Stack.Navigator>
       ) : (
         <Stack.Navigator>
