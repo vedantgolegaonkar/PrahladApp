@@ -5,7 +5,7 @@ import BookingScreen from "../screens/BookingScreen";
 import ListScreen from "../screens/ListScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import PdfScreen from "../screens/PdfScreen"; // New PDF screen
+// import PdfScreen from "../screens/PdfScreen"; // New PDF screen
 import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
@@ -21,8 +21,8 @@ const UserDashboard = ({ bookings, handleLogout }) => {
             iconName = "home";
           } else if (route.name === "My Bookings") {
             iconName = "calendar";
-          } else if (route.name === "Upasana PDF") {
-            iconName = "document"; // Use an appropriate icon for PDF
+          
+        
           } else if (route.name === "List") {
             iconName = "list";
           } else if (route.name === "Notifications") {
@@ -40,7 +40,6 @@ const UserDashboard = ({ bookings, handleLogout }) => {
       <Tab.Screen name="My Bookings">
         {(props) => <BookingScreen {...props} bookings={bookings} />}
       </Tab.Screen>
-      <Tab.Screen name="Upasana PDF" component={PdfScreen} /> {/* New Tab */}
       <Tab.Screen name="List" component={ListScreen} />
       <Tab.Screen name="Notifications" component={NotificationScreen} />
       <Tab.Screen name="Profile">

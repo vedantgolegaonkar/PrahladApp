@@ -6,7 +6,7 @@ import BookingsScreen from "./BookingsScreen";
 import NotificationsScreen from "./NotificationsScreen";
 import SettingsScreen from "./SettingsScreen";
 import { Ionicons } from "@expo/vector-icons";
-
+import PdfScreen from "./PdfScreen"
 const Tab = createBottomTabNavigator();
 
 const AdminDashboard = () => {
@@ -21,7 +21,10 @@ const AdminDashboard = () => {
             iconName = focused ? "people" : "people-outline";
           } else if (route.name === "Bookings") {
             iconName = focused ? "calendar" : "calendar-outline";
-          } else if (route.name === "Notifications") {
+          } else if (route.name === "Pdf") {
+            iconName = focused ? "document-text" : "document-text-outline";
+          }
+          else if (route.name === "Notifications") {
             iconName = focused ? "notifications" : "notifications-outline";
           } else if (route.name === "Settings") {
             iconName = focused ? "settings" : "settings-outline";
@@ -35,6 +38,7 @@ const AdminDashboard = () => {
       <Tab.Screen name="Dashboard" component={DashboardScreen} />
       <Tab.Screen name="Members" component={MembersScreen} />
       <Tab.Screen name="Bookings" component={BookingsScreen} />
+      <Tab.Screen name="Pdf" component={PdfScreen} />
       <Tab.Screen name="Notifications" component={NotificationsScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>

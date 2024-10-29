@@ -7,7 +7,7 @@ const AdminLoginScreen = ({ navigation }) => {
     const [errorMessage, setErrorMessage] = useState('');
 
     const adminCredentials = {
-        email: 'admin@prahladapp.com',
+        email: '',
         password: 'admin123',
     };
 
