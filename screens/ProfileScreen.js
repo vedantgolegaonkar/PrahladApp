@@ -12,7 +12,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 
-const ProfileScreen = ({ onLogout }) => {
+const ProfileScreen = ({ onLogout, route }) => {
   const [userData, setUserData] = useState({
     firstName: "Vedant",
     middleName: "Girish",
@@ -32,7 +32,9 @@ const ProfileScreen = ({ onLogout }) => {
   });
 
   const [profilePic, setProfilePic] = useState(null);
-  const [gender, setGender] = useState("male");
+  const [gender, setGender] = useState(userDetails.gender || "male");
+  const { userDetails } = route.params;
+
 
   const pickImage = async () => {
     const permissionResult =
@@ -119,14 +121,11 @@ const ProfileScreen = ({ onLogout }) => {
           </Text>
         )}
 
-        <View style={styles.formGroup}>
+<View style={styles.formGroup}>
           <Text style={styles.label}>First Name:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.firstName}
-            onChangeText={(text) =>
-              setUserData({ ...userData, firstName: text })
-            }
+            placeholder={userDetails.firstName}
             editable={false}
           />
         </View>
@@ -134,10 +133,7 @@ const ProfileScreen = ({ onLogout }) => {
           <Text style={styles.label}>Middle Name:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.middleName}
-            onChangeText={(text) =>
-              setUserData({ ...userData, middleName: text })
-            }
+            placeholder={userDetails.middleName}
             editable={false}
           />
         </View>
@@ -145,10 +141,7 @@ const ProfileScreen = ({ onLogout }) => {
           <Text style={styles.label}>Last Name:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.lastName}
-            onChangeText={(text) =>
-              setUserData({ ...userData, lastName: text })
-            }
+            placeholder={userDetails.lastName}
             editable={false}
           />
         </View>
@@ -156,8 +149,7 @@ const ProfileScreen = ({ onLogout }) => {
           <Text style={styles.label}>Email:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.email}
-            onChangeText={(text) => setUserData({ ...userData, email: text })}
+            placeholder={userDetails.email}
             editable={false}
           />
         </View>
@@ -165,23 +157,17 @@ const ProfileScreen = ({ onLogout }) => {
           <Text style={styles.label}>Mobile Number:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.mobileNumber}
+            placeholder={userDetails.mobileNumber}
             keyboardType="numeric"
-            onChangeText={(text) =>
-              setUserData({ ...userData, mobileNumber: text })
-            }
             editable={false}
           />
         </View>
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Alternate Mobile Number</Text>
+          <Text style={styles.label}>Alternate Mobile Number:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.altMobileNumber}
+            placeholder={userDetails.altMobileNumber}
             keyboardType="numeric"
-            onChangeText={(text) =>
-              setUserData({ ...userData, altMobileNumber: text })
-            }
             editable={false}
           />
         </View>
@@ -189,8 +175,7 @@ const ProfileScreen = ({ onLogout }) => {
           <Text style={styles.label}>Flat No:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.flatNo}
-            onChangeText={(text) => setUserData({ ...userData, flatNo: text })}
+            placeholder={userDetails.flatNo}
             editable={false}
           />
         </View>
@@ -198,10 +183,7 @@ const ProfileScreen = ({ onLogout }) => {
           <Text style={styles.label}>Full Address:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.fullAddress}
-            onChangeText={(text) =>
-              setUserData({ ...userData, function: text })
-            }
+            placeholder={userDetails.fullAddress}
             editable={false}
           />
         </View>
@@ -209,8 +191,7 @@ const ProfileScreen = ({ onLogout }) => {
           <Text style={styles.label}>Area:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.area}
-            onChangeText={(text) => setUserData({ ...userData, area: text })}
+            placeholder={userDetails.area}
             editable={false}
           />
         </View>
@@ -218,10 +199,7 @@ const ProfileScreen = ({ onLogout }) => {
           <Text style={styles.label}>Landmark:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.landmark}
-            onChangeText={(text) =>
-              setUserData({ ...userData, landmark: text })
-            }
+            placeholder={userDetails.landmark}
             editable={false}
           />
         </View>
@@ -229,8 +207,7 @@ const ProfileScreen = ({ onLogout }) => {
           <Text style={styles.label}>City:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.city}
-            onChangeText={(text) => setUserData({ ...userData, city: text })}
+            placeholder={userDetails.city}
             editable={false}
           />
         </View>
@@ -238,8 +215,7 @@ const ProfileScreen = ({ onLogout }) => {
           <Text style={styles.label}>State:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.state}
-            onChangeText={(text) => setUserData({ ...userData, state: text })}
+            placeholder={userDetails.state}
             editable={false}
           />
         </View>
@@ -247,9 +223,8 @@ const ProfileScreen = ({ onLogout }) => {
           <Text style={styles.label}>Pincode:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.pincode}
+            placeholder={userDetails.pincode}
             keyboardType="numeric"
-            onChangeText={(text) => setUserData({ ...userData, pincode: text })}
             editable={false}
           />
         </View>
@@ -257,10 +232,7 @@ const ProfileScreen = ({ onLogout }) => {
           <Text style={styles.label}>Anugrahit:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.anugrahit}
-            onChangeText={(text) =>
-              setUserData({ ...userData, anugrahit: text })
-            }
+            placeholder={userDetails.anugrahit}
             editable={false}
           />
         </View>
@@ -268,8 +240,7 @@ const ProfileScreen = ({ onLogout }) => {
           <Text style={styles.label}>Gender:</Text>
           <TextInput
             style={styles.input}
-            placeholder={userData.gender}
-            onChangeText={(text) => setUserData({ ...userData, gender: text })}
+            placeholder={userDetails.gender}
             editable={false}
           />
         </View>

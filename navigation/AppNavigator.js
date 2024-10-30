@@ -10,6 +10,7 @@ import Toast from "react-native-toast-message";
 import AdminDashboard from "../screens/AdminDashboard";
 import UserDashboard from "../screens/UserDashboard";
 import SlotBookingScreen from "../screens/SlotBookingScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 
 const Stack = createStackNavigator();
 // const Tab = createBottomTabNavigator();
@@ -19,7 +20,7 @@ const AppNavigator = () => {
   const [loading, setLoading] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [bookings, setBookings] = useState([]);
-  const [home, setHome] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
 
   const handleUserLogin = () => {
     setLoading(true);
@@ -55,7 +56,7 @@ const AppNavigator = () => {
   };
 
   const handleRegister = (details) => {
-    setHome(details);
+    setUserDetails(details);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -85,10 +86,13 @@ const AppNavigator = () => {
               )}
             </Stack.Screen>
             <Stack.Screen name="Home">
-              {(props) => (
-                <HomeScreen {...props}  home={home}/>
-              )}
-            </Stack.Screen>
+            {(props) => (
+              <HomeScreen
+                {...props}
+                userDetails={userDetails} // Pass user details to HomeScreen
+              />
+            )}
+          </Stack.Screen>
         </Stack.Navigator>
       ) : isAdminLoggedIn ? (
         <Stack.Navigator>
@@ -121,6 +125,11 @@ const AppNavigator = () => {
             name="Home"
             component={HomeScreen}
           />
+          <Stack.Screen 
+          name="Profile" 
+          component={ProfileScreen} 
+          initialParams={{ userDetails }} 
+        />
         </Stack.Navigator>
       )}
       <Toast />
