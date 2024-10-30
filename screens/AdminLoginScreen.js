@@ -6,10 +6,6 @@ const AdminLoginScreen = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
-    const adminCredentials = {
-        email: '',
-        password: 'admin123',
-    };
 
     const handleAdminLogin = () => {
         if (!email.trim()) {

@@ -1,70 +1,146 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import * as DocumentPicker from "expo-document-picker";
-import { AntDesign } from "@expo/vector-icons";
-import PDFReader from "react-native-pdf";
+// import React, { useState } from "react";
+// import {
+//   View,
+//   Text,
+//   TouchableOpacity,
+//   FlatList,
+//   StyleSheet,
+//   Alert,
+//   Modal,
+// } from "react-native";
+// import * as DocumentPicker from "expo-document-picker";
+// import { WebView } from "react-native-webview";
 
-const PdfScreen = () => {
-  const [pdfUri, setPdfUri] = useState(null);
+// const PdfScreen = () => {
+//   const [pdfFiles, setPdfFiles] = useState([]);
+//   const [selectedPdf, setSelectedPdf] = useState(null);
 
-  // Function to handle PDF upload
-  const handleUploadPdf = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: "application/pdf",
-      });
-      if (result.type === "success") {
-        setPdfUri(result.uri);
-      }
-    } catch (error) {
-      console.error("Error uploading PDF:", error);
-    }
-  };
+//   const handleUploadPDF = async () => {
+//     try {
+//       const result = await DocumentPicker.getDocumentAsync({
+//         type: "application/pdf",
+//         copyToCacheDirectory: true,
+//       });
 
-  return (
-    <View style={styles.container}>
-      {pdfUri ? (
-        <PDFReader
-          source={{ uri: pdfUri }}
-          style={styles.pdfViewer}
-        />
-      ) : (
-        <Text style={styles.placeholderText}>No PDF uploaded yet.</Text>
-      )}
+//       if (!result.canceled && result.assets && result.assets.length > 0) {
+//         const pdfFile = result.assets[0];
 
-      <TouchableOpacity style={styles.uploadButton} onPress={handleUploadPdf}>
-        <AntDesign name="upload" size={24} color="white" />
-      </TouchableOpacity>
-    </View>
-  );
-};
+//         if (pdfFile.mimeType === "application/pdf" && pdfFile.uri) {
+//           setPdfFiles((prevFiles) => [...prevFiles, pdfFile]);
+//           Alert.alert("Success", "PDF uploaded successfully!");
+//         } else {
+//           Alert.alert("Error", "Please select a valid PDF file.");
+//         }
+//       } else {
+//         Alert.alert("Upload Cancelled", "No file was selected.");
+//       }
+//     } catch (error) {
+//       console.error("Document Picker Error:", error);
+//       Alert.alert("Error", "An error occurred while uploading PDF.");
+//     }
+//   };
 
-export default PdfScreen;
+//   const handlePdfPress = (pdfFile) => {
+//     setSelectedPdf(pdfFile);
+//   };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5F5F5",
-  },
-  pdfViewer: {
-    width: "100%",
-    height: "100%",
-  },
-  placeholderText: {
-    fontSize: 18,
-    color: "gray",
-  },
-  uploadButton: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    backgroundColor: "#FF6F00",
-    padding: 15,
-    borderRadius: 30,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 4,
-  },
-});
+//   const closePdfViewer = () => {
+//     setSelectedPdf(null);
+//   };
+
+//   const handlePdfPress = (pdfFile) => {
+//     setSelectedPdf(pdfFile);
+//   };
+
+//   const closePdfViewer = () => {
+//     setSelectedPdf(null);
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <FlatList
+//         data={pdfFiles}
+//         keyExtractor={(item) => item.uri}
+//         renderItem={({ item }) => (
+//           <TouchableOpacity onPress={() => handlePdfPress(item)} style={styles.pdfItem}>
+//             <Text style={styles.pdfText}>{item.name || "Unnamed PDF"}</Text>
+//           </TouchableOpacity>
+//         )}
+//         ListEmptyComponent={<Text style={styles.emptyText}>No PDFs uploaded</Text>}
+//       />
+
+//       {/* Floating Upload PDF Button */}
+//       <TouchableOpacity style={styles.fab} onPress={handleUploadPDF}>
+//         <Text style={styles.fabText}>Upload PDF</Text>
+//       </TouchableOpacity>
+
+//       {/* PDF Viewer Modal */}
+//       <Modal visible={!!selectedPdf} animationType="slide">
+//         <View style={styles.modalHeader}>
+//           <TouchableOpacity onPress={closePdfViewer}>
+//             <Text style={styles.closeText}>Close</Text>
+//           </TouchableOpacity>
+//         </View>
+//         {selectedPdf && (
+//           <WebView
+//             source={{ uri: selectedPdf.uri }}
+//             style={{ flex: 1 }}
+//             onError={() => Alert.alert("Error", "Failed to load PDF")}
+//           />
+//         )}
+//       </Modal>
+//     </View>
+//   );
+// };
+
+// export default PdfScreen;
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: "center",
+//     alignItems: "center",
+//     backgroundColor: "#F5F5F5",
+//   },
+//   pdfViewer: {
+//     width: "100%",
+//     height: "100%",
+//   },
+//   placeholderText: {
+//     fontSize: 18,
+//     color: "gray",
+//   },
+//   emptyText: {
+//     textAlign: "center",
+//     color: "#888",
+//     fontSize: 16,
+//     marginTop: 20,
+//   },
+//   fab: {
+//     position: "absolute",
+//     bottom: 20,
+//     backgroundColor: "#ff4500",
+//     paddingVertical: 10,
+//     paddingHorizontal: 20,
+//     borderRadius: 30,
+//     alignItems: "center",
+//     justifyContent: "center",
+//   },
+//   fabText: {
+//     color: "#fff",
+//     fontWeight: "bold",
+//   },
+//   modalHeader: {
+//     padding: 16,
+//     backgroundColor: "#ff4500",
+//     flexDirection: "row",
+//     justifyContent: "flex-end",
+//   },
+//   closeText: {
+//     color: "#fff",
+//     fontSize: 16,
+//     fontWeight: "bold",
+//   },
+// });
+
+// export default PDFScreen;

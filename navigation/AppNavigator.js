@@ -10,7 +10,6 @@ import Toast from "react-native-toast-message";
 import AdminDashboard from "../screens/AdminDashboard";
 import UserDashboard from "../screens/UserDashboard";
 import SlotBookingScreen from "../screens/SlotBookingScreen";
-// import MembersDetailsScreen from "../screens/MembersDetailsScreen";
 
 const Stack = createStackNavigator();
 // const Tab = createBottomTabNavigator();
