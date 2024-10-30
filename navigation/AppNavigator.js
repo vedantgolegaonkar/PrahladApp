@@ -19,6 +19,7 @@ const AppNavigator = () => {
   const [loading, setLoading] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [bookings, setBookings] = useState([]);
+  const [home, setHome] = useState(null);
 
   const handleUserLogin = () => {
     setLoading(true);
@@ -53,37 +54,14 @@ const AppNavigator = () => {
     setIsAdminLoggedIn(false);
   };
 
-  const handleRegister = () => {
+  const handleRegister = (details) => {
+    setHome(details);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
       setIsLoggedIn(true);
     }, 500);
   };
-
-  // Bottom Tab Navigator for User
-  // const UserTabNavigator = () => (
-  //   <Tab.Navigator>
-  //     <Tab.Screen
-  //       name="UserDashboard"
-  //       options={{ headerShown: false }}
-  //     >
-  //       {(props) => (
-  //         <UserDashboard
-  //           {...props}
-  //           bookings={bookings}
-  //           handleLogout={handleLogout}
-  //         />
-  //       )}
-  //     </Tab.Screen>
-  //     <Tab.Screen name="SlotBooking">
-  //       {(props) => (
-  //         <SlotBookingScreen {...props} addBooking={addBooking} />
-  //       )}
-  //     </Tab.Screen>
-  //   </Tab.Navigator>
-  // );
-
 
   return (
     <NavigationContainer>
@@ -104,6 +82,11 @@ const AppNavigator = () => {
             <Stack.Screen name="SlotBooking">
               {(props) => (
                 <SlotBookingScreen {...props} addBooking={addBooking} />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Home">
+              {(props) => (
+                <HomeScreen {...props}  home={home}/>
               )}
             </Stack.Screen>
         </Stack.Navigator>
