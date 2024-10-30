@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "../screens/HomeScreen";
 import LoginScreen from "../screens/LoginScreen";
@@ -10,10 +10,10 @@ import Toast from "react-native-toast-message";
 import AdminDashboard from "../screens/AdminDashboard";
 import UserDashboard from "../screens/UserDashboard";
 import SlotBookingScreen from "../screens/SlotBookingScreen";
-import MembersDetailsScreen from "../screens/MembersDetailsScreen";
+// import MembersDetailsScreen from "../screens/MembersDetailsScreen";
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
+// const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -63,60 +63,58 @@ const AppNavigator = () => {
   };
 
   // Bottom Tab Navigator for User
-  const UserTabNavigator = () => (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="UserDashboard"
-        options={{ headerShown: false }}
-      >
-        {(props) => (
-          <UserDashboard
-            {...props}
-            bookings={bookings}
-            handleLogout={handleLogout}
-          />
-        )}
-      </Tab.Screen>
-      <Tab.Screen name="SlotBooking">
-        {(props) => (
-          <SlotBookingScreen {...props} addBooking={addBooking} />
-        )}
-      </Tab.Screen>
-    </Tab.Navigator>
-  );
+  // const UserTabNavigator = () => (
+  //   <Tab.Navigator>
+  //     <Tab.Screen
+  //       name="UserDashboard"
+  //       options={{ headerShown: false }}
+  //     >
+  //       {(props) => (
+  //         <UserDashboard
+  //           {...props}
+  //           bookings={bookings}
+  //           handleLogout={handleLogout}
+  //         />
+  //       )}
+  //     </Tab.Screen>
+  //     <Tab.Screen name="SlotBooking">
+  //       {(props) => (
+  //         <SlotBookingScreen {...props} addBooking={addBooking} />
+  //       )}
+  //     </Tab.Screen>
+  //   </Tab.Navigator>
+  // );
 
-  // Bottom Tab Navigator for Admin
-  const AdminTabNavigator = () => (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="AdminDashboard"
-        component={AdminDashboard}
-        options={{ headerShown: false }}
-      />
-      <Tab.Screen
-        name="MembersDetails"
-        component={MembersDetailsScreen}
-      />
-    </Tab.Navigator>
-  );
 
   return (
     <NavigationContainer>
       {isLoggedIn ? (
         <Stack.Navigator>
           <Stack.Screen
-            name="UserTabNavigator"
-            component={UserTabNavigator}
-            options={{ headerShown: false }}
-          />
+              name="UserDashboard"
+              options={{ headerShown: false }}
+            >
+              {(props) => (
+                <UserDashboard
+                  {...props}
+                  bookings={bookings}
+                  handleLogout={handleLogout}
+                />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="SlotBooking">
+              {(props) => (
+                <SlotBookingScreen {...props} addBooking={addBooking} />
+              )}
+            </Stack.Screen>
         </Stack.Navigator>
       ) : isAdminLoggedIn ? (
         <Stack.Navigator>
-          <Stack.Screen
-            name="AdminTabNavigator"
-            component={AdminTabNavigator}
-            options={{ headerShown: false }}
-          />
+           <Stack.Screen
+              name="AdminDashboard"
+              component={AdminDashboard}
+              options={{ headerShown: false }}
+            />
         </Stack.Navigator>
       ) : (
         <Stack.Navigator>

@@ -38,7 +38,7 @@ export default ({ config }) => {
   const envConfig = {
     dev: {
       extra: {
-        apiUrl: "http://192.168.1.7:5000",
+        apiUrl: "http://192.168.31.124:5000",
         environment: "dev",
       },
     },

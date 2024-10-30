@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
 
 const AllBookingListing = ({ navigation }) => {
   const [bookings, setBookings] = useState([]);
@@ -11,12 +18,12 @@ const AllBookingListing = ({ navigation }) => {
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch('http://192.168.1.7:5000/bookings'); // Replace with your API URL
+      const response = await fetch("http://192.168.31.124:5000/bookings"); // Replace with your API URL
       const data = await response.json();
       setBookings(data);
       setLoading(false);
     } catch (error) {
-      console.error('Failed to fetch bookings:', error);
+      console.error("Failed to fetch bookings:", error);
       setLoading(false);
     }
   };
@@ -24,7 +31,7 @@ const AllBookingListing = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.bookingCard}
-      onPress={() => navigation.navigate('BookingDetails', { booking: item })}
+      onPress={() => navigation.navigate("BookingDetails", { booking: item })}
     >
       <View style={styles.bookingDetails}>
         <Text style={styles.bookingTitle}>Booking ID: {item.booking_id}</Text>
@@ -37,7 +44,9 @@ const AllBookingListing = ({ navigation }) => {
   );
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#ff4500" style={styles.loading} />;
+    return (
+      <ActivityIndicator size="large" color="#ff4500" style={styles.loading} />
+    );
   }
 
   return (
@@ -56,41 +65,41 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: "#f4f4f4",
   },
   listContainer: {
     paddingBottom: 16,
   },
   bookingCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 8,
     padding: 16,
     marginBottom: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     elevation: 3,
     borderLeftWidth: 5,
-    borderColor: '#ff4500',
+    borderColor: "#ff4500",
   },
   bookingDetails: {
     marginBottom: 8,
   },
   bookingTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 4,
   },
   bookingText: {
     fontSize: 14,
-    color: '#555',
+    color: "#555",
   },
   loading: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

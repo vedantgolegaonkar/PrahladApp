@@ -21,8 +21,6 @@ const UserDashboard = ({ bookings, handleLogout }) => {
             iconName = "home";
           } else if (route.name === "My Bookings") {
             iconName = "calendar";
-          
-        
           } else if (route.name === "List") {
             iconName = "list";
           } else if (route.name === "Notifications") {

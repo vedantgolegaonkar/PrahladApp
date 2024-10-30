@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 import Toast from "react-native-toast-message";
 
 const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
@@ -16,12 +16,15 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
   const [password, setPassword] = useState("");
 
   const adminCredentials = {
-    mobileNumber: '8825784512',
+    mobileNumber: "8825784512",
     password: "A",
   };
 
-  const appEnv = (Constants.manifest && Constants.manifest.releaseChannel) || 'dev';
-  const envConfig = Constants.manifest?.extra?.[appEnv] || { apiUrl: 'http://192.168.1.7:5000' };
+  const appEnv =
+    (Constants.manifest && Constants.manifest.releaseChannel) || "dev";
+  const envConfig = Constants.manifest?.extra?.[appEnv] || {
+    apiUrl: "http://192.168.31.124:5000",
+  };
   const apiUrl = envConfig.apiUrl;
 
   const handleLogin = async () => {
@@ -57,7 +60,9 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
       });
 
       if (!response.ok) {
-        throw new Error("Login failed. Please check your mobile number and password.");
+        throw new Error(
+          "Login failed. Please check your mobile number and password."
+        );
       }
 
       const data = await response.json();
@@ -68,7 +73,6 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
       });
 
       onLogin(navigation);
-
     } catch (error) {
       Toast.show({
         type: "error",

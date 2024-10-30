@@ -1,85 +1,70 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
+import { AntDesign } from "@expo/vector-icons";
+import PDFReader from "react-native-pdf";
 
 const PdfScreen = () => {
-  const [pdfFiles, setPdfFiles] = useState([]);
+  const [pdfUri, setPdfUri] = useState(null);
 
   // Function to handle PDF upload
-  const handleUploadPDF = async () => {
+  const handleUploadPdf = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: "application/pdf",
       });
-
       if (result.type === "success") {
-        setPdfFiles((prevFiles) => [...prevFiles, result]);
+        setPdfUri(result.uri);
       }
     } catch (error) {
-      Alert.alert("Error", "Failed to upload PDF");
+      console.error("Error uploading PDF:", error);
     }
   };
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={pdfFiles}
-        keyExtractor={(item) => item.uri}
-        renderItem={({ item }) => (
-          <View style={styles.pdfItem}>
-            <Text style={styles.pdfText}>{item.name}</Text>
-          </View>
-        )}
-        ListEmptyComponent={<Text>No PDFs uploaded</Text>}
-      />
+      {pdfUri ? (
+        <PDFReader
+          source={{ uri: pdfUri }}
+          style={styles.pdfViewer}
+        />
+      ) : (
+        <Text style={styles.placeholderText}>No PDF uploaded yet.</Text>
+      )}
 
-      {/* Floating Upload PDF Button */}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={handleUploadPDF}
-      >
-        <Text style={styles.fabText}>Upload PDF</Text>
+      <TouchableOpacity style={styles.uploadButton} onPress={handleUploadPdf}>
+        <AntDesign name="upload" size={24} color="white" />
       </TouchableOpacity>
     </View>
   );
 };
 
+export default PdfScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5F5F5",
   },
-  pdfItem: {
-    padding: 16,
-    marginVertical: 8,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 8,
+  pdfViewer: {
+    width: "100%",
+    height: "100%",
   },
-  pdfText: {
-    fontSize: 16,
-    color: "#333",
+  placeholderText: {
+    fontSize: 18,
+    color: "gray",
   },
-  fab: {
+  uploadButton: {
     position: "absolute",
-    right: 20,
     bottom: 20,
-    backgroundColor: "#ff4500",
-    padding: 16,
+    right: 20,
+    backgroundColor: "#FF6F00",
+    padding: 15,
     borderRadius: 30,
     alignItems: "center",
     justifyContent: "center",
-  },
-  fabText: {
-    color: "#fff",
-    fontWeight: "bold",
+    elevation: 4,
   },
 });
-
-export default PdfScreen;

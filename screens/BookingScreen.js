@@ -9,7 +9,7 @@ const BookingScreen = () => {
   // Function to send the updated booking to the server
   const updateBookingOnServer = async (booking) => {
     try {
-      const response = await fetch("http://192.168.1.7:5000/api/bookings", {
+      const response = await fetch("http://192.168.31.124:5000/api/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

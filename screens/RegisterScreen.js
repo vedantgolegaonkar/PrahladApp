@@ -6,11 +6,11 @@ import {
   StyleSheet,
   Alert,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Toast from "react-native-toast-message";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 
 const RegisterScreen = ({ navigation, onRegister }) => {
   const [firstName, setFirstName] = useState("");
@@ -32,26 +32,29 @@ const RegisterScreen = ({ navigation, onRegister }) => {
   const [gender, setGender] = useState("male");
 
   // Determine the environment safely
-  const appEnv = (Constants.manifest && Constants.manifest.releaseChannel) || 'dev';
-  // How to get this IP 
+  const appEnv =
+    (Constants.manifest && Constants.manifest.releaseChannel) || "dev";
+  // How to get this IP
   //cmd -->
   //  ipconfig --Will Give
   //        -->IPv4 Address. . . . . . . . . . . : 192.168.1.9
   //Replace in apiUrl: 'http://192.168.1.9:5000'
 
-  const envConfig = Constants.manifest?.extra?.[appEnv] || { apiUrl: 'http://192.168.1.7:5000' }; // Default API URL
+  const envConfig = Constants.manifest?.extra?.[appEnv] || {
+    apiUrl: "http://192.168.31.124:5000",
+  }; // Default API URL
 
   // Use the environment-specific API URL
   const apiUrl = envConfig.apiUrl;
 
   const handleRegistration = async () => {
-    console.log('###################');
-      console.log('URL IS',  `${appEnv}`);
-      console.log('###################');
-      console.log('###################');
-      console.log('envConfig IS',  JSON.stringify(Constants.manifest));
-      console.log('###################');
-     if (!firstName.trim()) {
+    console.log("###################");
+    console.log("URL IS", `${appEnv}`);
+    console.log("###################");
+    console.log("###################");
+    console.log("envConfig IS", JSON.stringify(Constants.manifest));
+    console.log("###################");
+    if (!firstName.trim()) {
       Alert.alert("Error", "First Name is Required");
       return;
     }
@@ -131,13 +134,12 @@ const RegisterScreen = ({ navigation, onRegister }) => {
 
     // Send the registration request
     try {
-
-      console.log('###################');
-      console.log('URL IS',  `${apiUrl}/register`);
-      console.log('###################');
-      console.log('###################');
-      console.log('PAYLOAD IS',  JSON.stringify(payload));
-      console.log('###################');
+      console.log("###################");
+      console.log("URL IS", `${apiUrl}/register`);
+      console.log("###################");
+      console.log("###################");
+      console.log("PAYLOAD IS", JSON.stringify(payload));
+      console.log("###################");
       const response = await fetch(`${apiUrl}/register`, {
         method: "POST",
         headers: {
@@ -145,9 +147,8 @@ const RegisterScreen = ({ navigation, onRegister }) => {
         },
         body: JSON.stringify(payload),
       });
-      console.log('RESPONSE IS ******',JSON.stringify(response));
+      console.log("RESPONSE IS ******", JSON.stringify(response));
       if (!response.ok) {
-        
         throw new Error("Registration failed. Please try again.");
       }
 
@@ -160,7 +161,6 @@ const RegisterScreen = ({ navigation, onRegister }) => {
 
       // Optionally, you can navigate to another screen or reset form state
       onRegister(navigation);
-
     } catch (error) {
       Toast.show({
         type: "error",
@@ -298,7 +298,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       </TouchableOpacity>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
