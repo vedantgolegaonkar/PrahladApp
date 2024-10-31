@@ -15,7 +15,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 const Stack = createStackNavigator();
 // const Tab = createBottomTabNavigator();
 
-const AppNavigator = () => {
+const AppNavigator = ({userDetails }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
