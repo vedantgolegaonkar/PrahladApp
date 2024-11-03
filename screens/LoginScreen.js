@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 import Toast from "react-native-toast-message";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
   const [mobileNumber, setMobileNumber] = useState("");
@@ -58,7 +59,7 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
         },
         body: JSON.stringify(payload),
       });
-
+      console.log('dataffff',response)
       if (!response.ok) {
         throw new Error(
           "Login failed. Please check your mobile number and password."
@@ -66,6 +67,19 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
       }
 
       const data = await response.json();
+      const userId = data?.user_id  // Store user ID from response
+      console.log('dataffff',data)
+      const storeData = async (key, value) => {
+        try {
+          console.log("valueeee",value)
+          console.log("value.toString()",value.toString())
+
+          await AsyncStorage.setItem(key, value.toString());
+        } catch (e) {
+          console.error('Failed to save data to AsyncStorage:', e);
+        }
+      };
+      await storeData("userId",userId)
       Toast.show({
         type: "success",
         text1: "Login Successful",

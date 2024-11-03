@@ -1,10 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-const HomeScreen = ({ navigation, userDetails }) => {
+const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hello, {userDetails?.firstname}!!</Text>
       <Text style={styles.title}>Welcome to Prahlad Upasana</Text>
 
       <TouchableOpacity

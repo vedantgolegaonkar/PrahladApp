@@ -21,7 +21,7 @@ export default ({ config }) => {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "",  // Set your adaptive icon foreground image path
+        foregroundImage: "./assets/foregroundImage.jpg",  // Set your adaptive icon foreground image path
         backgroundColor: "#ffffff",
       },
       permissions: [

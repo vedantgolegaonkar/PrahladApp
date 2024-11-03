@@ -140,6 +140,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       console.log("###################");
       console.log("PAYLOAD IS", JSON.stringify(payload));
       console.log("###################");
+      
       const response = await fetch(`${apiUrl}/register`, {
         method: "POST",
         headers: {

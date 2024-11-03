@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "../screens/HomeScreen";
 import LoginScreen from "../screens/LoginScreen";
@@ -13,16 +12,16 @@ import SlotBookingScreen from "../screens/SlotBookingScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 
 const Stack = createStackNavigator();
-// const Tab = createBottomTabNavigator();
 
-const AppNavigator = ({userDetails }) => {
+const AppNavigator = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [userDetails, setUserDetails] = useState(null);
 
-  const handleUserLogin = () => {
+  const handleUserLogin = (details) => {
+    setUserDetails(details);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -55,8 +54,7 @@ const AppNavigator = ({userDetails }) => {
     setIsAdminLoggedIn(false);
   };
 
-  const handleRegister = (details) => {
-    setUserDetails(details);
+  const handleRegister = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -85,14 +83,6 @@ const AppNavigator = ({userDetails }) => {
                 <SlotBookingScreen {...props} addBooking={addBooking} />
               )}
             </Stack.Screen>
-            <Stack.Screen name="Home">
-            {(props) => (
-              <HomeScreen
-                {...props}
-                userDetails={userDetails} // Pass user details to HomeScreen
-              />
-            )}
-          </Stack.Screen>
         </Stack.Navigator>
       ) : isAdminLoggedIn ? (
         <Stack.Navigator>
@@ -128,7 +118,7 @@ const AppNavigator = ({userDetails }) => {
           <Stack.Screen 
           name="Profile" 
           component={ProfileScreen} 
-          initialParams={{ userDetails }} 
+          options={{headerShown: false}}
         />
         </Stack.Navigator>
       )}
