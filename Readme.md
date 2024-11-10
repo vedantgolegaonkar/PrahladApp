@@ -81,3 +81,19 @@ eas build --profile prod --platform android
 
 ## Download the APK
 Once the build is complete, EAS will provide you with a link to download the APK file. You can then transfer this APK file to your Android device for testing.
+
+## FOR  EXPO APK generation issues follow below commands
+## run the following commands will solve the problems:
+
+npx expo-doctor
+npx expo-doctor --fix-dependencies
+npx expo install --check
+## After every build make sure to run the check so that build is always successfull
+npm install -g npm-check
+npm-check
+
+## generate APK 
+eas build --profile prod --platform android
+
+## Android app:
+https://expo.dev/artifacts/eas/jZ6vtNSw1y6NRk3m4FfWzV.apk

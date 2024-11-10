@@ -1,10 +1,9 @@
 export default ({ config }) => {
-  const environment = process.env.APP_ENV || "dev"; // Use "dev" as default if APP_ENV is not set
+  const environment = process.env.APP_ENV || "dev";
 
-  // Define environment-specific settings
   const envConfig = {
     dev: {
-      apiUrl: "http://192.168.1.9:5000",
+      apiUrl: "https://upasana-app-gdm2p.ondigitalocean.app",
       environment: "dev",
     },
     prod: {
@@ -13,20 +12,19 @@ export default ({ config }) => {
     },
   };
 
-  // Merge common settings with environment-specific settings
   return {
     ...config,
     extra: {
-      ...config.extra, // Keep existing extra settings
-      ...envConfig[environment], // Merge environment-specific settings
+      ...config.extra,
+      eas: {
+        projectId: "3aec5053-2364-467a-ad8a-b74a955a311a",  // Add your EAS project ID here
+      },
+      ...envConfig[environment],
     },
-    version: "1.0.0", // Specify your app version
+    version: "1.0.0",
     android: {
       ...config.android,
-      package: "com.upasana.app", // Set your unique package name here
-    },
-    cli: {
-      appVersionSource: "config", // Ensure the source is set to "config"
+      package: "com.upasana.app",
     },
   };
 };
