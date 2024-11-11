@@ -41,7 +41,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
   //Replace in apiUrl: 'http://192.168.1.9:5000'
 
   const envConfig = Constants.manifest?.extra?.[appEnv] || {
-    apiUrl: "http://192.168.31.124:5000",
+    apiUrl: "http://192.168.43.168:5000",
   }; // Default API URL
 
   // Use the environment-specific API URL

@@ -11,6 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 const Tab = createBottomTabNavigator();
 
 const UserDashboard = ({ bookings, handleLogout }) => {
+ 
   return (
     <Tab.Navigator
       initialRouteName="Home"

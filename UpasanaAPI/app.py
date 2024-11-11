@@ -107,20 +107,39 @@ def register_user():
         conn = get_db_connection()
         cursor = conn.cursor()
 
+                 # Query to get the zone code
+        zone_query = "SELECT zone_code FROM Zone WHERE pincode = %s"
+        cursor.execute(zone_query, (pincode,))
+        zone_result = cursor.fetchone()
+
+        # Check if zone code exists for the provided pincode
+        if zone_result is None:
+            return jsonify({"error": "Invalid pincode; no matching zone found"}), 400
+
+        # Retrieve the zone code from the query result
+        zone_code = zone_result[0]
+
+         # Check if the mobile number is already registered
+        cursor.execute("SELECT * FROM users WHERE mobile_number = %s", (mobile_number,))
+        existing_user = cursor.fetchone()
+        if existing_user:
+            return jsonify({"error": "Already registered mobile number"}), 400
+
+
         # Step 4: Insert query
         insert_query = """
         INSERT INTO users (
             first_name, middle_name, last_name, email, password, confirm_password,
             mobile_number, alternate_mobile_number, flat_no, full_address, area,
-            landmark, city, state, pincode, anugrahit, gender
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            landmark, city, state, pincode, anugrahit, gender, zone_code
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s)
         """
 
         # Execute the query
         cursor.execute(insert_query, (
             first_name, middle_name, last_name, email, password, confirm_password, 
             mobile_number, alt_mobile_number, flat_no, full_address, area,
-            landmark, city, state, pincode, anugrahit, gender
+            landmark, city, state, pincode, anugrahit, gender, zone_code
         ))
 
         conn.commit()  # Commit the transaction

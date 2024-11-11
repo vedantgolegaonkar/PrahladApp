@@ -10,7 +10,7 @@ class Config:
     DB_PORT = "5432"
     DB_NAME = "Upasana"
     DB_USER = "postgres"
-    DB_PASSWORD = "1234"
+    DB_PASSWORD = "admin123"
     
     # Create connection pool for better performance
     connection_pool = pool.SimpleConnectionPool(1, 20,
