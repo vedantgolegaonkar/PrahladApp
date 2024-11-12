@@ -5,11 +5,13 @@ import BookingScreen from "../screens/BookingScreen";
 import ListScreen from "../screens/ListScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+// import PdfScreen from "../screens/PdfScreen"; // New PDF screen
 import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
 const UserDashboard = ({ bookings, handleLogout }) => {
+ 
   return (
     <Tab.Navigator
       initialRouteName="Home"

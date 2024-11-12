@@ -6,12 +6,10 @@ import { useBooking } from "../context/BookingContext";
 const BookingScreen = () => {
   const { bookings } = useBooking();
 
-  // Get `apiUrl` from the extra config
-  const apiUrl = Constants.expoConfig?.extra?.apiUrl || 'http://localhost:5000';
   // Function to send the updated booking to the server
   const updateBookingOnServer = async (booking) => {
     try {
-      const response = await fetch(`${apiUrl}/api/bookings`, {
+      const response = await fetch("http://192.168.31.124:5000/api/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

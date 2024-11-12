@@ -6,11 +6,11 @@ import {
   StyleSheet,
   Alert,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Toast from "react-native-toast-message";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 
 const RegisterScreen = ({ navigation, onRegister }) => {
   const [firstName, setFirstName] = useState("");
@@ -30,16 +30,31 @@ const RegisterScreen = ({ navigation, onRegister }) => {
   const [pincode, setPincode] = useState("");
   const [anugrahit, setAnugrahit] = useState("no");
   const [gender, setGender] = useState("male");
-  
-  // Get `apiUrl` from the extra config
-  const apiUrl = Constants.expoConfig?.extra?.apiUrl || 'http://localhost:5000';
+
+  // Determine the environment safely
+  const appEnv =
+    (Constants.manifest && Constants.manifest.releaseChannel) || "dev";
+  // How to get this IP
+  //cmd -->
+  //  ipconfig --Will Give
+  //        -->IPv4 Address. . . . . . . . . . . : 192.168.1.9
+  //Replace in apiUrl: 'http://192.168.1.9:5000'
+
+  const envConfig = Constants.manifest?.extra?.[appEnv] || {
+    apiUrl: "http://192.168.43.168:5000",
+  }; // Default API URL
+
+  // Use the environment-specific API URL
+  const apiUrl = envConfig.apiUrl;
 
   const handleRegistration = async () => {
-   
-    console.log('###################');
-    console.log('API URL IS',  `${apiUrl}/register`);
-    console.log('###################');
-     if (!firstName.trim()) {
+    console.log("###################");
+    console.log("URL IS", `${appEnv}`);
+    console.log("###################");
+    console.log("###################");
+    console.log("envConfig IS", JSON.stringify(Constants.manifest));
+    console.log("###################");
+    if (!firstName.trim()) {
       Alert.alert("Error", "First Name is Required");
       return;
     }
@@ -119,9 +134,13 @@ const RegisterScreen = ({ navigation, onRegister }) => {
 
     // Send the registration request
     try {
-      console.log('###################');
-      console.log('PAYLOAD IS',  JSON.stringify(payload));
-      console.log('###################');
+      console.log("###################");
+      console.log("URL IS", `${apiUrl}/register`);
+      console.log("###################");
+      console.log("###################");
+      console.log("PAYLOAD IS", JSON.stringify(payload));
+      console.log("###################");
+      
       const response = await fetch(`${apiUrl}/register`, {
         method: "POST",
         headers: {
@@ -129,22 +148,22 @@ const RegisterScreen = ({ navigation, onRegister }) => {
         },
         body: JSON.stringify(payload),
       });
-      console.log('RESPONSE IS ******',JSON.stringify(response));
+      console.log("RESPONSE IS ******", JSON.stringify(response));
       if (!response.ok) {
-        
         throw new Error("Registration failed. Please try again.");
       }
 
       const data = await response.json(); // Parse the response
+
       Toast.show({
         type: "success",
         text1: "Registration Successful",
         text2: "You have been registered successfully",
       });
 
-      // Optionally, you can navigate to another screen or reset form state
-      onRegister(navigation);
-
+      // Optionally, you can navigate to another screen or reset form state;
+      onRegister({first_name: data.first_name, middle_name: data.middle_name, last_name: data.middle_name, email: data.email, password: data.email, confirm_password: data.confirm_password, mobile_number: data.mobile_number, alternate_mobile_number: data.alternate_mobile_number, flat_no: data.flat_no, full_address: data.full_address, area: data.area, landmark: data.landmark, city: data.city, state: data.state, pincode: data.pincode, anugrahit: data.anugrahit, gender: data.gender });
+      navigation.navigate("Home")
     } catch (error) {
       Toast.show({
         type: "error",
@@ -282,7 +301,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       </TouchableOpacity>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

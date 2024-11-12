@@ -1,30 +1,59 @@
-export default ({ config }) => {
-  const environment = process.env.APP_ENV || "dev";
+// app.config.js
 
-  const envConfig = {
-    dev: {
-      apiUrl: "https://upasana-app-gdm2p.ondigitalocean.app",
-      environment: "dev",
+export default ({ config }) => {
+  const environment = process.env.APP_ENV || 'development';
+
+  // Define common settings
+  const commonSettings = {
+    name: "PrahladApp",
+    slug: "PrahladApp",
+    version: "1.0.0",
+    orientation: "portrait",
+    icon: "./assets/icon.png",  // Set your icon path
+    userInterfaceStyle: "light",
+    splash: {
+      image: "./assets/splash.png",  // Set your splash image path
+      resizeMode: "contain",
+      backgroundColor: "#ffffff",
     },
-    prod: {
-      apiUrl: "https://upasana-app-gdm2p.ondigitalocean.app",
-      environment: "prod",
+    ios: {
+      supportsTablet: true,
+    },
+    android: {
+      adaptiveIcon: {
+        foregroundImage: "./assets/foregroundImage.jpg",  // Set your adaptive icon foreground image path
+        backgroundColor: "#ffffff",
+      },
+      permissions: [
+        "INTERNET",                // Allow network access
+        "ACCESS_NETWORK_STATE" ,     // Allow checking network state
+        ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
+      ],
+    },
+    web: {
+      favicon: "./assets/favicon.png",  // Set your favicon path
     },
   };
 
-  return {
-    ...config,
-    extra: {
-      ...config.extra,
-      eas: {
-        projectId: "3aec5053-2364-467a-ad8a-b74a955a311a",  // Add your EAS project ID here
+  // Define environment-specific settings
+  const envConfig = {
+    dev: {
+      extra: {
+        apiUrl: "http://192.168.31.124:5000",
+        environment: "dev",
       },
-      ...envConfig[environment],
     },
-    version: "1.0.0",
-    android: {
-      ...config.android,
-      package: "com.upasana.app",
+    prod: {
+      extra: {
+        apiUrl: "https://api.prahladapp.com",
+        environment: "prd",
+      },
     },
+  };
+
+  // Merge common settings with environment-specific settings
+  return {
+    ...commonSettings,
+    ...envConfig[environment],
   };
 };

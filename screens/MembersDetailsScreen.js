@@ -1,7 +1,14 @@
 // MemberDetailsScreen.js
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert} from 'react-native';
- 
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  Alert,
+} from "react-native";
+
 const MemberDetailsScreen = ({ route, navigation }) => {
   const { member } = route.params;
 
@@ -13,28 +20,30 @@ const MemberDetailsScreen = ({ route, navigation }) => {
     setIsEditing(true);
   };
 
-    const handleSave = async () => {
+  const handleSave = async () => {
     try {
-      
-  // Get `apiUrl` from the extra config
-  const apiUrl = Constants.expoConfig?.extra?.apiUrl || 'http://localhost:5000';
-
-      const response = await fetch(`${apiUrl}/users/${editableMember.id}`, {
-        method: 'PUT', // or 'PATCH', depending on your API
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(editableMember), // Send the updated member data
-      });
+      const response = await fetch(
+        `http://192.168.31.124:5000/users/${editableMember.id}`,
+        {
+          method: "PUT", // or 'PATCH', depending on your API
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editableMember), // Send the updated member data
+        }
+      );
 
       if (response.ok) {
-        Alert.alert('Success', 'Member details updated successfully');
+        Alert.alert("Success", "Member details updated successfully");
         setIsEditing(false);
       } else {
-        Alert.alert('Error', 'Failed to update member details');
+        Alert.alert("Error", "Failed to update member details");
       }
     } catch (error) {
-      Alert.alert('Error', 'An error occurred while updating the member details');
+      Alert.alert(
+        "Error",
+        "An error occurred while updating the member details"
+      );
     }
   };
 
@@ -56,7 +65,7 @@ const MemberDetailsScreen = ({ route, navigation }) => {
               <TextInput
                 style={styles.input}
                 value={editableMember.email}
-                onChangeText={(value) => handleChange('email', value)}
+                onChangeText={(value) => handleChange("email", value)}
               />
             </View>
 
@@ -65,7 +74,7 @@ const MemberDetailsScreen = ({ route, navigation }) => {
               <TextInput
                 style={styles.input}
                 value={editableMember.mobile_number}
-                onChangeText={(value) => handleChange('mobile_number', value)}
+                onChangeText={(value) => handleChange("mobile_number", value)}
               />
             </View>
 
@@ -74,7 +83,7 @@ const MemberDetailsScreen = ({ route, navigation }) => {
               <TextInput
                 style={styles.input}
                 value={`${editableMember.flat_no}, ${editableMember.full_address}, ${editableMember.area}, ${editableMember.landmark}, ${editableMember.city}, ${editableMember.state} - ${editableMember.pincode}`}
-                onChangeText={(value) => handleChange('address', value)}
+                onChangeText={(value) => handleChange("address", value)}
                 multiline
               />
             </View>
@@ -84,7 +93,7 @@ const MemberDetailsScreen = ({ route, navigation }) => {
               <TextInput
                 style={styles.input}
                 value={editableMember.gender}
-                onChangeText={(value) => handleChange('gender', value)}
+                onChangeText={(value) => handleChange("gender", value)}
               />
             </View>
 
@@ -93,7 +102,7 @@ const MemberDetailsScreen = ({ route, navigation }) => {
               <TextInput
                 style={styles.input}
                 value={editableMember.anugrahit}
-                onChangeText={(value) => handleChange('anugrahit', value)}
+                onChangeText={(value) => handleChange("anugrahit", value)}
               />
             </View>
 
@@ -116,8 +125,10 @@ const MemberDetailsScreen = ({ route, navigation }) => {
             <View style={styles.detailRow}>
               <Text style={styles.label}>Address:</Text>
               <Text style={styles.value}>
-                {editableMember.flat_no}, {editableMember.full_address}, {editableMember.area},{' '}
-                {editableMember.landmark}, {editableMember.city}, {editableMember.state} - {editableMember.pincode}
+                {editableMember.flat_no}, {editableMember.full_address},{" "}
+                {editableMember.area}, {editableMember.landmark},{" "}
+                {editableMember.city}, {editableMember.state} -{" "}
+                {editableMember.pincode}
               </Text>
             </View>
 
@@ -145,77 +156,77 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: "#f4f4f4",
   },
   detailCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 8,
     padding: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     elevation: 3,
     borderLeftWidth: 5,
-    borderColor: '#ff4500',
+    borderColor: "#ff4500",
   },
   memberName: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 16,
   },
   detailRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
     marginBottom: 12,
   },
   label: {
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     fontSize: 16,
-    width: '30%',
+    width: "30%",
   },
   value: {
-    color: '#555',
+    color: "#555",
     fontSize: 16,
-    width: '70%',
-    flexWrap: 'wrap',
+    width: "70%",
+    flexWrap: "wrap",
   },
   input: {
-    color: '#555',
+    color: "#555",
     fontSize: 16,
-    width: '70%',
-    flexWrap: 'wrap',
+    width: "70%",
+    flexWrap: "wrap",
     borderBottomWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     padding: 4,
   },
   editButton: {
     marginTop: 20,
-    backgroundColor: '#ff4500',
+    backgroundColor: "#ff4500",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   editButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   saveButton: {
     marginTop: 20,
-    backgroundColor: '#4caf50',
+    backgroundColor: "#4caf50",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   saveButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 

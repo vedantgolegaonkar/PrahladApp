@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "../screens/HomeScreen";
 import LoginScreen from "../screens/LoginScreen";
@@ -10,20 +9,19 @@ import Toast from "react-native-toast-message";
 import AdminDashboard from "../screens/AdminDashboard";
 import UserDashboard from "../screens/UserDashboard";
 import SlotBookingScreen from "../screens/SlotBookingScreen";
-import MembersDetailsScreen from "../screens/MembersDetailsScreen";
-
+import ProfileScreen from "../screens/ProfileScreen";
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [bookings, setBookings] = useState([]);
+  const [userDetails, setUserDetails] = useState(null);
 
-
-  const handleUserLogin = () => {
+  const handleUserLogin = (details) => {
+    setUserDetails(details);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -51,11 +49,9 @@ const AppNavigator = () => {
     setBookings([...bookings, slot]);
   };
 
-
-
   const handleLogout = () => {
-    setIsLoggedIn(false); // Reset login state
-    setIsAdminLoggedIn(false); // Reset admin login if necessary
+    setIsLoggedIn(false);
+    setIsAdminLoggedIn(false);
   };
 
   const handleRegister = () => {
@@ -66,13 +62,11 @@ const AppNavigator = () => {
     }, 500);
   };
 
-
   return (
-    <>
-      <NavigationContainer>
-        {isLoggedIn ? (
-         <Stack.Navigator>
-            <Stack.Screen
+    <NavigationContainer>
+      {isLoggedIn ? (
+        <Stack.Navigator>
+          <Stack.Screen
               name="UserDashboard"
               options={{ headerShown: false }}
             >
@@ -89,60 +83,47 @@ const AppNavigator = () => {
                 <SlotBookingScreen {...props} addBooking={addBooking} />
               )}
             </Stack.Screen>
-          </Stack.Navigator>
-     ) : isAdminLoggedIn ? (
-       <Stack.Navigator>
-         <Stack.Screen
-           name="AdminDashboard"
-           component={AdminDashboard}
-           options={{ headerShown: false }}
-         />
-         <Stack.Screen name="MemberDetails" component={MembersDetailsScreen} />
-
-       </Stack.Navigator>
-        ) : isAdminLoggedIn ? (
-          <Stack.Navigator>
-            <Stack.Screen
+        </Stack.Navigator>
+      ) : isAdminLoggedIn ? (
+        <Stack.Navigator>
+           <Stack.Screen
               name="AdminDashboard"
               component={AdminDashboard}
               options={{ headerShown: false }}
             />
-
-          </Stack.Navigator>
-        ) : (
-          <Stack.Navigator>
-            <Stack.Screen name="Login">
-              {(props) => (
-                <LoginScreen
-                  {...props}
-                  onLogin={handleUserLogin}
-                  onAdminLogin={handleAdminLogin}
-                />
-              )}
-            </Stack.Screen>
-            <Stack.Screen name="Register">
-              {(props) => (
-                <RegisterScreen
-                  {...props}
-                  onRegister={() => handleRegister(props.navigation)} // Pass navigation
-                />
-              )}
-            </Stack.Screen>
-            <Stack.Screen name="AdminLogin">
-              {(props) => <AdminDashboard {...props} />}
-            </Stack.Screen>
-
-            <Stack.Screen
-              name="AdminDashboard"
-              component={AdminDashboard}
-              options={{ headerShown: false }}
-            />
-            <Tab.Screen name="Home" component={HomeScreen} />
-          </Stack.Navigator>
-        )}
-      </NavigationContainer>
+        </Stack.Navigator>
+      ) : (
+        <Stack.Navigator>
+          <Stack.Screen name="Login">
+            {(props) => (
+              <LoginScreen
+                {...props}
+                onLogin={handleUserLogin}
+                onAdminLogin={handleAdminLogin}
+              />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="Register">
+            {(props) => (
+              <RegisterScreen
+                {...props}
+                onRegister={() => handleRegister(props.navigation)}
+              />
+            )}
+          </Stack.Screen>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+          />
+          <Stack.Screen 
+          name="Profile" 
+          component={ProfileScreen} 
+          options={{headerShown: false}}
+        />
+        </Stack.Navigator>
+      )}
       <Toast />
-    </>
+    </NavigationContainer>
   );
 };
 
