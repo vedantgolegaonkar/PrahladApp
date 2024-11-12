@@ -1,5 +1,5 @@
 {
-  "name": "prahladapp",
+  "name": "RamdasiBana@Pune",
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "android:prod": "cross-env EXPO_APP_ENV=prod npx expo start --android --no-dev --minify",
     "ios:dev": "cross-env EXPO_APP_ENV=dev npx expo start --ios",
     "ios:prod": "cross-env EXPO_APP_ENV=prod npx expo start --ios --no-dev --minify",
-    "postinstall": "npx json -I -f package.json -e \"delete this.dependencies['prahladapp']\""
+    "postinstall": "npx json -I -f package.json -e \"delete this.dependencies['RamdasiBana@Pune']\""
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.3",

@@ -4,8 +4,8 @@ export default ({ config }) => {
 
   // Define common settings
   const commonSettings = {
-    name: "PrahladApp",
-    slug: "PrahladApp",
+    name: "RamdasiBana@Pune",
+    slug: "RamdasiBana@Pune",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/icon.png",  // Set your icon path
@@ -29,7 +29,7 @@ export default ({ config }) => {
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE",
       ],
-      package: "com.prahladapp",  // Add your unique Android package name here
+      package: "com.ramdasibana",  // Add your unique Android package name here
     },
     web: {
       favicon: "./assets/favicon.png",  // Set your favicon path
