@@ -3,29 +3,30 @@
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
-    "start:dev": "cross-env EXPO_APP_ENV=dev npx expo start",
+    "start:dev": "cross-env EXPO_APP_ENV=dev npx expo start -c",
     "start:prod": "cross-env EXPO_APP_ENV=prod npx expo start --no-dev --minify",
     "android:dev": "cross-env EXPO_APP_ENV=dev npx expo start --android",
     "android:prod": "cross-env EXPO_APP_ENV=prod npx expo start --android --no-dev --minify",
     "ios:dev": "cross-env EXPO_APP_ENV=dev npx expo start --ios",
-    "ios:prod": "cross-env EXPO_APP_ENV=prod npx expo start --ios --no-dev --minify"
+    "ios:prod": "cross-env EXPO_APP_ENV=prod npx expo start --ios --no-dev --minify",
+    "postinstall": "npx json -I -f package.json -e \"delete this.dependencies['prahladapp']\""
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.3",
-    "@react-native-async-storage/async-storage": "^1.24.0",
+    "@expo/vector-icons": "^14.0.3",
+    "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-picker/picker": "^2.7.5",
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
     "@react-navigation/stack": "^6.4.1",
-    "expo": "^51.0.37",
+    "expo": "~51.0.39",
     "expo-constants": "~16.0.2",
-    "expo-dev-client": "~4.0.28",
+    "expo-dev-client": "~4.0.29",
     "expo-document-picker": "~12.0.2",
     "expo-file-system": "~17.0.1",
     "expo-image-picker": "^15.0.7",
     "expo-status-bar": "~1.12.1",
-    "prahladapp": "file:",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.5",
@@ -37,11 +38,11 @@
     "react-native-screens": "^3.31.1",
     "react-native-toast-message": "^2.2.1",
     "react-native-web": "~0.19.10",
-    "react-native-webview": "^13.12.3",
+    "react-native-webview": "13.8.6",
     "react-router-dom": "^6.27.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/core": "^7.26.0",
     "cross-env": "^7.0.3"
   },
   "private": true

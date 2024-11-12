@@ -1,0 +1,28 @@
+# Ignore node_modules, logs, and any build output
+node_modules
+logs
+*.log
+*.tmp
+
+# Ignore all Expo build artifacts
+.expo
+.expo-shared
+
+# Ignore any environment configuration files
+.env
+.env.*
+
+# Ignore local dependency folders
+prahladapp
+
+# Ignore any unnecessary files
+.git
+.gitignore
+.idea
+.vscode
+.DS_Store
+
+# Ignore local scripts or temporary files
+scripts/
+temp/
+*.bak

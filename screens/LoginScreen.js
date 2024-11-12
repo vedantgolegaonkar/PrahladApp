@@ -1,4 +1,3 @@
-// LoginScreen.js
 import React, { useState } from "react";
 import {
   View,
@@ -21,14 +20,18 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
     password: "A",
   };
 
-  const appEnv =
-    (Constants.manifest && Constants.manifest.releaseChannel) || "dev";
-  const envConfig = Constants.manifest?.extra?.[appEnv] || {
-    apiUrl: "http://192.168.31.124:5000",
-  };
-  const apiUrl = envConfig.apiUrl;
+  // Ensure appEnv is set correctly (should be 'dev' or 'prod')
+  const appEnv = Constants.manifest?.releaseChannel || "dev";
+  
+  // Retrieve apiUrl from app.config.js
+  const apiUrl = Constants.manifest?.extra?.[appEnv]?.apiUrl || "https://upasana-app-gdm2p.ondigitalocean.app"; 
 
   const handleLogin = async () => {
+    console.log("###################");
+    console.log("Login Clicked on Environment", `${appEnv}`);
+    console.log("URL IS", `${apiUrl}/login`);
+    console.log("###################");
+
     if (!mobileNumber.trim()) {
       Alert.alert("Error", "Mobile Number is Required");
       return;
@@ -59,7 +62,7 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
         },
         body: JSON.stringify(payload),
       });
-      console.log('dataffff',response)
+
       if (!response.ok) {
         throw new Error(
           "Login failed. Please check your mobile number and password."
@@ -67,19 +70,11 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
       }
 
       const data = await response.json();
-      const userId = data?.user_id  // Store user ID from response
-      console.log('dataffff',data)
-      const storeData = async (key, value) => {
-        try {
-          console.log("valueeee",value)
-          console.log("value.toString()",value.toString())
+      const userId = data?.user_id;  // Store user ID from response
 
-          await AsyncStorage.setItem(key, value.toString());
-        } catch (e) {
-          console.error('Failed to save data to AsyncStorage:', e);
-        }
-      };
-      await storeData("userId",userId)
+      // Store userId in AsyncStorage
+      await AsyncStorage.setItem("userId", userId.toString());
+
       Toast.show({
         type: "success",
         text1: "Login Successful",

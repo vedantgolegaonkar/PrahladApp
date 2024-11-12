@@ -89,7 +89,7 @@ npx expo-doctor
 npx expo-doctor --fix-dependencies
 npx expo install --check
 ## After every build make sure to run the check so that build is always successfull
-npm install -g npm-check
+## npm install -g npm-check
 npm-check
 
 ## generate APK 

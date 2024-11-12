@@ -127,7 +127,7 @@ const ProfileScreen = ({ onLogout }) => {
 
       try {
       
-        const apiUrl = "http://192.168.43.168:5000";
+        const apiUrl = "https://upasana-app-gdm2p.ondigitalocean.app";
         console.log("userId",userId," ", typeof userId)
         const response = await fetch(`${apiUrl}/users/${userId}`, {
           method: "GET",

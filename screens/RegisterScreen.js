@@ -37,11 +37,11 @@ const RegisterScreen = ({ navigation, onRegister }) => {
   // How to get this IP
   //cmd -->
   //  ipconfig --Will Give
-  //        -->IPv4 Address. . . . . . . . . . . : 192.168.1.9
-  //Replace in apiUrl: 'http://192.168.1.9:5000'
+  //        -->IPv4 Address. . . . . . . . . . . : https://upasana-app-gdm2p.ondigitalocean.app
+  //Replace in apiUrl: 'https://upasana-app-gdm2p.ondigitalocean.app'
 
   const envConfig = Constants.manifest?.extra?.[appEnv] || {
-    apiUrl: "http://192.168.43.168:5000",
+    apiUrl: "https://upasana-app-gdm2p.ondigitalocean.app",
   }; // Default API URL
 
   // Use the environment-specific API URL

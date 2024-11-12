@@ -18,7 +18,7 @@ const AllBookingListing = ({ navigation }) => {
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch("http://192.168.31.124:5000/bookings"); // Replace with your API URL
+      const response = await fetch("https://upasana-app-gdm2p.ondigitalocean.app/bookings"); // Replace with your API URL
       const data = await response.json();
       setBookings(data);
       setLoading(false);
