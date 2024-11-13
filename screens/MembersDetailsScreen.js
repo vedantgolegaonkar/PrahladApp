@@ -23,7 +23,7 @@ const MemberDetailsScreen = ({ route, navigation }) => {
   const handleSave = async () => {
     try {
       const response = await fetch(
-        `http://192.168.31.124:5000/users/${editableMember.id}`,
+        `http://192.168.1.4:5000/users/${editableMember.id}`,
         {
           method: "PUT", // or 'PATCH', depending on your API
           headers: {

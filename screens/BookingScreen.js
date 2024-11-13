@@ -1,41 +1,88 @@
-// BookingScreen.js - User Panel
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, Alert } from "react-native";
-import { useBooking } from "../context/BookingContext";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
+import { useNavigation } from "@react-navigation/native";
 
 const BookingScreen = () => {
-  const { bookings } = useBooking();
+  const [bookings, setBookings] = useState([]); // State to hold booking data
+  const [user, setUser] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [error, setError] = useState(null);
+  const navigation = useNavigation();
 
-  // Function to send the updated booking to the server
-  const updateBookingOnServer = async (booking) => {
+  const appEnv =
+    (Constants.manifest && Constants.manifest.releaseChannel) || "dev";
+  const envConfig = Constants.manifest?.extra?.[appEnv] || {
+    apiUrl: "http://192.168.1.4:5000",
+  };
+  const apiUrl = envConfig.apiUrl;
+
+  // Helper function to fetch data from AsyncStorage
+  const getData = async (key) => {
     try {
-      const response = await fetch("http://192.168.31.124:5000/api/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(booking),
-      });
-
-      if (!response.ok) {
-        Alert.alert("Error", "Failed to update booking on server");
+      const value = await AsyncStorage.getItem(key);
+      if (value !== null) {
+        return value;
       }
-    } catch (error) {
-      Alert.alert("Error", "An error occurred while updating booking");
+    } catch (e) {
+      console.error("Failed to fetch data from AsyncStorage:", e);
     }
+    return null;
   };
 
-  // Send bookings to the server when there's a change
+  // useEffect to get user ID from AsyncStorage and fetch user and booking data
   useEffect(() => {
-    if (bookings.length > 0) {
-      bookings.forEach((booking) => {
-        updateBookingOnServer(booking);
-      });
-    }
-  }, [bookings]);
+    const fetchUserData = async () => {
+      try {
+        const storedUserId = await getData("userId");
+        console.log("Retrieved user ID from AsyncStorage:", storedUserId);
+
+        if (!storedUserId) {
+          console.error("User ID not found in AsyncStorage");
+          setError("User ID not found");
+          return;
+        }
+
+        setUserId(storedUserId);
+
+        // Fetch user and booking data
+        const response = await fetch(`${apiUrl}/bookings/user/${storedUserId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch data");
+
+        const data = await response.json();
+        setUser(data.user);
+        setBookings(data.bookings || []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError(error.message);
+      }
+    };
+
+    fetchUserData();
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
+      {error && <Text style={styles.errorText}>{error}</Text>}
+
+{user && (
+  <View style={styles.userInfo}>
+    <Text style={styles.userLabel}>User Information:</Text>
+    <Text style={styles.userText}>Name: {user.first_name} {user.middle_name} {user.last_name}</Text>
+    <Text style={styles.userText}>Email: {user.email}</Text>
+    <Text style={styles.userText}>Mobile: {user.mobile_number}</Text>
+    <Text style={styles.userText}>Address: {user.full_address}</Text>
+  </View>
+)}
+
+      {/* Display bookings if available */}
       {bookings.length > 0 ? (
         <FlatList
           data={bookings}
@@ -43,33 +90,16 @@ const BookingScreen = () => {
           renderItem={({ item }) => (
             <View style={styles.bookingCard}>
               <View style={styles.bookingDetails}>
-                <Text style={styles.bookingLabel}>Date:</Text>
-                <Text style={styles.bookingText}>{item.date}</Text>
-              </View>
-
-              <View style={styles.bookingDetails}>
-                <Text style={styles.bookingLabel}>Timeslot:</Text>
-                <Text style={styles.bookingText}>{item.timeslot}</Text>
+                <Text style={styles.bookingLabel}>Upasana Booking Date:</Text>
+                <Text style={styles.bookingText}>{item.booking_date}</Text>
               </View>
 
               <View style={styles.bookingDetails}>
                 <Text style={styles.bookingLabel}>Mahaprasad:</Text>
-                <Text style={styles.bookingText}>{item.mahaprasad}</Text>
+                <Text style={styles.bookingText}>{item.mahaprasad ? "Yes" : "No"}</Text>
               </View>
 
-              <View style={styles.bookingDetails}>
-                <Text style={styles.bookingLabel}>Status:</Text>
-                <Text
-                  style={[
-                    styles.bookingText,
-                    item.status === "Confirmed"
-                      ? styles.statusConfirmed
-                      : styles.statusCancelled,
-                  ]}
-                >
-                  {item.status}
-                </Text>
-              </View>
+              
             </View>
           )}
         />
@@ -100,16 +130,26 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 5,
   },
+  userInfo: {
+    marginBottom: 20,
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 8,
+  },
+  userLabel: { fontWeight: "bold", color: "#333" },
+  userText: { color: "#555" },
   bookingLabel: { fontWeight: "bold", color: "#333" },
   bookingText: { color: "#555" },
   statusConfirmed: { color: "#4CAF50", fontWeight: "bold" },
   statusCancelled: { color: "#F44336", fontWeight: "bold" },
+  loadingText: { fontSize: 16, textAlign: "center", marginTop: 20, color: "#999" },
   noBookingsText: {
     fontSize: 16,
     textAlign: "center",
     marginTop: 20,
     color: "#999",
   },
+  errorText: { fontSize: 16, color: "red", textAlign: "center", marginTop: 20 },
 });
 
 export default BookingScreen;

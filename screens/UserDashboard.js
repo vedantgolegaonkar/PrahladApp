@@ -7,6 +7,8 @@ import NotificationScreen from "../screens/NotificationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 // import PdfScreen from "../screens/PdfScreen"; // New PDF screen
 import { Ionicons } from "@expo/vector-icons";
+import Constants from 'expo-constants';
+
 
 const Tab = createBottomTabNavigator();
 

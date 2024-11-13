@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,11 +10,52 @@ import {
 import { Calendar } from "react-native-calendars";
 import Toast from "react-native-toast-message";
 import { useBooking } from "../context/BookingContext";
+import Constants from 'expo-constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SlotBookingScreen = ({ navigation }) => {
   const [selectedDate, setSelectedDate] = useState("");
   const { addBooking } = useBooking();
   const [isMahaPrasadAvailable, setIsMahaPrasadAvailable] = useState(false);
+  const [userId, setUserId] = useState(null); // Initialize userId state
+  
+  // Determine the environment safely
+  const appEnv =
+    (Constants.manifest && Constants.manifest.releaseChannel) || "dev";
+  const envConfig = Constants.manifest?.extra?.[appEnv] || {
+    apiUrl: "http://192.168.1.4:5000",
+  };
+  const apiUrl = envConfig.apiUrl;
+
+  // Fetch user ID asynchronously
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const id = await getData("userId");
+        console.log("###############Setting user ID:", id);
+        setUserId(id);  // Store the userId in component state
+        console.log("###############Setting user ID:", userId);
+      } catch (error) {
+        console.error("Error fetching user ID:", error);
+      }
+    };
+
+    fetchUserId(); // Call the async function inside useEffect
+  }, []);
+
+  const getData = async (key) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if (value !== null) {
+        // Value exists
+        return value;
+      }
+    } catch (e) {
+      console.error('Failed to fetch data from AsyncStorage:', e);
+    }
+  };
+
+
 
   const handleDayPress = (day) => {
     const date = new Date(day.timestamp);
@@ -31,38 +72,61 @@ const SlotBookingScreen = ({ navigation }) => {
   };
 
   const handleConfirmBooking = () => {
-    // Trigger Confirmation Dialog
     Alert.alert(
       "Confirm Booking",
       "Are you sure you want to confirm this slot?",
       [
         {
           text: "Cancel",
-          onPress: () => console.log("Booking Cancellled"),
+          onPress: () => console.log("Booking Cancelled"),
           style: "cancel",
         },
         {
           text: "Yes",
-          onPress: () => {
+          onPress: async () => {
+            if (!userId) {
+              Alert.alert("User ID Error", "User ID is not available.");
+              return;
+            }
+
             const bookedSlot = {
-              date: selectedDate,
-              status: "Confirmed",
-              MahaPrasadStatus: isMahaPrasadAvailable
-                ? "Available"
-                : "Not Available",
+              user_id: userId,  // Replace with actual user ID
+              booking_date: selectedDate,
+              mahaprasad: isMahaPrasadAvailable ? true : false,
             };
-            addBooking(bookedSlot);
-
-            setTimeout(() => {
-              navigation.navigate("My Bookings");
-            }, 2500);
-
-            Toast.show({
-              type: "success",
-              text1: "Success",
-              text2: "Your Slot has been booked successfully! 🎉",
-              visibilityTime: 2500,
-            });
+  
+            try {
+              console.log("&&&&&***&&&&",JSON.stringify(bookedSlot));
+              const response = await fetch(`${apiUrl}/book`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(bookedSlot),
+              });
+  
+              if (response.ok) {
+                addBooking(bookedSlot);
+  
+                Toast.show({
+                  type: "success",
+                  text1: "Success",
+                  text2: "Your Slot has been booked successfully! 🎉",
+                  visibilityTime: 2500,
+                });
+  
+                setTimeout(() => {
+                  navigation.navigate("My Bookings");
+                }, 2500);
+              } else {
+                const errorData = await response.json();
+                console.error("Booking failed:", errorData);
+                Alert.alert("Booking Failed", "Unable to book your slot. Please try again later.");
+              }
+            } catch (error) {
+              console.error("Error:", error);
+              Alert.alert("Network Error", "Please check your internet connection and try again.");
+            }
           },
         },
       ],
@@ -74,7 +138,7 @@ const SlotBookingScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Book Your Upasana Slot</Text>
       <Calendar
-        minDate={"2025-01-01"}
+        minDate={"2024-12-01"}
         maxDate={"2025-12-31"}
         current={"2025-01-01"}
         onDayPress={handleDayPress}
@@ -174,7 +238,6 @@ const SlotBookingScreen = ({ navigation }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

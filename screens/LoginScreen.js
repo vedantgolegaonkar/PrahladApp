@@ -24,7 +24,7 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
   const appEnv =
     (Constants.manifest && Constants.manifest.releaseChannel) || "dev";
   const envConfig = Constants.manifest?.extra?.[appEnv] || {
-    apiUrl: "http://192.168.31.124:5000",
+    apiUrl: "http://192.168.1.4:5000",
   };
   const apiUrl = envConfig.apiUrl;
 

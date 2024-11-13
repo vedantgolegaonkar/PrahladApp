@@ -127,7 +127,7 @@ const ProfileScreen = ({ onLogout }) => {
 
       try {
       
-        const apiUrl = "http://192.168.43.168:5000";
+        const apiUrl = "http://192.168.1.4:5000";
         console.log("userId",userId," ", typeof userId)
         const response = await fetch(`${apiUrl}/users/${userId}`, {
           method: "GET",
