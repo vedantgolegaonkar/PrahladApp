@@ -158,7 +158,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       Toast.show({
         type: "success",
         text1: "Registration Successful",
-        text2: "You have been registered successfully",
+        text2: "You have been registered successfully, Please login",
       });
 
       // Optionally, you can navigate to another screen or reset form state;
@@ -170,6 +170,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
         text1: "Registration Failed",
         text2: error.message || "An error occurred during registration.",
       });
+      Alert.alert("Registration Failed!", JSON.stringify(error));
     }
   };
 
