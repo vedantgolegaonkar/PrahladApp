@@ -1,4 +1,3 @@
-// MembersDetailsScreen.js
 import React, { useState } from "react";
 import {
   View,
@@ -22,7 +21,7 @@ const MembersDetailsScreen = ({ route, navigation }) => {
 
   const handleSave = async () => {
     try {
-      console.log("Edited Data ####",JSON.stringify(editableMember));
+      console.log("Edited Data ####", JSON.stringify(editableMember));
       const response = await fetch(
         `https://upasana-app-gdm2p.ondigitalocean.app/users/${editableMember.id}`,
         {
@@ -55,40 +54,103 @@ const MembersDetailsScreen = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.detailCard}>
-        <Text style={styles.memberName}>
-          {editableMember.first_name} {editableMember.last_name}
-        </Text>
+        
+
+        {/* Address as a header */}
+        <Text style={styles.addressHeader}>Member Details:</Text>
 
         {isEditing ? (
           <>
             <View style={styles.detailRow}>
-              <Text style={styles.label}>Email:</Text>
+              <Text style={styles.label}>First Name:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={editableMember.first_name}
+                  onChangeText={(value) => handleChange("first_name", value)}
+                />
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Last Name:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={editableMember.last_name}
+                  onChangeText={(value) => handleChange("filast_namerst_name", value)}
+                />
+            </View>
+            {/* Editable Address Fields */}
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Flat No:</Text>
               <TextInput
                 style={styles.input}
-                value={editableMember.email}
-                onChangeText={(value) => handleChange("email", value)}
+                value={editableMember.flat_no}
+                onChangeText={(value) => handleChange("flat_no", value)}
               />
             </View>
 
             <View style={styles.detailRow}>
-              <Text style={styles.label}>Mobile:</Text>
+              <Text style={styles.label}>Full Address:</Text>
               <TextInput
                 style={styles.input}
-                value={editableMember.mobile_number}
-                onChangeText={(value) => handleChange("mobile_number", value)}
+                value={editableMember.full_address}
+                onChangeText={(value) => handleChange("full_address", value)}
               />
             </View>
 
             <View style={styles.detailRow}>
-              <Text style={styles.label}>Address:</Text>
+              <Text style={styles.label}>Area:</Text>
               <TextInput
                 style={styles.input}
-                value={`${editableMember.flat_no}, ${editableMember.full_address}, ${editableMember.area}, ${editableMember.landmark}, ${editableMember.city}, ${editableMember.state} - ${editableMember.pincode}`}
-                onChangeText={(value) => handleChange("address", value)}
-                multiline
+                value={editableMember.area}
+                onChangeText={(value) => handleChange("area", value)}
               />
             </View>
 
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Landmark:</Text>
+              <TextInput
+                style={styles.input}
+                value={editableMember.landmark}
+                onChangeText={(value) => handleChange("landmark", value)}
+              />
+            </View>
+
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Pincode:</Text>
+              <TextInput
+                style={styles.input}
+                value={editableMember.pincode}
+                onChangeText={(value) => handleChange("pincode", value)}
+              />
+            </View>
+
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>City:</Text>
+              <TextInput
+                style={styles.input}
+                value={editableMember.city}
+                onChangeText={(value) => handleChange("city", value)}
+              />
+            </View>
+
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>State:</Text>
+              <TextInput
+                style={styles.input}
+                value={editableMember.state}
+                onChangeText={(value) => handleChange("state", value)}
+              />
+            </View>
+
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Pincode:</Text>
+              <TextInput
+                style={styles.input}
+                value={editableMember.pincode}
+                onChangeText={(value) => handleChange("pincode", value)}
+              />
+            </View>
+
+            {/* Other editable fields */}
             <View style={styles.detailRow}>
               <Text style={styles.label}>Gender:</Text>
               <TextInput
@@ -107,32 +169,83 @@ const MembersDetailsScreen = ({ route, navigation }) => {
               />
             </View>
 
+            {/* Editable Email Field */}
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Email:</Text>
+              <TextInput
+                style={styles.input}
+                value={editableMember.email}
+                onChangeText={(value) => handleChange("email", value)}
+              />
+            </View>
+
+            {/* Editable Mobile Field */}
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Mobile:</Text>
+              <TextInput
+                style={styles.input}
+                value={editableMember.mobile_number}
+                onChangeText={(value) => handleChange("mobile_number", value)}
+              />
+            </View>
+
             <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
               <Text style={styles.saveButtonText}>Save</Text>
             </TouchableOpacity>
           </>
         ) : (
           <>
+            {/* Non-editable Fields */}
             <View style={styles.detailRow}>
-              <Text style={styles.label}>Email:</Text>
-              <Text style={styles.value}>{editableMember.email}</Text>
+              <Text style={styles.label}>First Name:</Text>
+              <Text style={styles.value}>{editableMember.first_name}</Text>
             </View>
 
             <View style={styles.detailRow}>
-              <Text style={styles.label}>Mobile:</Text>
-              <Text style={styles.value}>{editableMember.mobile_number}</Text>
+              <Text style={styles.label}>Last Name:</Text>
+              <Text style={styles.value}>{editableMember.last_name}</Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Flat No:</Text>
+              <Text style={styles.value}>{editableMember.flat_no}</Text>
             </View>
 
             <View style={styles.detailRow}>
-              <Text style={styles.label}>Address:</Text>
-              <Text style={styles.value}>
-                {editableMember.flat_no}, {editableMember.full_address},{" "}
-                {editableMember.area}, {editableMember.landmark},{" "}
-                {editableMember.city}, {editableMember.state} -{" "}
-                {editableMember.pincode}
-              </Text>
+              <Text style={styles.label}>Full Address:</Text>
+              <Text style={styles.value}>{editableMember.full_address}</Text>
             </View>
 
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Area:</Text>
+              <Text style={styles.value}>{editableMember.area}</Text>
+            </View>
+
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Landmark:</Text>
+              <Text style={styles.value}>{editableMember.landmark}</Text>
+            </View>
+            
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Pincode:</Text>
+              <Text style={styles.value}>{editableMember.pincode}</Text>
+            </View>
+            
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>City:</Text>
+              <Text style={styles.value}>{editableMember.city}</Text>
+            </View>
+
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>State:</Text>
+              <Text style={styles.value}>{editableMember.state}</Text>
+            </View>
+
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Pincode:</Text>
+              <Text style={styles.value}>{editableMember.pincode}</Text>
+            </View>
+
+            {/* Non-editable fields */}
             <View style={styles.detailRow}>
               <Text style={styles.label}>Gender:</Text>
               <Text style={styles.value}>{editableMember.gender}</Text>
@@ -141,6 +254,18 @@ const MembersDetailsScreen = ({ route, navigation }) => {
             <View style={styles.detailRow}>
               <Text style={styles.label}>Anugrahit:</Text>
               <Text style={styles.value}>{editableMember.anugrahit}</Text>
+            </View>
+
+            {/* Non-editable Email Field */}
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Email:</Text>
+              <Text style={styles.value}>{editableMember.email}</Text>
+            </View>
+
+            {/* Non-editable Mobile Field */}
+            <View style={styles.detailRow}>
+              <Text style={styles.label}>Mobile:</Text>
+              <Text style={styles.value}>{editableMember.mobile_number}</Text>
             </View>
 
             <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
@@ -177,6 +302,12 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 16,
   },
+  addressHeader: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 12,
+  },
   detailRow: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -204,30 +335,30 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   editButton: {
-    marginTop: 20,
-    backgroundColor: "#ff4500",
-    paddingVertical: 12,
+    backgroundColor: "#007bff",
+    paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 8,
+    borderRadius: 5,
     alignItems: "center",
+    marginTop: 20,
   },
   editButtonText: {
     color: "#fff",
-    fontSize: 16,
     fontWeight: "bold",
+    fontSize: 16,
   },
   saveButton: {
-    marginTop: 20,
-    backgroundColor: "#4caf50",
-    paddingVertical: 12,
+    backgroundColor: "#28a745",
+    paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 8,
+    borderRadius: 5,
     alignItems: "center",
+    marginTop: 20,
   },
   saveButtonText: {
     color: "#fff",
-    fontSize: 16,
     fontWeight: "bold",
+    fontSize: 16,
   },
 });
 
