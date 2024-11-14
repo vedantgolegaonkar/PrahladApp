@@ -17,14 +17,14 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
   const [password, setPassword] = useState("");
 
   const adminCredentials = {
-    mobileNumber: "8825784512",
+    mobileNumber: "1234567890",
     password: "A",
   };
 
   const appEnv =
     (Constants.manifest && Constants.manifest.releaseChannel) || "dev";
   const envConfig = Constants.manifest?.extra?.[appEnv] || {
-    apiUrl: "http://192.168.1.4:5000",
+    apiUrl: "http://192.168.1.10:5000",
   };
   const apiUrl = envConfig.apiUrl;
 
