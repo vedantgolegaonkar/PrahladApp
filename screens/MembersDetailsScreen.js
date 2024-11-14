@@ -22,6 +22,7 @@ const MembersDetailsScreen = ({ route, navigation }) => {
 
   const handleSave = async () => {
     try {
+      console.log("Edited Data ####",JSON.stringify(editableMember));
       const response = await fetch(
         `https://upasana-app-gdm2p.ondigitalocean.app/users/${editableMember.id}`,
         {

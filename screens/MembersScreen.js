@@ -1,4 +1,3 @@
-// MembersScreen.js
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -13,21 +12,24 @@ const MembersScreen = ({ navigation }) => {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchMembers();
-  }, []);
-
   const fetchMembers = async () => {
     try {
-      const response = await fetch("https://upasana-app-gdm2p.ondigitalocean.app/users"); // Replace with your API URL
+      setLoading(true); // Show loading indicator during data fetch
+      const response = await fetch("https://upasana-app-gdm2p.ondigitalocean.app/users");
       const data = await response.json();
       setMembers(data);
-      setLoading(false);
     } catch (error) {
       console.error("Failed to fetch members:", error);
-      setLoading(false);
+    } finally {
+      setLoading(false); // Hide loading indicator after data fetch
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", fetchMembers);
+
+    return unsubscribe; // Clean up the listener on unmount
+  }, [navigation]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity

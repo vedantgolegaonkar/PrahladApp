@@ -19,7 +19,7 @@ const BookingsScreen = () => {
       const response = await fetch("https://upasana-app-gdm2p.ondigitalocean.app/bookings/users");
       if (response.ok) {
         const data = await response.json();
-        console.log("Fetched Data:", JSON.stringify(data)); // Inspect the response data structure
+        console.log("@@@@Booking Data@@@@@:", JSON.stringify(data)); // Inspect the response data structure
         setBookings(data.users); // Assuming data contains the "users" array directly
       } else {
         console.log("Error", "Failed to fetch bookings");
@@ -49,7 +49,9 @@ const BookingsScreen = () => {
 
   return (
     <View style={styles.container}>
-      {bookings && bookings.length > 0 ? (
+        
+      {
+      bookings && bookings.length > 0 ? (
         <FlatList
           data={bookings}
           keyExtractor={(item) => item.id.toString()}
@@ -117,7 +119,7 @@ const BookingsScreen = () => {
         />
       ) : (
         <Text style={styles.noBookingsText}>
-          Bookings not available for the logged-in user
+          Bookings not available !
         </Text>
       )}
     </View>
