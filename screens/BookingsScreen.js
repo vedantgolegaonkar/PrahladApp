@@ -1,4 +1,3 @@
-// BookingsScreen.js - Admin Panel
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -8,6 +7,7 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
+import moment from "moment";
 
 const BookingsScreen = () => {
   const [bookings, setBookings] = useState([]);
@@ -16,31 +16,29 @@ const BookingsScreen = () => {
   // Function to fetch bookings from the server
   const fetchBookings = async () => {
     try {
-      const response = await fetch("https://upasana-app-gdm2p.ondigitalocean.app/bookings");
+      const response = await fetch("http://192.168.1.10:5000/bookings/users");
       if (response.ok) {
         const data = await response.json();
-        setBookings(data);
+        console.log("Fetched Data:", JSON.stringify(data)); // Inspect the response data structure
+        setBookings(data.users); // Assuming data contains the "users" array directly
       } else {
-        Alert.alert("Error", "Failed to fetch bookings");
+        console.log("Error", "Failed to fetch bookings");
       }
     } catch (error) {
       Alert.alert("Error", "An error occurred while fetching bookings");
     } finally {
-      setLoading(false); // Stop loading indicator once data is fetched
+      setLoading(false);
     }
   };
 
   // Fetch bookings when the component mounts
   useEffect(() => {
     fetchBookings();
-
-    // Optionally, set an interval to refresh the data every few seconds
-    const interval = setInterval(fetchBookings, 5000); // Fetch every 5 seconds
-    return () => clearInterval(interval); // Clean up the interval on unmount
+    const interval = setInterval(fetchBookings, 60000); // Refresh every minute
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
-    // Show a loading indicator while data is being fetched
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#ff4500" />
@@ -51,31 +49,76 @@ const BookingsScreen = () => {
 
   return (
     <View style={styles.container}>
-      {bookings.length > 0 ? (
+      {bookings && bookings.length > 0 ? (
         <FlatList
           data={bookings}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.bookingCard}>
+              {/* Name Column */}
               <View style={styles.bookingDetails}>
-                <Text style={styles.bookingLabel}>Date:</Text>
-                <Text style={styles.bookingText}>{item.date}</Text>
+                <Text style={styles.bookingLabel}>Name:</Text>
+                <Text style={styles.bookingText}>
+                  {item.first_name} {item.last_name}
+                </Text>
               </View>
 
+              {/* Address Column */}
               <View style={styles.bookingDetails}>
-                <Text style={styles.bookingLabel}>Timeslot:</Text>
-                <Text style={styles.bookingText}>{item.timeslot}</Text>
+                <Text style={styles.bookingLabel}>Address:</Text>
+                <Text style={styles.bookingText}>
+                  {`${item.flat_no}, ${item.full_address}, ${item.area}, ${item.landmark}, ${item.city}, ${item.state} - ${item.pincode}`}
+                </Text>
               </View>
 
+              {/* Anugrahit Field */}
               <View style={styles.bookingDetails}>
-                <Text style={styles.bookingLabel}>Mahaprasad:</Text>
-                <Text style={styles.bookingText}>{item.mahaprasad}</Text>
+                <Text style={styles.bookingLabel}>Anugrahit:</Text>
+                <Text style={styles.bookingText}>{item.anugrahit}</Text>
+              </View>
+
+              {/* Bookings Array - Horizontal FlatList */}
+              <View style={styles.bookingDetails}>
+                <FlatList
+                  horizontal
+                  data={item.bookings}
+                  keyExtractor={(booking, index) => index.toString()}
+                  renderItem={({ item: booking }) => (
+                    <View style={styles.bookingCard}>
+                      {/* Booking Date */}
+                      <Text style={styles.bookingInfoText}>
+                        Booking Date: {moment(booking.booking_date).format("DD MMM YYYY")}
+                      </Text>
+
+                      {/* Mahaprasad Available */}
+                      <Text style={styles.bookingInfoText}>
+                        Mahaprasad Available: {booking.mahaprasad ? "Yes" : "No"}
+                      </Text>
+                    </View>
+                  )}
+                  showsHorizontalScrollIndicator={false} // Hide horizontal scrollbar
+                />
+              </View>
+
+
+              {/* Mobile Number */}
+              <View style={styles.bookingDetails}>
+                <Text style={styles.bookingLabel}>Mobile Number:</Text>
+                <Text style={styles.bookingText}>{item.mobile_number}</Text>
+              </View>
+
+              {/* Alternate Mobile Number */}
+              <View style={styles.bookingDetails}>
+                <Text style={styles.bookingLabel}>Alternate Mobile:</Text>
+                <Text style={styles.bookingText}>{item.alternate_mobile_number}</Text>
               </View>
             </View>
           )}
         />
       ) : (
-        <Text style={styles.noBookingsText}>No Bookings Available</Text>
+        <Text style={styles.noBookingsText}>
+          Bookings not available for the logged-in user
+        </Text>
       )}
     </View>
   );
@@ -113,13 +156,28 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   bookingLabel: { fontWeight: "bold", color: "#333" },
-  bookingText: { color: "#555" },
+  bookingText: { color: "#555", flexWrap: "wrap", flex: 1 },
+  bookingInfoText: {
+    color: "#555",
+    flexWrap: "wrap",
+    flex: 1,
+    fontWeight: 'bold',  // Make text bold
+    fontStyle: 'italic', // Make text italic
+    fontSize: 12,        // Make text slightly smaller
+  },
   noBookingsText: {
     fontSize: 16,
     textAlign: "center",
     marginTop: 20,
     color: "#999",
   },
+  bookingRow: {
+    flexDirection: "row",
+    justifyContent: "space-between", // Distribute the columns evenly
+    marginBottom: 10,
+    marginRight: 10, // Add spacing between horizontal items
+  },
+  
 });
 
 export default BookingsScreen;
