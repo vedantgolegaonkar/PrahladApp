@@ -163,7 +163,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
 
       // Optionally, you can navigate to another screen or reset form state;
       onRegister({first_name: data.first_name, middle_name: data.middle_name, last_name: data.middle_name, email: data.email, password: data.email, confirm_password: data.confirm_password, mobile_number: data.mobile_number, alternate_mobile_number: data.alternate_mobile_number, flat_no: data.flat_no, full_address: data.full_address, area: data.area, landmark: data.landmark, city: data.city, state: data.state, pincode: data.pincode, anugrahit: data.anugrahit, gender: data.gender });
-      navigation.navigate("Home")
+      navigation.navigate("Login")
     } catch (error) {
       Toast.show({
         type: "error",
