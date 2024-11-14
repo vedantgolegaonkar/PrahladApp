@@ -24,7 +24,7 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
   const appEnv =
     (Constants.manifest && Constants.manifest.releaseChannel) || "dev";
   const envConfig = Constants.manifest?.extra?.[appEnv] || {
-    apiUrl: "http://192.168.1.10:5000",
+    apiUrl: "https://upasana-app-gdm2p.ondigitalocean.app",
   };
   const apiUrl = envConfig.apiUrl;
 

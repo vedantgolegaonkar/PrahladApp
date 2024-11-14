@@ -19,7 +19,7 @@ const MembersScreen = ({ navigation }) => {
 
   const fetchMembers = async () => {
     try {
-      const response = await fetch("http://192.168.1.10:5000/users"); // Replace with your API URL
+      const response = await fetch("https://upasana-app-gdm2p.ondigitalocean.app/users"); // Replace with your API URL
       const data = await response.json();
       setMembers(data);
       setLoading(false);

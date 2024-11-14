@@ -23,7 +23,7 @@ const SlotBookingScreen = ({ navigation }) => {
   const appEnv =
     (Constants.manifest && Constants.manifest.releaseChannel) || "dev";
   const envConfig = Constants.manifest?.extra?.[appEnv] || {
-    apiUrl: "http://192.168.1.4:5000",
+    apiUrl: "https://upasana-app-gdm2p.ondigitalocean.app",
   };
   const apiUrl = envConfig.apiUrl;
 
@@ -54,8 +54,6 @@ const SlotBookingScreen = ({ navigation }) => {
       console.error('Failed to fetch data from AsyncStorage:', e);
     }
   };
-
-
 
   const handleDayPress = (day) => {
     const date = new Date(day.timestamp);
@@ -120,8 +118,8 @@ const SlotBookingScreen = ({ navigation }) => {
                 }, 2500);
               } else {
                 const errorData = await response.json();
-                console.error("Booking failed:", errorData);
-                Alert.alert("Booking Failed", "Unable to book your slot. Please try again later.");
+                //console.error("Booking failed:", errorData);
+                Alert.alert("Booking already exist!", JSON.stringify(errorData.error));
               }
             } catch (error) {
               console.error("Error:", error);

@@ -16,7 +16,7 @@ const BookingsScreen = () => {
   // Function to fetch bookings from the server
   const fetchBookings = async () => {
     try {
-      const response = await fetch("http://192.168.1.10:5000/bookings/users");
+      const response = await fetch("https://upasana-app-gdm2p.ondigitalocean.app/bookings/users");
       if (response.ok) {
         const data = await response.json();
         console.log("Fetched Data:", JSON.stringify(data)); // Inspect the response data structure
