@@ -32,7 +32,7 @@ const MembersScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.memberCard}
-      onPress={() => navigation.navigate("MemberDetails", { member: item })}
+      onPress={() => navigation.navigate("MembersDetailsScreen", { member: item })}
     >
       <View style={styles.memberDetails}>
         <Text style={styles.memberName}>

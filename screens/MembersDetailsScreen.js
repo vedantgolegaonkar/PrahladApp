@@ -1,4 +1,4 @@
-// MemberDetailsScreen.js
+// MembersDetailsScreen.js
 import React, { useState } from "react";
 import {
   View,
@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 
-const MemberDetailsScreen = ({ route, navigation }) => {
+const MembersDetailsScreen = ({ route, navigation }) => {
   const { member } = route.params;
 
   // State to manage editable member data
@@ -230,4 +230,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MemberDetailsScreen;
+export default MembersDetailsScreen;
