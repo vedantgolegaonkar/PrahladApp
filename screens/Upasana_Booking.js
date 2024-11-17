@@ -16,7 +16,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Upasana_Booking = ({ navigation }) => {
   const [selectedDate, setSelectedDate] = useState("");
   const { addBooking } = useBooking();
-  const [isMahaPrasadAvailable, setIsMahaPrasadAvailable] = useState(false);
   const [userId, setUserId] = useState(null); // Initialize userId state
   
   // Determine the environment safely
@@ -26,6 +25,14 @@ const Upasana_Booking = ({ navigation }) => {
     apiUrl: "https://upasana-app-gdm2p.ondigitalocean.app",
   };
   const apiUrl = envConfig.apiUrl;
+
+  const [selectedOption, setSelectedOption] = useState(null); // State to store selected value
+
+  const isMahaPrasadAvailable = selectedOption === "Yes";
+
+  const handleSelection = (option) => {
+    setSelectedOption(option);
+  };
 
   // Fetch user ID asynchronously
   useEffect(() => {
@@ -70,6 +77,17 @@ const Upasana_Booking = ({ navigation }) => {
   };
 
   const handleConfirmBooking = () => {
+    if (!selectedOption) {
+      Alert.alert("Validation Error", "Please select if Mahaprasad is available.");
+      return;
+    }
+  
+    // Check if MahaPrasad is available and if the user has selected "Yes"
+    if (selectedOption === "No") {
+      Alert.alert("MahaPrasad Unavailable", "MahaPrasad is not available for this booking.");
+      return;
+    }
+  
     Alert.alert(
       "Confirm Booking",
       "Are you sure you want to confirm this upasana booking?",
@@ -86,15 +104,15 @@ const Upasana_Booking = ({ navigation }) => {
               Alert.alert("User ID Error", "User ID is not available.");
               return;
             }
-
+  
             const bookedSlot = {
-              user_id: userId,  // Replace with actual user ID
+              user_id: userId, // Replace with actual user ID
               booking_date: selectedDate,
               mahaprasad: isMahaPrasadAvailable ? true : false,
             };
   
             try {
-              console.log("&&&&&***&&&&",JSON.stringify(bookedSlot));
+              console.log("&&&&&***&&&&", JSON.stringify(bookedSlot));
               const response = await fetch(`${apiUrl}/book`, {
                 method: "POST",
                 headers: {
@@ -106,21 +124,15 @@ const Upasana_Booking = ({ navigation }) => {
               if (response.ok) {
                 addBooking(bookedSlot);
   
-                /* Toast.show({
-                  type: "success",
-                  text1: "Success",
-                  text2: "Your upasana booked successfully! 🎉",
-                  visibilityTime: 2500,
-                }); */
-                Alert.alert("Booking Success","Your upasana booked successfully!");
+                Alert.alert("Booking Success", "Your upasana booked successfully!");
   
                 setTimeout(() => {
                   navigation.navigate("My Bookings");
                 }, 2500);
               } else {
                 const errorData = await response.json();
-                //console.error("Booking failed:", errorData);
-                Alert.alert("Booking already exist!", JSON.stringify(errorData.error));
+                console.error("Booking failed:", JSON.stringify(errorData));
+                Alert.alert("Booking not available!", JSON.stringify(errorData));
               }
             } catch (error) {
               console.error("Error:", error);
@@ -132,6 +144,7 @@ const Upasana_Booking = ({ navigation }) => {
       { cancelable: false }
     );
   };
+  
 
   return (
     <View style={styles.container}>
@@ -207,21 +220,50 @@ const Upasana_Booking = ({ navigation }) => {
         }}
       />
 
-      <View style={styles.toggleContainer}>
-        <Switch
-          value={isMahaPrasadAvailable}
-          onValueChange={toggleMahaPrasadAvailability}
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={isMahaPrasadAvailable ? "#ff4500" : "#f4f3f4"}
-        />
-        <Text
-          style={
-            isMahaPrasadAvailable ? styles.toggleTextAfter : styles.toggleText
-          }
-        >
-          MahaPrasad is {isMahaPrasadAvailable ? "available" : "Not Available"}
-        </Text>
+<View style={styles.container}>
+      {/* Radio Group */}
+      <View style={styles.radioGroupContainer}>
+        <Text style={styles.label}>Is MahaPrasad Available?</Text>
+        <View style={styles.radioGroup}>
+          {/* Yes Option */}
+          <TouchableOpacity
+            style={styles.radioButton}
+            onPress={() => handleSelection("Yes")}
+          >
+            <View
+              style={[
+                styles.outerCircle,
+                selectedOption === "Yes" && styles.selectedOuterCircle,
+              ]}
+            >
+              {selectedOption === "Yes" && <View style={styles.innerCircle} />}
+            </View>
+            <Text style={styles.radioLabel}>Yes</Text>
+          </TouchableOpacity>
+
+          {/* No Option */}
+          <TouchableOpacity
+            style={styles.radioButton}
+            onPress={() => handleSelection("No")}
+          >
+            <View
+              style={[
+                styles.outerCircle,
+                selectedOption === "No" && styles.selectedOuterCircle,
+              ]}
+            >
+              {selectedOption === "No" && <View style={styles.innerCircle} />}
+            </View>
+            <Text style={styles.radioLabel}>No</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
+      {/* Display Selected Option */}
+      <Text style={styles.resultText}>
+        MahaPrasad is {selectedOption || "Not Selected"}
+      </Text>
+    </View>
 
       {selectedDate ? (
         <View style={styles.selection}>
@@ -284,6 +326,53 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     color: "#006400", // Text color according to the theme
     fontWeight: "bold",
+  },
+  radioGroupContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#333",
+  },
+  radioGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+  },
+  radioButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 10,
+  },
+  outerCircle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "#888",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+  },
+  selectedOuterCircle: {
+    borderColor: "#ff4500",
+  },
+  innerCircle: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: "#ff4500",
+  },
+  radioLabel: {
+    fontSize: 18,
+    color: "#333",
+  },
+  resultText: {
+    fontSize: 18,
+    color: "#555",
+    marginTop: 20,
   },
 });
 
