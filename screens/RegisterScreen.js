@@ -49,10 +49,10 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       Alert.alert("Error", "Last Name is Required");
       return;
     }
-    if (!email.trim()) {
-      Alert.alert("Error", "Email is Required");
-      return;
-    }
+    // if (!email.trim()) {
+    //   Alert.alert("Error", "Email is Required");
+    //   return;
+    // }
     if (!password.trim()) {
       Alert.alert("Error", "Password is Required");
       return;
@@ -111,8 +111,8 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       full_address: fullAddress.trim(),
       area: area.trim(),
       landmark: landmark.trim(),
-      city: city.trim(),
-      state: state.trim(),
+      city: "Pune",
+      state: "Maharashtra",
       pincode: pincode.trim(),
       anugrahit: anugrahit.trim(),
       gender: gender.trim(),
@@ -153,8 +153,6 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       setFullAddress("");
       setArea("");
       setLandmark("");
-      setCity("");
-      setState("");
       setPincode("");
       setAnugrahit("no");
       setGender("male");
@@ -253,16 +251,17 @@ const RegisterScreen = ({ navigation, onRegister }) => {
         onChangeText={setLandmark}
       />
       <TextInput
-        style={styles.input}
-        placeholder="City"
-        value={city}
-        onChangeText={setCity}
+      style={styles.input}
+      placeholder="City"
+      value="Pune"
+      editable={false} // Disable the TextInput
       />
+
       <TextInput
         style={styles.input}
         placeholder="State"
-        value={state}
-        onChangeText={setState}
+        value="Maharashtra"
+        editable={false} 
       />
       <TextInput
         style={styles.input}
@@ -320,6 +319,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 10,
     borderRadius: 5,
+    fontWeight: "bold",
   },
   pickerContainer: {
     marginBottom: 10,

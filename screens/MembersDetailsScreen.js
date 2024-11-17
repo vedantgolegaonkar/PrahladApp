@@ -128,7 +128,8 @@ const MembersDetailsScreen = ({ route, navigation }) => {
               <TextInput
                 style={styles.input}
                 value={editableMember.city}
-                onChangeText={(value) => handleChange("city", value)}
+                editable={false} // Disable the TextInput
+                onChangeText={(value) => handleChange("city", "Pune")}
               />
             </View>
 
@@ -137,7 +138,8 @@ const MembersDetailsScreen = ({ route, navigation }) => {
               <TextInput
                 style={styles.input}
                 value={editableMember.state}
-                onChangeText={(value) => handleChange("state", value)}
+                editable={false} // Disable the TextInput
+                onChangeText={(value) => handleChange("state", "Maharashtra")}
               />
             </View>
 

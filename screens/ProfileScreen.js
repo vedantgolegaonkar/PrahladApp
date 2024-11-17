@@ -21,24 +21,6 @@ const ProfileScreen = ({ onLogout }) => {
   const [error, setError] = useState(null);
   const navigation = useNavigation()
 
-  // const userFields = [
-  //   { label: 'First Name', value: first_name },
-  //   { label: 'Middle Name', value: middle_name },
-  //   { label: 'Last Name', value: last_name },
-  //   { label: 'Email', value: email },
-  //   { label: 'Mobile Number', value: mobile_number },
-  //   { label: 'Alternate Mobile Number', value: alternate_mobile_number },
-  //   { label: 'Flat No', value: flat_no },
-  //   { label: 'Full Address', value: full_address },
-  //   { label: 'Area', value: area },
-  //   { label: 'Landmark', value: landmark },
-  //   { label: 'City', value: city },
-  //   { label: 'State', value: state },
-  //   { label: 'Pincode', value: pincode },
-  //   { label: 'Anugrahit', value: anugrahit },
-  //   { label: 'Gender', value: gender },
-  // ];
-
   const pickImage = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();

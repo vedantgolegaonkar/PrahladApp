@@ -76,7 +76,7 @@ const AppNavigator = () => {
               <UserDashboard
                 {...props}
                 bookings={bookings}
-                handleLogout={handleLogout}
+                handleLogout={handleLogout} // Pass handleLogout here
               />
             )}
           </Stack.Screen>
@@ -92,9 +92,15 @@ const AppNavigator = () => {
         <Stack.Navigator>
           <Stack.Screen
             name="AdminDashboard"
-            component={AdminDashboard}
             options={{ headerShown: false }}
-          />
+          >
+            {(props) => (
+              <AdminDashboard
+                {...props}
+                handleLogout={handleLogout} // Pass handleLogout here
+              />
+            )}
+          </Stack.Screen>
           <Stack.Screen name="Members" component={MembersScreen} />
           <Stack.Screen name="MembersDetailsScreen" component={MembersDetailsScreen} />
         </Stack.Navigator>
