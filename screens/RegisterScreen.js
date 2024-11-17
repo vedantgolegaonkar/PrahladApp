@@ -12,7 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import Toast from "react-native-toast-message";
 import Constants from "expo-constants";
 
-const RegisterScreen = ({ onRegister }) => {
+const RegisterScreen = ({ navigation, onRegister }) => {
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -133,12 +133,13 @@ const RegisterScreen = ({ onRegister }) => {
 
       const data = await response.json();
 
-      Toast.show({
+      /* Toast.show({
         type: "success",
         text1: "Registration Successful",
         text2: "You have been registered successfully, Please login",
-      });
-
+      }); */
+    
+      Alert.alert("Success", "You have been registered successfully, Please login");
       // Clear the form after successful registration
       setFirstName("");
       setMiddleName("");
@@ -158,8 +159,8 @@ const RegisterScreen = ({ onRegister }) => {
       setAnugrahit("no");
       setGender("male");
 
-      // Optionally, you can call the onRegister callback if needed
-      onRegister(data);
+      // Navigate to the Login screen
+      navigation.navigate("Login");
 
     } catch (error) {
       Toast.show({

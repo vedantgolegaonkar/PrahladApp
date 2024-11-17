@@ -94,6 +94,7 @@ npm-check
 
 ## generate APK 
 eas build --profile prod --platform android
+eas build --profile prod --platform ios
 
 ## Android app:
 https://expo.dev/artifacts/eas/jZ6vtNSw1y6NRk3m4FfWzV.apk

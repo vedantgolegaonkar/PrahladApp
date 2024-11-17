@@ -17,6 +17,7 @@ export default ({ config }) => {
     },
     ios: {
       supportsTablet: true,
+      bundleIdentifier: "com.ramdasibana", // Add this line
     },
     android: {
       adaptiveIcon: {
