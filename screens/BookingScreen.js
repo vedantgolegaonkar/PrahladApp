@@ -26,7 +26,7 @@ const BookingScreen = () => {
         return value;
       }
     } catch (e) {
-      console.error("Failed to fetch data from AsyncStorage:", e);
+      console.error("Failed to fetch data## from AsyncStorage:", e);
     }
     return null;
   };
@@ -37,15 +37,15 @@ const BookingScreen = () => {
       try {
         const storedUserId = await getData("userId");
         console.log("Retrieved user ID from AsyncStorage:", storedUserId);
-
+  
         if (!storedUserId) {
           console.error("User ID not found in AsyncStorage");
           setError("User ID not found");
           return;
         }
-
+  
         setUserId(storedUserId);
-
+  
         // Fetch user and booking data
         const response = await fetch(`${apiUrl}/bookings/user/${storedUserId}`, {
           method: "GET",
@@ -53,15 +53,20 @@ const BookingScreen = () => {
             "Content-Type": "application/json",
           },
         });
-
-        if (!response.ok) throw new Error("Failed to fetch data");
-
+  
+        if (!response.ok) {
+          // Attempt to extract the error message from the server's response
+          const errorData = await response.json();
+          const errorMessage = errorData.message;  // Fallback to a generic error message if not available
+          throw new Error(errorMessage);
+        }
+  
         const data = await response.json();
         setUser(data.user);
         setBookings(data.bookings || []);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError(error.message);
+        setError(error.message);  // Set the exact error message
       }
     };
 
@@ -98,13 +103,11 @@ const BookingScreen = () => {
                 <Text style={styles.bookingLabel}>Mahaprasad:</Text>
                 <Text style={styles.bookingText}>{item.mahaprasad ? "Yes" : "No"}</Text>
               </View>
-
-              
             </View>
           )}
         />
       ) : (
-        <Text style={styles.noBookingsText}>No Bookings Found</Text>
+        <Text style={styles.noBookingsText}>There is no bookings for the current user</Text>
       )}
     </View>
   );

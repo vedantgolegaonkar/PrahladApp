@@ -6,7 +6,7 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import AdminDashboard from "../screens/AdminDashboard";
 import UserDashboard from "../screens/UserDashboard";
-import SlotBookingScreen from "../screens/SlotBookingScreen";
+import Upasana_Booking from "../screens/Upasana_Booking";
 import ProfileScreen from "../screens/ProfileScreen";
 import MembersScreen from "../screens/MembersScreen";
 import MembersDetailsScreen from "../screens/MembersDetailsScreen";
@@ -80,9 +80,9 @@ const AppNavigator = () => {
               />
             )}
           </Stack.Screen>
-          <Stack.Screen name="SlotBooking">
+          <Stack.Screen name="Upasana_Booking">
             {(props) => (
-              <SlotBookingScreen {...props} addBooking={addBooking} />
+              <Upasana_Booking {...props} addBooking={addBooking} />
             )}
           </Stack.Screen>
           <Stack.Screen name="Members" component={MembersScreen} />

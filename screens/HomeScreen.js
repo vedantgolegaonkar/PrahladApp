@@ -8,7 +8,7 @@ const HomeScreen = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("SlotBooking")}
+        onPress={() => navigation.navigate("Upasana_Booking")}
       >
         <Text style={styles.buttonText}>Upasana booking</Text>
       </TouchableOpacity>

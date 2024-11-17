@@ -77,14 +77,6 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       Alert.alert("Error", "Landmark is Required");
       return;
     }
-    if (!city.trim()) {
-      Alert.alert("Error", "City is Required");
-      return;
-    }
-    if (!state.trim()) {
-      Alert.alert("Error", "State is Required");
-      return;
-    }
     if (!pincode.trim()) {
       Alert.alert("Error", "Pincode is Required");
       return;
