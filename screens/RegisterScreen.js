@@ -12,7 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import Toast from "react-native-toast-message";
 import Constants from "expo-constants";
 
-const RegisterScreen = ({ navigation, onRegister }) => {
+const RegisterScreen = ({ onRegister }) => {
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -31,29 +31,16 @@ const RegisterScreen = ({ navigation, onRegister }) => {
   const [anugrahit, setAnugrahit] = useState("no");
   const [gender, setGender] = useState("male");
 
-  // Determine the environment safely
   const appEnv =
     (Constants.manifest && Constants.manifest.releaseChannel) || "dev";
-  // How to get this IP
-  //cmd -->
-  //  ipconfig --Will Give
-  //        -->IPv4 Address. . . . . . . . . . . : https://upasana-app-gdm2p.ondigitalocean.app
-  //Replace in apiUrl: 'https://upasana-app-gdm2p.ondigitalocean.app'
 
   const envConfig = Constants.manifest?.extra?.[appEnv] || {
     apiUrl: "https://upasana-app-gdm2p.ondigitalocean.app",
-  }; // Default API URL
+  };
 
-  // Use the environment-specific API URL
   const apiUrl = envConfig.apiUrl;
 
   const handleRegistration = async () => {
-    console.log("###################");
-    console.log("URL IS", `${appEnv}`);
-    console.log("###################");
-    console.log("###################");
-    console.log("envConfig IS", JSON.stringify(Constants.manifest));
-    console.log("###################");
     if (!firstName.trim()) {
       Alert.alert("Error", "First Name is Required");
       return;
@@ -111,7 +98,6 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       return;
     }
 
-    // Create the JSON payload
     const payload = {
       first_name: firstName.trim(),
       middle_name: middleName.trim(),
@@ -132,15 +118,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       gender: gender.trim(),
     };
 
-    // Send the registration request
     try {
-      console.log("###################");
-      console.log("URL IS", `${apiUrl}/register`);
-      console.log("###################");
-      console.log("###################");
-      console.log("PAYLOAD IS", JSON.stringify(payload));
-      console.log("###################");
-      
       const response = await fetch(`${apiUrl}/register`, {
         method: "POST",
         headers: {
@@ -148,12 +126,12 @@ const RegisterScreen = ({ navigation, onRegister }) => {
         },
         body: JSON.stringify(payload),
       });
-      console.log("RESPONSE IS ******", JSON.stringify(response));
+
       if (!response.ok) {
         throw new Error("Registration failed. Please try again.");
       }
 
-      const data = await response.json(); // Parse the response
+      const data = await response.json();
 
       Toast.show({
         type: "success",
@@ -161,9 +139,28 @@ const RegisterScreen = ({ navigation, onRegister }) => {
         text2: "You have been registered successfully, Please login",
       });
 
-      // Optionally, you can navigate to another screen or reset form state;
-      onRegister({first_name: data.first_name, middle_name: data.middle_name, last_name: data.middle_name, email: data.email, password: data.email, confirm_password: data.confirm_password, mobile_number: data.mobile_number, alternate_mobile_number: data.alternate_mobile_number, flat_no: data.flat_no, full_address: data.full_address, area: data.area, landmark: data.landmark, city: data.city, state: data.state, pincode: data.pincode, anugrahit: data.anugrahit, gender: data.gender });
-      navigation.navigate("Login")
+      // Clear the form after successful registration
+      setFirstName("");
+      setMiddleName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setMobileNumber("");
+      setAltMobileNumber("");
+      setFlatNo("");
+      setFullAddress("");
+      setArea("");
+      setLandmark("");
+      setCity("");
+      setState("");
+      setPincode("");
+      setAnugrahit("no");
+      setGender("male");
+
+      // Optionally, you can call the onRegister callback if needed
+      onRegister(data);
+
     } catch (error) {
       Toast.show({
         type: "error",
@@ -306,45 +303,47 @@ const RegisterScreen = ({ navigation, onRegister }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    justifyContent: "center",
-    alignItems: "center",
     padding: 20,
+    backgroundColor: "#f9f9f9",
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
+    fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
-    fontWeight: "bold",
-    color: "#ff4500",
   },
   input: {
+    height: 50,
+    borderColor: "#ccc",
     borderWidth: 1,
-    marginVertical: 12,
-    paddingHorizontal: 8,
-    borderRadius: 4,
-    width: "100%",
-    height: 40,
-    borderColor: "#cccccc",
+    marginBottom: 10,
+    paddingLeft: 10,
+    borderRadius: 5,
   },
-  pickerContainer: { width: "100%", marginVertical: 10 },
+  pickerContainer: {
+    marginBottom: 10,
+  },
   pickerLabel: {
     fontSize: 16,
-    fontWeight: "bold",
     marginBottom: 5,
-    color: "#ff4500",
   },
-  picker: { width: "100%", height: 50, borderWidth: 1, borderColor: "#cccccc" },
-  button: {
-    width: "100%",
+  picker: {
     height: 50,
-    backgroundColor: "#ff4500",
-    justifyContent: "center",
-    alignItems: "center",
+    borderColor: "#ccc",
+    borderWidth: 1,
     borderRadius: 5,
+  },
+  button: {
+    backgroundColor: "#1e90ff",
+    padding: 15,
+    borderRadius: 5,
+    alignItems: "center",
     marginTop: 20,
   },
-  buttonText: { color: "#ffffff", fontSize: 18, fontWeight: "bold" },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+  },
 });
 
 export default RegisterScreen;

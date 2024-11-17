@@ -4,13 +4,13 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to RamdasiBana@Pune Upasana App</Text>
+      <Text style={styles.title}>Welcome to RamdasiBana@Pune Upasana Booking</Text>
 
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("SlotBooking")}
       >
-        <Text style={styles.buttonText}>Book a Slot</Text>
+        <Text style={styles.buttonText}>Upasana booking</Text>
       </TouchableOpacity>
     </View>
   );

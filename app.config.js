@@ -5,7 +5,7 @@ export default ({ config }) => {
   // Define common settings
   const commonSettings = {
     name: "RamdasiBana@Pune",
-    slug: "RamdasiBana@Pune",
+    slug: "PrahladApp",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/icon.png",  // Set your icon path
