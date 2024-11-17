@@ -62,7 +62,7 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
       console.log('dataffff',response)
       if (!response.ok) {
         throw new Error(
-          "Login failed. Please check your mobile number and password."
+          "Please check your mobile number and password."
         );
       }
 
@@ -88,11 +88,12 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
 
       onLogin(navigation);
     } catch (error) {
-      Toast.show({
+     /*  Toast.show({
         type: "error",
         text1: "Login Failed",
         text2: error.message || "An error occurred during login.",
-      });
+      }); */
+      Alert.alert("Login Failed",error.message);
     }
   };
 

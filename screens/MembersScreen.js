@@ -5,8 +5,8 @@ import {
   FlatList,
   StyleSheet,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
-import { TouchableOpacity } from "react-native";
 
 const MembersScreen = ({ navigation }) => {
   const [members, setMembers] = useState([]);
@@ -55,12 +55,16 @@ const MembersScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={members}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-        contentContainerStyle={styles.listContainer}
-      />
+      {members.length === 0 ? (
+        <Text style={styles.noMembersText}>Awaiting for new members to join!</Text>
+      ) : (
+        <FlatList
+          data={members}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          contentContainerStyle={styles.listContainer}
+        />
+      )}
     </View>
   );
 };
@@ -104,6 +108,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  noMembersText: {
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 20,
+    color: "#999",
   },
 });
 

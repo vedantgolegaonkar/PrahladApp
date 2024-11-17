@@ -41,8 +41,8 @@ const UserDashboard = ({ bookings, handleLogout }) => {
       <Tab.Screen name="My Bookings">
         {(props) => <BookingScreen {...props} bookings={bookings} />}
       </Tab.Screen>
-      <Tab.Screen name="List" component={ListScreen} />
-      <Tab.Screen name="Notifications" component={NotificationScreen} />
+      {/* <Tab.Screen name="List" component={ListScreen} />
+      <Tab.Screen name="Notifications" component={NotificationScreen} /> */}
       <Tab.Screen name="Profile">
         {(props) => <ProfileScreen {...props} onLogout={handleLogout} />}
       </Tab.Screen>

@@ -168,7 +168,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
 
       <TextInput
         style={styles.input}
-        placeholder="First Name"
+        placeholder="First Name *"
         value={firstName}
         onChangeText={setFirstName}
       />
@@ -180,7 +180,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Last Name"
+        placeholder="Last Name *"
         value={lastName}
         onChangeText={setLastName}
       />
@@ -192,21 +192,21 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder="Password *"
         value={password}
         onChangeText={setPassword}
         secureTextEntry={true}
       />
       <TextInput
         style={styles.input}
-        placeholder="Confirm Password"
+        placeholder="Confirm Password *"
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry={true}
       />
       <TextInput
         style={styles.input}
-        placeholder="Mobile Number"
+        placeholder="Mobile Number *"
         value={mobileNumber}
         onChangeText={setMobileNumber}
         keyboardType="numeric"
@@ -220,25 +220,25 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Flat No."
+        placeholder="Flat No/House Name"
         value={flatNo}
         onChangeText={setFlatNo}
       />
       <TextInput
         style={styles.input}
-        placeholder="Full Address"
+        placeholder="Full Address *"
         value={fullAddress}
         onChangeText={setFullAddress}
       />
       <TextInput
         style={styles.input}
-        placeholder="Area"
+        placeholder="Area *"
         value={area}
         onChangeText={setArea}
       />
       <TextInput
         style={styles.input}
-        placeholder="Landmark"
+        placeholder="Landmark *"
         value={landmark}
         onChangeText={setLandmark}
       />
@@ -257,7 +257,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Pincode"
+        placeholder="Pincode *"
         value={pincode}
         onChangeText={setPincode}
       />

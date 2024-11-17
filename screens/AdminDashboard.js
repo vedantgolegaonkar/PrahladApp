@@ -37,8 +37,8 @@ const AdminDashboard = ({ handleLogout }) => {  // Destructure handleLogout prop
       </Tab.Screen>
       <Tab.Screen name="Members" component={MembersScreen} />
       <Tab.Screen name="Bookings" component={BookingsScreen} />
-      <Tab.Screen name="Notifications" component={NotificationsScreen} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+     {/*  <Tab.Screen name="Notifications" component={NotificationsScreen} />
+      <Tab.Screen name="Settings" component={SettingsScreen} /> */}
     </Tab.Navigator>
   );
 };

@@ -1,14 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-const DashboardScreen = ({ onLogout }) => {
+const DashboardScreen = ({ navigation, onLogout }) => {
+  const [usersSummary, setUsersSummary] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  const fetchUpasanaUsersSummary = async () => {
+    try {
+      setLoading(true); // Show loading indicator during data fetch
+      const response = await fetch(
+        "https://upasana-app-gdm2p.ondigitalocean.app/upasanaUsersSummary"
+      );
+      const data = await response.json();
+      console.log("####Summary Details ", JSON.stringify(data));
+      setUsersSummary(data); // Assuming data includes the necessary fields
+    } catch (error) {
+      console.error("Failed to fetch upasana Users Summary:", error);
+    } finally {
+      setLoading(false); // Hide loading indicator after data fetch
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", fetchUpasanaUsersSummary);
+    return unsubscribe; // Clean up the listener on unmount
+  }, [navigation]);
 
   const handleLogout = () => {
     // Show confirmation alert
@@ -31,14 +55,24 @@ const DashboardScreen = ({ onLogout }) => {
   };
 
   return (
-    <View style={StyleSheet.container}>
-      <Text style={styles.text}>This is your Dashboard Screen</Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>Welcome to Ramdasibana@Pune </Text>
 
-      <TouchableOpacity
-              onPress={handleLogout}
-              style={styles?.logoutButton}
-            >
-          <Ionicons name="log-out-outline" size={30} color="#ff4500" />
+      {/* Display loading indicator while fetching data */}
+      {loading ? (
+        <ActivityIndicator size="large" color="#ff4500" />
+      ) : (
+        // Display the card with summary data
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Upasana booking and user summary</Text>
+          <Text style={styles.cardText}>Total Users: {usersSummary.total_users || 0}</Text>
+          <Text style={styles.cardText}>Total Bookings: {usersSummary.total_bookings || 0}</Text>
+          <Text style={styles.cardText}>Total Booking Users: {usersSummary.total_booking_users || 0}</Text>
+        </View>
+      )}
+
+      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+        <Ionicons name="log-out-outline" size={30} color="#ff4500" />
       </TouchableOpacity>
     </View>
   );
@@ -53,6 +87,29 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 15,
+  },
+  card: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    marginTop: 20,
+    width: "80%",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  cardText: {
+    fontSize: 16,
+    marginBottom: 5,
+    textAlign: "center",
   },
   logoutButton: {
     backgroundColor: "#fff",
