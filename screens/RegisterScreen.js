@@ -89,7 +89,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       Alert.alert("Error", "Gender is Required");
       return;
     }
-
+  
     const payload = {
       first_name: firstName.trim(),
       middle_name: middleName.trim(),
@@ -109,7 +109,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       anugrahit: anugrahit.trim(),
       gender: gender.trim(),
     };
-
+  
     try {
       const response = await fetch(`${apiUrl}/register`, {
         method: "POST",
@@ -118,20 +118,19 @@ const RegisterScreen = ({ navigation, onRegister }) => {
         },
         body: JSON.stringify(payload),
       });
-
+  
       if (!response.ok) {
-        throw new Error("Registration failed. Please try again.");
+        const errorData = await response.json();
+        console.log("&&&&&Error***********", JSON.stringify(errorData));
+        // If the server sends an error message, show it in an alert
+        const errorMessage =
+          errorData?.message;
+        throw new Error(JSON.stringify(errorData));
       }
-
+  
       const data = await response.json();
-
-      /* Toast.show({
-        type: "success",
-        text1: "Registration Successful",
-        text2: "You have been registered successfully, Please login",
-      }); */
-    
       Alert.alert("Success", "You have been registered successfully, Please login");
+  
       // Clear the form after successful registration
       setFirstName("");
       setMiddleName("");
@@ -148,17 +147,18 @@ const RegisterScreen = ({ navigation, onRegister }) => {
       setPincode("");
       setAnugrahit("no");
       setGender("male");
-
+  
       // Navigate to the Login screen
       navigation.navigate("Login");
-
+  
     } catch (error) {
-      Toast.show({
+      // Show the error message from the server or a generic message
+      /* Toast.show({
         type: "error",
         text1: "Registration Failed",
         text2: error.message || "An error occurred during registration.",
-      });
-      Alert.alert("Registration Failed!", JSON.stringify(error));
+      }); */
+      Alert.alert("Registration Failed!", error.message);
     }
   };
 

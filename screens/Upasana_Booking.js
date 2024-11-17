@@ -61,7 +61,7 @@ const Upasana_Booking = ({ navigation }) => {
     if (isSaturday) {
       setSelectedDate(day.dateString);
     } else {
-      Alert.alert("Invalid Selection", "You can only book slots on Saturdays");
+      Alert.alert("Invalid Selection", "You can only book upasana on Saturdays");
     }
   };
 
@@ -72,7 +72,7 @@ const Upasana_Booking = ({ navigation }) => {
   const handleConfirmBooking = () => {
     Alert.alert(
       "Confirm Booking",
-      "Are you sure you want to confirm this slot?",
+      "Are you sure you want to confirm this upasana booking?",
       [
         {
           text: "Cancel",
@@ -106,12 +106,13 @@ const Upasana_Booking = ({ navigation }) => {
               if (response.ok) {
                 addBooking(bookedSlot);
   
-                Toast.show({
+                /* Toast.show({
                   type: "success",
                   text1: "Success",
-                  text2: "Your Slot has been booked successfully! 🎉",
+                  text2: "Your upasana booked successfully! 🎉",
                   visibilityTime: 2500,
-                });
+                }); */
+                Alert.alert("Booking Success","Your upasana booked successfully!");
   
                 setTimeout(() => {
                   navigation.navigate("My Bookings");

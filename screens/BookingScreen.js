@@ -45,7 +45,7 @@ const BookingScreen = () => {
         }
   
         setUserId(storedUserId);
-  
+  console.log("#### Getting Booking for User",storedUserId);
         // Fetch user and booking data
         const response = await fetch(`${apiUrl}/bookings/user/${storedUserId}`, {
           method: "GET",
