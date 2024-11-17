@@ -52,10 +52,8 @@ const ProfileScreen = ({ onLogout }) => {
       return (
         <Image
           source={
-            gender === "male"
-              ? require("../assets/male.jpg")
-              : require("../assets/female.jpg")
-          }
+            require("../assets/male.jpg")
+            }
           style={styles.profilePic}
         />
       );
@@ -149,11 +147,11 @@ const ProfileScreen = ({ onLogout }) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={pickImage}
+              /* onPress={pickImage} */
               style={styles?.avatarContainer}
             >
               {renderProfilePicture()}
-              <Text style={styles.editText}>Edit Profile Picture</Text>
+              {/* <Text style={styles.editText}>Edit Profile Picture</Text> */}
             </TouchableOpacity>
 
             {profilePic && (

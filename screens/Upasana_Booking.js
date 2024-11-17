@@ -219,7 +219,7 @@ const Upasana_Booking = ({ navigation }) => {
             isMahaPrasadAvailable ? styles.toggleTextAfter : styles.toggleText
           }
         >
-          MahaPrasad is {isMahaPrasadAvailable ? "Available" : "Not Available"}
+          MahaPrasad is {isMahaPrasadAvailable ? "available" : "Not Available"}
         </Text>
       </View>
 
@@ -230,7 +230,7 @@ const Upasana_Booking = ({ navigation }) => {
             style={styles.confirmButton}
             onPress={handleConfirmBooking}
           >
-            <Text style={styles.confirmButtonText}>Confirm Slot</Text>
+            <Text style={styles.confirmButtonText}>Confirm upasana</Text>
           </TouchableOpacity>
         </View>
       ) : null}
@@ -276,13 +276,13 @@ const styles = StyleSheet.create({
   toggleText: {
     fontSize: 18,
     marginLeft: 10,
-    color: "#2d4150", // Text color according to the theme
+    color: "#ff4500", // Text color according to the theme
     fontWeight: "bold",
   },
   toggleTextAfter: {
     fontSize: 18,
     marginLeft: 10,
-    color: "#ff4500", // Text color according to the theme
+    color: "#006400", // Text color according to the theme
     fontWeight: "bold",
   },
 });
