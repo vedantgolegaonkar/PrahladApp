@@ -61,8 +61,9 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
       });
       console.log('data',response)
       if (!response.ok) {
+        const errorData = await response.json();
         throw new Error(
-          "Please check your mobile number and password."
+          JSON.stringify(errorData.error)
         );
       }
 

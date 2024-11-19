@@ -171,24 +171,28 @@ const RegisterScreen = ({ navigation, onRegister }) => {
         placeholder="First Name *"
         value={firstName}
         onChangeText={setFirstName}
+        maxLength={50}
       />
       <TextInput
         style={styles.input}
         placeholder="Middle Name"
         value={middleName}
         onChangeText={setMiddleName}
+        maxLength={50}
       />
       <TextInput
         style={styles.input}
         placeholder="Last Name *"
         value={lastName}
         onChangeText={setLastName}
+        maxLength={50}
       />
       <TextInput
         style={styles.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
+        maxLength={100}
       />
       <TextInput
         style={styles.input}
@@ -196,6 +200,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
         value={password}
         onChangeText={setPassword}
         secureTextEntry={true}
+        maxLength={10}
       />
       <TextInput
         style={styles.input}
@@ -203,6 +208,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry={true}
+        maxLength={10}
       />
       <TextInput
         style={styles.input}
@@ -210,6 +216,7 @@ const RegisterScreen = ({ navigation, onRegister }) => {
         value={mobileNumber}
         onChangeText={setMobileNumber}
         keyboardType="numeric"
+        maxLength={10}
       />
       <TextInput
         style={styles.input}
@@ -217,36 +224,42 @@ const RegisterScreen = ({ navigation, onRegister }) => {
         value={altMobileNumber}
         onChangeText={setAltMobileNumber}
         keyboardType="numeric"
+        maxLength={10}
       />
       <TextInput
         style={styles.input}
         placeholder="Flat No/House Name"
         value={flatNo}
         onChangeText={setFlatNo}
+        maxLength={20}
       />
       <TextInput
         style={styles.input}
         placeholder="Full Address *"
         value={fullAddress}
         onChangeText={setFullAddress}
+        maxLength={100} // Max length 100 for full address
       />
       <TextInput
         style={styles.input}
         placeholder="Area *"
         value={area}
         onChangeText={setArea}
+        maxLength={100} 
       />
       <TextInput
         style={styles.input}
         placeholder="Landmark *"
         value={landmark}
         onChangeText={setLandmark}
+        maxLength={100} 
       />
       <TextInput
       style={styles.input}
       placeholder="City"
       value="Pune"
       editable={false} // Disable the TextInput
+      maxLength={50} 
       />
 
       <TextInput
@@ -254,12 +267,14 @@ const RegisterScreen = ({ navigation, onRegister }) => {
         placeholder="State"
         value="Maharashtra"
         editable={false} 
+        maxLength={50} 
       />
       <TextInput
         style={styles.input}
         placeholder="Pincode *"
         value={pincode}
         onChangeText={setPincode}
+        maxLength={10} 
       />
       <View style={styles.pickerContainer}>
         <Text style={styles.pickerLabel}>Anugrahit:</Text>

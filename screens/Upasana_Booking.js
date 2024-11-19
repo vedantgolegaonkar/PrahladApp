@@ -132,7 +132,7 @@ const Upasana_Booking = ({ navigation }) => {
               } else {
                 const errorData = await response.json();
                 console.error("Booking failed:", JSON.stringify(errorData));
-                Alert.alert("Booking not available!", JSON.stringify(errorData));
+                Alert.alert("Booking not available!", JSON.stringify(errorData.error));
               }
             } catch (error) {
               console.error("Error:", error);
