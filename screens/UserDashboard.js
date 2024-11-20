@@ -37,7 +37,11 @@ const UserDashboard = ({ bookings, handleLogout }) => {
         tabBarInactiveTintColor: "gray",
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen
+        name="Home"
+      >
+      {(props) => <HomeScreen {...props} onLogout={handleLogout} />} 
+    </Tab.Screen>
       <Tab.Screen name="My Bookings">
         {(props) => <BookingScreen {...props} bookings={bookings} />}
       </Tab.Screen>

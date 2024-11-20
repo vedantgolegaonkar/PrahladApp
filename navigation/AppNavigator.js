@@ -123,7 +123,11 @@ const AppNavigator = () => {
               />
             )}
           </Stack.Screen>
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen
+            name="Home"
+          >
+            {(props) => <HomeScreen {...props} onLogout={handleLogout} />} 
+          </Stack.Screen>
           <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       )}

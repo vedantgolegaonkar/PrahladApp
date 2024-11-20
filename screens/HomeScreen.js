@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Animated } from "react-native";
+import { View, Text, StyleSheet, Alert, TouchableOpacity, Animated } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, onLogout }) => {
   const blinkOpacity = useRef(new Animated.Value(1)).current; // For blinking effect
 
   useEffect(() => {
@@ -25,8 +26,31 @@ const HomeScreen = ({ navigation }) => {
     animateBlink();
   }, [blinkOpacity]);
 
+  const handleLogout = () => {
+    // Show confirmation alert
+    Alert.alert(
+      "Logout", // Title of the alert
+      "Are you sure you want to log out?", // Message
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Logout cancelled"), // If user selects "Cancel"
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => onLogout(), // If user selects "Yes", log out
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <View style={styles.container}>
+       <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+        <Ionicons name="log-out-outline" size={30} color="#ff4500" />
+      </TouchableOpacity>
       {/* Blinking Text */}
       <View style={styles.blinkContainer}>
         <Animated.Text style={[styles.blinkText, { opacity: blinkOpacity }]}>
@@ -110,6 +134,16 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  logoutButton: {
+    backgroundColor: "#fff",
+    padding: 10,
+    elevation: 1,
+    borderRadius: 5,
+    position: "absolute",
+    top: 15,
+    right: 15,
+    shadowOpacity: 1,
   },
 });
 

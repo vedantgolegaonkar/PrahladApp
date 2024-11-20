@@ -82,15 +82,17 @@ const Upasana_Booking = ({ navigation }) => {
       return;
     }
   
-    // Check if MahaPrasad is available and if the user has selected "Yes"
-    if (selectedOption === "No") {
-      Alert.alert("MahaPrasad Unavailable", "MahaPrasad is not available for this booking.");
-      return;
+    let finalMessage;
+  
+    if (isMahaPrasadAvailable) {
+      finalMessage = "MahaPrasad is available, Do you want to confirm booking?";
+    } else {
+      finalMessage = "MahaPrasad is NOT available, Do you want to confirm booking?";
     }
   
     Alert.alert(
       "Confirm Booking",
-      "Are you sure you want to confirm this upasana booking?",
+      finalMessage,
       [
         {
           text: "Cancel",
@@ -131,8 +133,8 @@ const Upasana_Booking = ({ navigation }) => {
                 }, 2500);
               } else {
                 const errorData = await response.json();
-                console.error("Booking failed:", JSON.stringify(errorData));
-                Alert.alert("Booking not available!", JSON.stringify(errorData.error));
+                console.error("Booking failed:", JSON.stringify(errorData.error));
+                Alert.alert("Booking not available!", errorData.error);
               }
             } catch (error) {
               console.error("Error:", error);
@@ -148,7 +150,7 @@ const Upasana_Booking = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Book Your Upasana Slot</Text>
+      <Text style={styles.title}>Book Your Upasana</Text>
       <Calendar
         minDate={"2024-12-01"}
         maxDate={"2025-12-31"}
@@ -261,7 +263,10 @@ const Upasana_Booking = ({ navigation }) => {
 
       {/* Display Selected Option */}
       <Text style={styles.resultText}>
-        MahaPrasad is {selectedOption || "Not Selected"}
+        MahaPrasad availability : {selectedOption || "Not Selected"}
+      </Text>
+      <Text style={styles.resultText}>
+      “ महाप्रसाद ऐच्छिक आहे. महाप्रसाद करायचा असेल तर फक्त कढी खिचडी करावी “
       </Text>
     </View>
 
