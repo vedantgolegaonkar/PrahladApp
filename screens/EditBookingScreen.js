@@ -33,12 +33,15 @@ const EditBookingScreen = ({ route, navigation }) => {
   
       if (response.ok) {
         const data = await response.json();
+        Alert.alert(data.message);
         // Assuming response contains updated bookings data
-        console.log("@@@@Updated Booking Data@@@@@:", JSON.stringify(data));
+        //console.log("@@@@Updated Booking Data@@@@@:", JSON.stringify(data));
         //setBookings(data.users); // Update your bookings state with the response data
+        setLoading(false); // Stop the loading spinner
       } else {
         console.log("Error", "Failed to update booking");
         Alert.alert("No bookings to update");
+        setLoading(false); // Stop the loading spinner
       }
     } catch (error) {
       console.error("Error:", error);

@@ -45,7 +45,7 @@ const BookingsScreen = () => {
       
       if (response.ok) {
         const data = await response.json();
-        console.log("@@@@Booking Data@@@@@:", JSON.stringify(data)); // Inspect the response data structure
+       // console.log("@@@@Booking Data@@@@@:", JSON.stringify(data)); // Inspect the response data structure
         
         // Assuming the response contains a user object and its associated bookings
         setBookings(data.users); 
@@ -59,7 +59,7 @@ const BookingsScreen = () => {
         if (loggedInUser) {
           // Set the isadmin value for the logged-in user
           setIsAdmin(loggedInUser.isadmin);  // Update state to true or false
-          console.log(" user isadmin : ", loggedInUser);
+          //console.log(" user isadmin : ", loggedInUser);
         } else {
           console.error("Logged-in user not found in the fetched data.");
         }
@@ -87,7 +87,7 @@ const BookingsScreen = () => {
   // Fetch bookings when the component mounts
   useEffect(() => {
     fetchBookings();
-    const interval = setInterval(fetchBookings, 60000); // Refresh every minute
+    const interval = setInterval(fetchBookings, 20000); // Refresh every minute
     return () => clearInterval(interval);
   }, []);
 

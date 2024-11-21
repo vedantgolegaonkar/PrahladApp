@@ -86,6 +86,7 @@ const AppNavigator = () => {
               <Upasana_Booking {...props} addBooking={addBooking} />
             )}
           </Stack.Screen>
+          <Stack.Screen name="EditBooking" component={EditBookingScreen} />
           <Stack.Screen name="Members" component={MembersScreen} />
           <Stack.Screen name="MembersDetailsScreen" component={MembersDetailsScreen} />
         </Stack.Navigator>
