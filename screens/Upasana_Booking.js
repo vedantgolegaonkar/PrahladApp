@@ -368,7 +368,7 @@ const Upasana_Booking = ({ navigation }) => {
           MahaPrasad availability : {selectedOption || "Not Selected"}
         </Text>
         <Text style={styles.resultText}>
-          “ महाप्रसाद ऐच्छिक आहे. महाप्रसाद करायचा असेल तर फक्त कढी खिचडी करावी “
+          “महाप्रसाद ऐच्छिक आहे. महाप्रसाद करायचा असेल तर फक्त कढी खिचडी करावी“
         </Text>
       </View>
 
@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   label: {
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: "bold",
     marginBottom: 10,
     color: "#333",
@@ -482,13 +482,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#ff4500",
   },
   radioLabel: {
-    fontSize: 18,
+    fontSize: 14,
     color: "#333",
   },
   resultText: {
-    fontSize: 18,
+    fontSize: 14,
     color: "#555",
-    marginTop: 20,
+    marginTop: 5,
   },
 });
 
