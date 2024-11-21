@@ -6,18 +6,21 @@ import {
   FlatList,
   Alert,
   ActivityIndicator,
-  TouchableOpacity
+  TextInput, // Added for search functionality
+  TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const BookingsScreen = () => {
   const [bookings, setBookings] = useState([]);
+  const [filteredBookings, setFilteredBookings] = useState([]); // Added state for filtered bookings
+  const [searchQuery, setSearchQuery] = useState(""); // Added state for search query
   const [loading, setLoading] = useState(true);
-  
-  const navigation = useNavigation()
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  // Helper function to fetch data from AsyncStorage
+  const navigation = useNavigation();
+
   const getData = async (key) => {
     try {
       const value = await AsyncStorage.getItem(key);
@@ -32,40 +35,32 @@ const BookingsScreen = () => {
 
   const formatFieldName = (field) => {
     return field
-      .replace(/_/g, " ") // Replace underscores with spaces
-      .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
   };
- 
-  // Function to fetch bookings from the server
-  const [isAdmin, setIsAdmin] = useState(false); // Initialize as a boolean
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch("https://upasana-app-gdm2p.ondigitalocean.app/bookings/users");
-      
+      const response = await fetch(
+        "https://upasana-app-gdm2p.ondigitalocean.app/bookings/users"
+      );
+
       if (response.ok) {
         const data = await response.json();
-       // console.log("@@@@Booking Data@@@@@:", JSON.stringify(data)); // Inspect the response data structure
-        
-        // Assuming the response contains a user object and its associated bookings
-        setBookings(data.users); 
+        setBookings(data.users); // Set original bookings
+        setFilteredBookings(data.users); // Set filtered bookings initially
 
-        // Retrieve the logged-in userId from AsyncStorage
         const loggedInUserId = await getData("userId");
-
-        // Find the logged-in user from the fetched data
-        const loggedInUser = data.users.find(user => user.id.toString() === loggedInUserId);
+        const loggedInUser = data.users.find(
+          (user) => user.id.toString() === loggedInUserId
+        );
 
         if (loggedInUser) {
-          // Set the isadmin value for the logged-in user
-          setIsAdmin(loggedInUser.isadmin);  // Update state to true or false
-          //console.log(" user isadmin : ", loggedInUser);
+          setIsAdmin(loggedInUser.isadmin);
         } else {
           console.error("Logged-in user not found in the fetched data.");
         }
-
       } else {
-        console.log("Error", "Failed to fetch bookings");
         Alert.alert("No bookings to display");
         setLoading(false);
       }
@@ -77,19 +72,27 @@ const BookingsScreen = () => {
     }
   };
 
-  // If you want to log the value after the state is updated, use useEffect
-  useEffect(() => {
-    console.log("isAdmin state updated:", isAdmin);
-  }, [isAdmin]); // This will run whenever `isAdmin` is updated
-
-  
-
-  // Fetch bookings when the component mounts
   useEffect(() => {
     fetchBookings();
-    const interval = setInterval(fetchBookings, 20000); // Refresh every minute
+    const interval = setInterval(fetchBookings, 20000); // Refresh every 20 seconds
     return () => clearInterval(interval);
   }, []);
+
+  // Filter bookings whenever the search query changes
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredBookings(bookings); // Reset to all bookings if the query is empty
+    } else {
+      const lowercasedQuery = searchQuery.toLowerCase();
+      const filtered = bookings.filter(
+        (item) =>
+          `${item.first_name} ${item.last_name}`
+            .toLowerCase()
+            .includes(lowercasedQuery)
+      );
+      setFilteredBookings(filtered);
+    }
+  }, [searchQuery, bookings]); // Dependencies: searchQuery and bookings
 
   if (loading) {
     return (
@@ -102,20 +105,25 @@ const BookingsScreen = () => {
 
   const handleEditBooking = (booking) => {
     console.log("Edit Booking Data:", booking);
-    // Navigate to an Edit Screen or perform an action with the booking data
     navigation.navigate("EditBooking", { bookingData: booking });
   };
 
   return (
     <View style={styles.container}>
-    {
-      bookings && bookings.length > 0 ? (
+      {/* Search Bar */}
+      <TextInput
+        style={styles.searchInput} // Added style for search bar
+        placeholder="Search by name..."
+        value={searchQuery} // Controlled input
+        onChangeText={(text) => setSearchQuery(text)} // Update search query state
+      />
+
+      {filteredBookings && filteredBookings.length > 0 ? (
         <FlatList
-          data={bookings}
+          data={filteredBookings} // Use filtered bookings here
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.bookingCard}>
-              {/* Name Column */}
               <View style={styles.bookingDetails}>
                 <Text style={styles.bookingLabel}>Name:</Text>
                 <Text style={styles.bookingText}>
@@ -123,7 +131,6 @@ const BookingsScreen = () => {
                 </Text>
               </View>
 
-              {/* Address Column */}
               <View style={styles.bookingDetails}>
                 <Text style={styles.bookingLabel}>Address:</Text>
                 <Text style={styles.bookingText}>
@@ -131,13 +138,11 @@ const BookingsScreen = () => {
                 </Text>
               </View>
 
-              {/* Anugrahit Field */}
               <View style={styles.bookingDetails}>
                 <Text style={styles.bookingLabel}>Anugrahit:</Text>
                 <Text style={styles.bookingText}>{item.anugrahit}</Text>
               </View>
 
-              {/* Bookings Array - Horizontal FlatList */}
               <View style={styles.bookingDetails}>
                 <FlatList
                   horizontal
@@ -145,73 +150,68 @@ const BookingsScreen = () => {
                   keyExtractor={(booking, index) => index.toString()}
                   renderItem={({ item: booking }) => (
                     <View style={styles.bookingCard}>
-                      {/* Edit Button */}
-                      <Text style={styles.fieldName}></Text>
-
                       <TouchableOpacity
                         style={[
-                          styles.editButton, 
-                          !isAdmin && { display: 'none' } // Apply display: 'none' if not isAdmin (when isAdmin is false)
+                          styles.editButton,
+                          !isAdmin && { display: "none" },
                         ]}
-                        onPress={() => handleEditBooking(booking)} // Pass the full booking object
-                        disabled={!isAdmin} // Disable the button if isAdmin is false
+                        onPress={() => handleEditBooking(booking)}
+                        disabled={!isAdmin}
                       >
                         <Text style={styles.editButtonText}>Edit</Text>
                       </TouchableOpacity>
-
-
-                      {/* Dynamically Render Booking Fields */}
+                     {/* Below Text is for an empty space between button and first line */}
+                      <Text style={styles.fieldName}></Text>
                       {Object.keys(booking).map((field, index) => (
                         <View key={index} style={styles.fieldRow}>
-                          <Text style={styles.fieldName}>{formatFieldName(field)}:</Text>
-                          <Text style={styles.fieldValue}>{String(booking[field])}</Text>
+                          <Text style={styles.fieldName}>
+                            {formatFieldName(field)}:
+                          </Text>
+                          <Text style={styles.fieldValue}>
+                            {String(booking[field])}
+                          </Text>
                         </View>
                       ))}
                     </View>
                   )}
-                  showsHorizontalScrollIndicator={false} // Hide horizontal scrollbar
+                  showsHorizontalScrollIndicator={false}
                 />
               </View>
 
-              {/* Mobile Number */}
               <View style={styles.bookingDetails}>
                 <Text style={styles.bookingLabel}>Mobile Number:</Text>
                 <Text style={styles.bookingText}>{item.mobile_number}</Text>
               </View>
 
-              {/* Alternate Mobile Number */}
               <View style={styles.bookingDetails}>
                 <Text style={styles.bookingLabel}>Alternate Mobile:</Text>
-                <Text style={styles.bookingText}>{item.alternate_mobile_number}</Text>
+                <Text style={styles.bookingText}>
+                  {item.alternate_mobile_number}
+                </Text>
               </View>
             </View>
           )}
         />
       ) : (
-        <Text style={styles.noBookingsText}>
-          Bookings not available !
-        </Text>
-      )
-    }
-  </View>
-
+        <Text style={styles.noBookingsText}>Bookings not available!</Text>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "#f4f4f4" },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f4f4f4",
+  searchInput: { // Added styles for search input
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 10,
+    paddingHorizontal: 10,
   },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: "#ff4500",
-  },
-
+  // Rest of the styles remain unchanged
+  loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
+  loadingText: { marginTop: 10, fontSize: 16, color: "#ff4500" },
   bookingCard: {
     backgroundColor: "#fff",
     borderRadius: 8,
@@ -225,60 +225,22 @@ const styles = StyleSheet.create({
     borderLeftWidth: 5,
     borderColor: "#ff4500",
   },
-  bookingDetails: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 5,
-  },
+  bookingDetails: { flexDirection: "row", justifyContent: "space-between" },
   bookingLabel: { fontWeight: "bold", color: "#333" },
   bookingText: { color: "#555", flexWrap: "wrap", flex: 1 },
-  bookingInfoText: {
-    color: "#555",
-    flexWrap: "wrap",
-    flex: 1,
-    fontWeight: 'bold',  // Make text bold
-    fontStyle: 'italic', // Make text italic
-    fontSize: 12,        // Make text slightly smaller
-  },
-  
-  noBookingsText: {
-    fontSize: 16,
-    textAlign: "center",
-    marginTop: 20,
-    color: "#999",
-  },
-  bookingRow: {
-    flexDirection: "row",
-    justifyContent: "space-between", // Distribute the columns evenly
-    marginBottom: 10,
-    marginRight: 10, // Add spacing between horizontal items
-  },
+  noBookingsText: { fontSize: 16, textAlign: "center", marginTop: 20 },
   editButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 5,
     left: 5,
-    backgroundColor: '#007bff',
+    backgroundColor: "#007bff",
     padding: 5,
     borderRadius: 4,
   },
-  editButtonText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  fieldRow: {
-    flexDirection: "row",
-    marginBottom: 5,
-  },
-  fieldName: {
-    fontWeight: "bold",
-    color: "#333",
-    marginRight: 5,
-  },
-  fieldValue: {
-    color: "#555",
-  }
-  
+  editButtonText: { color: "#fff", fontSize: 12, fontWeight: "bold" },
+  fieldRow: { flexDirection: "row", marginBottom: 5 },
+  fieldName: { fontWeight: "bold", color: "#333", marginRight: 5 },
+  fieldValue: { color: "#555" },
 });
 
 export default BookingsScreen;
