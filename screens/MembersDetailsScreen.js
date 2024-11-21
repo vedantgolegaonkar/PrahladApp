@@ -7,6 +7,7 @@ import {
   TextInput,
   Alert,
 } from "react-native";
+import { ScrollView } from "react-native"
 
 const MembersDetailsScreen = ({ route, navigation }) => {
   const { member } = route.params;
@@ -53,229 +54,237 @@ const MembersDetailsScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.detailCard}>
-        
 
-        {/* Address as a header */}
-        <Text style={styles.addressHeader}>Member Details:</Text>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ padding: 10 }} // Adjust padding or styling if necessary
+        showsVerticalScrollIndicator={true} // Enable vertical scrollbar
+      >
 
-        {isEditing ? (
-          <>
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>First Name:</Text>
+        <View style={styles.detailCard}>
+          
+
+          {/* Address as a header */}
+          <Text style={styles.addressHeader}>Member Details:</Text>
+
+          {isEditing ? (
+            <>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>First Name:</Text>
+                  <TextInput
+                    style={styles.input}
+                    value={editableMember.first_name}
+                    onChangeText={(value) => handleChange("first_name", value)}
+                  />
+              </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Last Name:</Text>
+                  <TextInput
+                    style={styles.input}
+                    value={editableMember.last_name}
+                    onChangeText={(value) => handleChange("filast_namerst_name", value)}
+                  />
+              </View>
+              {/* Editable Address Fields */}
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Flat No:</Text>
                 <TextInput
                   style={styles.input}
-                  value={editableMember.first_name}
-                  onChangeText={(value) => handleChange("first_name", value)}
+                  value={editableMember.flat_no}
+                  onChangeText={(value) => handleChange("flat_no", value)}
                 />
-            </View>
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Last Name:</Text>
+              </View>
+
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Full Address:</Text>
                 <TextInput
                   style={styles.input}
-                  value={editableMember.last_name}
-                  onChangeText={(value) => handleChange("filast_namerst_name", value)}
+                  value={editableMember.full_address}
+                  onChangeText={(value) => handleChange("full_address", value)}
                 />
-            </View>
-            {/* Editable Address Fields */}
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Flat No:</Text>
-              <TextInput
-                style={styles.input}
-                value={editableMember.flat_no}
-                onChangeText={(value) => handleChange("flat_no", value)}
-              />
-            </View>
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Full Address:</Text>
-              <TextInput
-                style={styles.input}
-                value={editableMember.full_address}
-                onChangeText={(value) => handleChange("full_address", value)}
-              />
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Area:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={editableMember.area}
+                  onChangeText={(value) => handleChange("area", value)}
+                />
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Area:</Text>
-              <TextInput
-                style={styles.input}
-                value={editableMember.area}
-                onChangeText={(value) => handleChange("area", value)}
-              />
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Landmark:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={editableMember.landmark}
+                  onChangeText={(value) => handleChange("landmark", value)}
+                />
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Landmark:</Text>
-              <TextInput
-                style={styles.input}
-                value={editableMember.landmark}
-                onChangeText={(value) => handleChange("landmark", value)}
-              />
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Pincode:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={editableMember.pincode}
+                  onChangeText={(value) => handleChange("pincode", value)}
+                />
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Pincode:</Text>
-              <TextInput
-                style={styles.input}
-                value={editableMember.pincode}
-                onChangeText={(value) => handleChange("pincode", value)}
-              />
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>City:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={editableMember.city}
+                  editable={false} // Disable the TextInput
+                  onChangeText={(value) => handleChange("city", "Pune")}
+                />
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>City:</Text>
-              <TextInput
-                style={styles.input}
-                value={editableMember.city}
-                editable={false} // Disable the TextInput
-                onChangeText={(value) => handleChange("city", "Pune")}
-              />
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>State:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={editableMember.state}
+                  editable={false} // Disable the TextInput
+                  onChangeText={(value) => handleChange("state", "Maharashtra")}
+                />
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>State:</Text>
-              <TextInput
-                style={styles.input}
-                value={editableMember.state}
-                editable={false} // Disable the TextInput
-                onChangeText={(value) => handleChange("state", "Maharashtra")}
-              />
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Pincode:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={editableMember.pincode}
+                  onChangeText={(value) => handleChange("pincode", value)}
+                />
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Pincode:</Text>
-              <TextInput
-                style={styles.input}
-                value={editableMember.pincode}
-                onChangeText={(value) => handleChange("pincode", value)}
-              />
-            </View>
+              {/* Other editable fields */}
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Gender:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={editableMember.gender}
+                  onChangeText={(value) => handleChange("gender", value)}
+                />
+              </View>
 
-            {/* Other editable fields */}
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Gender:</Text>
-              <TextInput
-                style={styles.input}
-                value={editableMember.gender}
-                onChangeText={(value) => handleChange("gender", value)}
-              />
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Anugrahit:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={editableMember.anugrahit}
+                  onChangeText={(value) => handleChange("anugrahit", value)}
+                />
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Anugrahit:</Text>
-              <TextInput
-                style={styles.input}
-                value={editableMember.anugrahit}
-                onChangeText={(value) => handleChange("anugrahit", value)}
-              />
-            </View>
+              {/* Editable Email Field */}
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Email:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={editableMember.email}
+                  onChangeText={(value) => handleChange("email", value)}
+                />
+              </View>
 
-            {/* Editable Email Field */}
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Email:</Text>
-              <TextInput
-                style={styles.input}
-                value={editableMember.email}
-                onChangeText={(value) => handleChange("email", value)}
-              />
-            </View>
+              {/* Editable Mobile Field */}
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Mobile:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={editableMember.mobile_number}
+                  onChangeText={(value) => handleChange("mobile_number", value)}
+                />
+              </View>
 
-            {/* Editable Mobile Field */}
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Mobile:</Text>
-              <TextInput
-                style={styles.input}
-                value={editableMember.mobile_number}
-                onChangeText={(value) => handleChange("mobile_number", value)}
-              />
-            </View>
+              <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+                <Text style={styles.saveButtonText}>Save</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <>
+              {/* Non-editable Fields */}
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>First Name:</Text>
+                <Text style={styles.value}>{editableMember.first_name}</Text>
+              </View>
 
-            <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-              <Text style={styles.saveButtonText}>Save</Text>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <>
-            {/* Non-editable Fields */}
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>First Name:</Text>
-              <Text style={styles.value}>{editableMember.first_name}</Text>
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Last Name:</Text>
+                <Text style={styles.value}>{editableMember.last_name}</Text>
+              </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Flat No:</Text>
+                <Text style={styles.value}>{editableMember.flat_no}</Text>
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Last Name:</Text>
-              <Text style={styles.value}>{editableMember.last_name}</Text>
-            </View>
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Flat No:</Text>
-              <Text style={styles.value}>{editableMember.flat_no}</Text>
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Full Address:</Text>
+                <Text style={styles.value}>{editableMember.full_address}</Text>
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Full Address:</Text>
-              <Text style={styles.value}>{editableMember.full_address}</Text>
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Area:</Text>
+                <Text style={styles.value}>{editableMember.area}</Text>
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Area:</Text>
-              <Text style={styles.value}>{editableMember.area}</Text>
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Landmark:</Text>
+                <Text style={styles.value}>{editableMember.landmark}</Text>
+              </View>
+              
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Pincode:</Text>
+                <Text style={styles.value}>{editableMember.pincode}</Text>
+              </View>
+              
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>City:</Text>
+                <Text style={styles.value}>{editableMember.city}</Text>
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Landmark:</Text>
-              <Text style={styles.value}>{editableMember.landmark}</Text>
-            </View>
-            
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Pincode:</Text>
-              <Text style={styles.value}>{editableMember.pincode}</Text>
-            </View>
-            
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>City:</Text>
-              <Text style={styles.value}>{editableMember.city}</Text>
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>State:</Text>
+                <Text style={styles.value}>{editableMember.state}</Text>
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>State:</Text>
-              <Text style={styles.value}>{editableMember.state}</Text>
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Pincode:</Text>
+                <Text style={styles.value}>{editableMember.pincode}</Text>
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Pincode:</Text>
-              <Text style={styles.value}>{editableMember.pincode}</Text>
-            </View>
+              {/* Non-editable fields */}
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Gender:</Text>
+                <Text style={styles.value}>{editableMember.gender}</Text>
+              </View>
 
-            {/* Non-editable fields */}
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Gender:</Text>
-              <Text style={styles.value}>{editableMember.gender}</Text>
-            </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Anugrahit:</Text>
+                <Text style={styles.value}>{editableMember.anugrahit}</Text>
+              </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Anugrahit:</Text>
-              <Text style={styles.value}>{editableMember.anugrahit}</Text>
-            </View>
+              {/* Non-editable Email Field */}
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Email:</Text>
+                <Text style={styles.value}>{editableMember.email}</Text>
+              </View>
 
-            {/* Non-editable Email Field */}
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Email:</Text>
-              <Text style={styles.value}>{editableMember.email}</Text>
-            </View>
+              {/* Non-editable Mobile Field */}
+              <View style={styles.detailRow}>
+                <Text style={styles.label}>Mobile:</Text>
+                <Text style={styles.value}>{editableMember.mobile_number}</Text>
+              </View>
 
-            {/* Non-editable Mobile Field */}
-            <View style={styles.detailRow}>
-              <Text style={styles.label}>Mobile:</Text>
-              <Text style={styles.value}>{editableMember.mobile_number}</Text>
-            </View>
-
-            <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
-              <Text style={styles.editButtonText}>Edit</Text>
-            </TouchableOpacity>
-          </>
-        )}
-      </View>
+              <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
+                <Text style={styles.editButtonText}>Edit</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+        </ScrollView>
     </View>
   );
 };

@@ -34,6 +34,9 @@ const BookingsScreen = () => {
   };
 
   const formatFieldName = (field) => {
+    if (field === "is_active") {
+      return "Booking Status";
+    }
     return field
       .replace(/_/g, " ")
       .replace(/\b\w/g, (char) => char.toUpperCase());
@@ -177,7 +180,7 @@ const BookingsScreen = () => {
                                   : null,
                               ]}
                             >
-                              {String(booking[field])}
+                              {field === "is_active" ? (booking[field] ? "Booked" : "Cancelled") : String(booking[field])}
                             </Text>
                           </View>
                         ))}

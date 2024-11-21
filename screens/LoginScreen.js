@@ -18,7 +18,7 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
 
   const adminCredentials = {
     mobileNumber: "1234567890",
-    password: "A",
+    password: "ShriRam@13",
   };
 
   const appEnv =
