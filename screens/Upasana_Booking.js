@@ -17,7 +17,9 @@ const Upasana_Booking = ({ navigation }) => {
   const [selectedDate, setSelectedDate] = useState("");
   const { addBooking } = useBooking();
   const [userId, setUserId] = useState(null); // Initialize userId state
-  
+  const [bookedDates, setBookedDates] = useState({}); // State to store booked dates
+
+
   // Determine the environment safely
   const appEnv =
     (Constants.manifest && Constants.manifest.releaseChannel) || "dev";
@@ -50,6 +52,53 @@ const Upasana_Booking = ({ navigation }) => {
     fetchUserId(); // Call the async function inside useEffect
   }, []);
 
+  useEffect(() => {
+    const fetchBookedDates = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/bookingsDates`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const dates = data.booked_dates; // Ensure this matches your API's response structure
+          console.log("Booked dates fetched:", dates);
+
+          // Transform dates into the required format for the calendar
+          const markedDates = dates.reduce((acc, date) => {
+            acc[date] = {
+              disabled: true,
+              disableTouchEvent: true,
+              marked: true,
+              dotColor: "gray", // Gray-out color
+            };
+            return acc;
+          }, {});
+
+          // Update state
+          setBookedDates(markedDates);
+        } else {
+          console.error("Failed to fetch booked dates. Response:", response);
+        }
+      } catch (error) {
+        console.error("Error fetching booked dates:", error);
+      }
+    };
+
+    // Call the function immediately when the component mounts
+    fetchBookedDates();
+
+    // Set an interval to periodically fetch booked dates
+    const intervalId = setInterval(fetchBookedDates, 30000); // 30 seconds
+
+    // Cleanup on unmount
+    return () => clearInterval(intervalId);
+  }, [apiUrl]);
+
+
   const getData = async (key) => {
     try {
       const value = await AsyncStorage.getItem(key);
@@ -81,15 +130,15 @@ const Upasana_Booking = ({ navigation }) => {
       Alert.alert("Validation Error", "Please select if Mahaprasad is available.");
       return;
     }
-  
+
     let finalMessage;
-  
+
     if (isMahaPrasadAvailable) {
       finalMessage = "MahaPrasad is available, Do you want to confirm booking?";
     } else {
       finalMessage = "MahaPrasad is NOT available, Do you want to confirm booking?";
     }
-  
+
     Alert.alert(
       "Confirm Booking",
       finalMessage,
@@ -106,13 +155,13 @@ const Upasana_Booking = ({ navigation }) => {
               Alert.alert("User ID Error", "User ID is not available.");
               return;
             }
-  
+
             const bookedSlot = {
               user_id: userId, // Replace with actual user ID
               booking_date: selectedDate,
               mahaprasad: isMahaPrasadAvailable ? true : false,
             };
-  
+
             try {
               console.log("&&&&&***&&&&", JSON.stringify(bookedSlot));
               const response = await fetch(`${apiUrl}/book`, {
@@ -122,12 +171,12 @@ const Upasana_Booking = ({ navigation }) => {
                 },
                 body: JSON.stringify(bookedSlot),
               });
-  
+
               if (response.ok) {
                 addBooking(bookedSlot);
-  
+
                 Alert.alert("Booking Success", "Your upasana booked successfully!");
-  
+
                 setTimeout(() => {
                   navigation.navigate("My Bookings");
                 }, 2500);
@@ -146,13 +195,13 @@ const Upasana_Booking = ({ navigation }) => {
       { cancelable: false }
     );
   };
-  
+
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Book Your Upasana</Text>
       <Calendar
-        minDate={"2024-12-01"}
+        minDate={"2025-01-01"}
         maxDate={"2025-12-31"}
         current={"2025-01-01"}
         onDayPress={handleDayPress}
@@ -169,12 +218,42 @@ const Upasana_Booking = ({ navigation }) => {
         }}
         markingType={"custom"}
         markedDates={{
-          [selectedDate]: {
-            selected: true,
-            selectedColor: "#ff8c00",
-          },
+          ...Object.keys(bookedDates).reduce((acc, date) => {
+            acc[date] = {
+              disabled: bookedDates[date]?.disabled,
+              disableTouchEvent: true,
+              customStyles: {
+                container: {
+                  backgroundColor: bookedDates[date]?.disabled
+                    ? "#b22222" // Consistent red background for disabled dates
+                    : "transparent",
+                  borderRadius: 0, // Ensure all have a circular shape
+                },
+                text: {
+                  color: bookedDates[date]?.disabled ? "#ffffff" : "#2d4150",
+                  fontWeight: bookedDates[date]?.disabled ? "bold" : "normal",
+                },
+              },
+            };
+            return acc;
+          }, {}),
+          ...(selectedDate && {
+            [selectedDate]: {
+              selected: true,
+              customStyles: {
+                container: {
+                  backgroundColor: "#ff8c00",
+                  borderRadius: 0, // Ensure selected dates are also circular
+                },
+                text: {
+                  color: "#ffffff",
+                  fontWeight: "bold",
+                },
+              },
+            },
+          }),
         }}
-        monthFormat={"yyyy MMM"}
+        monthFormat={"MMMM yyyy"} // Displays the full month name and year
         onMonthChange={(month) => {
           const year = parseInt(month.year);
           const monthNumber = parseInt(month.month);
@@ -190,27 +269,34 @@ const Upasana_Booking = ({ navigation }) => {
           }
         }}
         dayComponent={({ date, state }) => {
+          const dateKey = date.dateString;
           const isSaturday = new Date(date.timestamp).getDay() === 6;
-          const isSelected = date.dateString === selectedDate;
+          const isSelected = dateKey === selectedDate;
+          const isDisabled = bookedDates[dateKey]?.disabled;
+
           return (
             <TouchableOpacity
-              disabled={!isSaturday}
+              disabled={isDisabled || !isSaturday} // Disable interaction for invalid dates
               onPress={() => handleDayPress(date)}
             >
               <View
                 style={[
                   styles.dayContainer,
                   isSelected ? styles.selectedDay : null,
-                  { opacity: state === "disabled" || !isSaturday ? 0.5 : 1 },
+                  isDisabled
+                    ? { backgroundColor: "#b22222", borderRadius: 0 } // Red for disabled dates
+                    : null,
+                  { opacity: isDisabled || !isSaturday ? 0.5 : 1 }, // Reduce opacity for disabled
                 ]}
               >
                 <Text
                   style={{
                     textAlign: "center",
-                    color:
-                      state === "disabled" || !isSaturday
+                    color: isDisabled
+                      ? "#ffffff" // White text for disabled
+                      : state === "disabled" || !isSaturday
                         ? "#d3d3d3"
-                        : "#2d4150",
+                        : "#2d4150", // Normal color
                     fontWeight: isSaturday ? "bold" : "normal",
                   }}
                 >
@@ -222,57 +308,63 @@ const Upasana_Booking = ({ navigation }) => {
         }}
       />
 
-<View style={styles.container}>
-      {/* Radio Group */}
-      <View style={styles.radioGroupContainer}>
-        <Text style={styles.label}>Is MahaPrasad Available?</Text>
-        <View style={styles.radioGroup}>
-          {/* Yes Option */}
-          <TouchableOpacity
-            style={styles.radioButton}
-            onPress={() => handleSelection("Yes")}
-          >
-            <View
-              style={[
-                styles.outerCircle,
-                selectedOption === "Yes" && styles.selectedOuterCircle,
-              ]}
+      <View style={styles.container}>
+        {/* Radio Group */}
+        <View style={styles.radioGroupContainer}>
+          <Text style={styles.label}>Is MahaPrasad Available?</Text>
+          <View style={styles.radioGroup}>
+            {/* Yes Option */}
+            <TouchableOpacity
+              style={styles.radioButton}
+              onPress={() => handleSelection("Yes")}
             >
-              {selectedOption === "Yes" && <View style={styles.innerCircle} />}
-            </View>
-            <Text style={styles.radioLabel}>Yes</Text>
-          </TouchableOpacity>
+              <View
+                style={[
+                  styles.outerCircle,
+                  selectedOption === "Yes" && styles.selectedOuterCircle,
+                ]}
+              >
+                {selectedOption === "Yes" && <View style={styles.innerCircle} />}
+              </View>
+              <Text style={styles.radioLabel}>Yes</Text>
+            </TouchableOpacity>
 
-          {/* No Option */}
-          <TouchableOpacity
-            style={styles.radioButton}
-            onPress={() => handleSelection("No")}
-          >
-            <View
-              style={[
-                styles.outerCircle,
-                selectedOption === "No" && styles.selectedOuterCircle,
-              ]}
+            {/* No Option */}
+            <TouchableOpacity
+              style={styles.radioButton}
+              onPress={() => handleSelection("No")}
             >
-              {selectedOption === "No" && <View style={styles.innerCircle} />}
-            </View>
-            <Text style={styles.radioLabel}>No</Text>
-          </TouchableOpacity>
+              <View
+                style={[
+                  styles.outerCircle,
+                  selectedOption === "No" && styles.selectedOuterCircle,
+                ]}
+              >
+                {selectedOption === "No" && <View style={styles.innerCircle} />}
+              </View>
+              <Text style={styles.radioLabel}>No</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
-      {/* Display Selected Option */}
-      <Text style={styles.resultText}>
-        MahaPrasad availability : {selectedOption || "Not Selected"}
-      </Text>
-      <Text style={styles.resultText}>
-      “ महाप्रसाद ऐच्छिक आहे. महाप्रसाद करायचा असेल तर फक्त कढी खिचडी करावी “
-      </Text>
-    </View>
+        {/* Display Selected Option */}
+        <Text style={styles.resultText}>
+          MahaPrasad availability : {selectedOption || "Not Selected"}
+        </Text>
+        <Text style={styles.resultText}>
+          “ महाप्रसाद ऐच्छिक आहे. महाप्रसाद करायचा असेल तर फक्त कढी खिचडी करावी “
+        </Text>
+      </View>
 
       {selectedDate ? (
         <View style={styles.selection}>
-          <Text style={styles.selectedText}>Selected Date: {selectedDate}</Text>
+          <Text style={styles.selectedText}>
+            Selected Date: {new Date(selectedDate).toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            })}
+          </Text>
           <TouchableOpacity
             style={styles.confirmButton}
             onPress={handleConfirmBooking}
@@ -312,9 +404,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 40,
     width: 40,
-    borderRadius: 20,
+    borderRadius: 0, // Remove border-radius to make the days square
   },
-  selectedDay: { borderColor: "#ff8c00", borderWidth: 2 },
+  selectedDay: {
+    borderColor: "#ff8c00",
+    borderWidth: 2
+  },
   toggleContainer: {
     flexDirection: "row",
     alignItems: "center",

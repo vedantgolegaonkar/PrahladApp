@@ -1,13 +1,11 @@
-import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../screens/HomeScreen";
+import React from "react";
 import BookingScreen from "../screens/BookingScreen";
-import ListScreen from "../screens/ListScreen";
-import NotificationScreen from "../screens/NotificationScreen";
+import HomeScreen from "../screens/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 // import PdfScreen from "../screens/PdfScreen"; // New PDF screen
 import { Ionicons } from "@expo/vector-icons";
-import Constants from 'expo-constants';
+import BookingsScreen from "./BookingsScreen";
 
 
 const Tab = createBottomTabNavigator();
@@ -30,6 +28,8 @@ const UserDashboard = ({ bookings, handleLogout }) => {
             iconName = "notifications";
           } else if (route.name === "Profile") {
             iconName = "person";
+          }else if (route.name === "All Bookings") {
+            iconName = "folder";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -47,6 +47,7 @@ const UserDashboard = ({ bookings, handleLogout }) => {
       </Tab.Screen>
       {/* <Tab.Screen name="List" component={ListScreen} />
       <Tab.Screen name="Notifications" component={NotificationScreen} /> */}
+      <Tab.Screen name="All Bookings" component={BookingsScreen} />
       <Tab.Screen name="Profile">
         {(props) => <ProfileScreen {...props} onLogout={handleLogout} />}
       </Tab.Screen>

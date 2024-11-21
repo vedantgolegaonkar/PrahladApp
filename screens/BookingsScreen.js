@@ -6,30 +6,83 @@ import {
   FlatList,
   Alert,
   ActivityIndicator,
+  TouchableOpacity
 } from "react-native";
-import moment from "moment";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BookingsScreen = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  const navigation = useNavigation()
 
+  // Helper function to fetch data from AsyncStorage
+  const getData = async (key) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if (value !== null) {
+        return value;
+      }
+    } catch (e) {
+      console.error("Failed to fetch data from AsyncStorage:", e);
+    }
+    return null;
+  };
+
+  const formatFieldName = (field) => {
+    return field
+      .replace(/_/g, " ") // Replace underscores with spaces
+      .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
+  };
+ 
   // Function to fetch bookings from the server
+  const [isAdmin, setIsAdmin] = useState(false); // Initialize as a boolean
+
   const fetchBookings = async () => {
     try {
       const response = await fetch("https://upasana-app-gdm2p.ondigitalocean.app/bookings/users");
+      
       if (response.ok) {
         const data = await response.json();
         console.log("@@@@Booking Data@@@@@:", JSON.stringify(data)); // Inspect the response data structure
-        setBookings(data.users); // Assuming data contains the "users" array directly
+        
+        // Assuming the response contains a user object and its associated bookings
+        setBookings(data.users); 
+
+        // Retrieve the logged-in userId from AsyncStorage
+        const loggedInUserId = await getData("userId");
+
+        // Find the logged-in user from the fetched data
+        const loggedInUser = data.users.find(user => user.id.toString() === loggedInUserId);
+
+        if (loggedInUser) {
+          // Set the isadmin value for the logged-in user
+          setIsAdmin(loggedInUser.isadmin);  // Update state to true or false
+          console.log(" user isadmin : ", loggedInUser);
+        } else {
+          console.error("Logged-in user not found in the fetched data.");
+        }
+
       } else {
         console.log("Error", "Failed to fetch bookings");
+        Alert.alert("No bookings to display");
+        setLoading(false);
       }
     } catch (error) {
       Alert.alert("Error", "An error occurred while fetching bookings");
+      console.error("Error fetching bookings:", error);
     } finally {
       setLoading(false);
     }
   };
+
+  // If you want to log the value after the state is updated, use useEffect
+  useEffect(() => {
+    console.log("isAdmin state updated:", isAdmin);
+  }, [isAdmin]); // This will run whenever `isAdmin` is updated
+
+  
 
   // Fetch bookings when the component mounts
   useEffect(() => {
@@ -47,10 +100,15 @@ const BookingsScreen = () => {
     );
   }
 
+  const handleEditBooking = (booking) => {
+    console.log("Edit Booking Data:", booking);
+    // Navigate to an Edit Screen or perform an action with the booking data
+    navigation.navigate("EditBooking", { bookingData: booking });
+  };
+
   return (
     <View style={styles.container}>
-        
-      {
+    {
       bookings && bookings.length > 0 ? (
         <FlatList
           data={bookings}
@@ -87,21 +145,33 @@ const BookingsScreen = () => {
                   keyExtractor={(booking, index) => index.toString()}
                   renderItem={({ item: booking }) => (
                     <View style={styles.bookingCard}>
-                      {/* Booking Date */}
-                      <Text style={styles.bookingInfoText}>
-                        Booking Date: {moment(booking.booking_date).format("DD MMM YYYY")}
-                      </Text>
+                      {/* Edit Button */}
+                      <Text style={styles.fieldName}>ssss {isAdmin ? "Yes" : "No"}</Text>
 
-                      {/* Mahaprasad Available */}
-                      <Text style={styles.bookingInfoText}>
-                        Mahaprasad Available: {booking.mahaprasad ? "Yes" : "No"}
-                      </Text>
+                      <TouchableOpacity
+                        style={[
+                          styles.editButton, 
+                          !isAdmin && { display: 'none' } // Apply display: 'none' if not isAdmin (when isAdmin is false)
+                        ]}
+                        onPress={() => handleEditBooking(booking)} // Pass the full booking object
+                        disabled={!isAdmin} // Disable the button if isAdmin is false
+                      >
+                        <Text style={styles.editButtonText}>Edit</Text>
+                      </TouchableOpacity>
+
+
+                      {/* Dynamically Render Booking Fields */}
+                      {Object.keys(booking).map((field, index) => (
+                        <View key={index} style={styles.fieldRow}>
+                          <Text style={styles.fieldName}>{formatFieldName(field)}:</Text>
+                          <Text style={styles.fieldValue}>{String(booking[field])}</Text>
+                        </View>
+                      ))}
                     </View>
                   )}
                   showsHorizontalScrollIndicator={false} // Hide horizontal scrollbar
                 />
               </View>
-
 
               {/* Mobile Number */}
               <View style={styles.bookingDetails}>
@@ -121,8 +191,10 @@ const BookingsScreen = () => {
         <Text style={styles.noBookingsText}>
           Bookings not available !
         </Text>
-      )}
-    </View>
+      )
+    }
+  </View>
+
   );
 };
 
@@ -139,6 +211,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#ff4500",
   },
+
   bookingCard: {
     backgroundColor: "#fff",
     borderRadius: 8,
@@ -167,6 +240,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic', // Make text italic
     fontSize: 12,        // Make text slightly smaller
   },
+  
   noBookingsText: {
     fontSize: 16,
     textAlign: "center",
@@ -179,6 +253,31 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginRight: 10, // Add spacing between horizontal items
   },
+  editButton: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
+    backgroundColor: '#007bff',
+    padding: 5,
+    borderRadius: 4,
+  },
+  editButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  fieldRow: {
+    flexDirection: "row",
+    marginBottom: 5,
+  },
+  fieldName: {
+    fontWeight: "bold",
+    color: "#333",
+    marginRight: 5,
+  },
+  fieldValue: {
+    color: "#555",
+  }
   
 });
 

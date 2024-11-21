@@ -100,7 +100,9 @@ const BookingScreen = () => {
             <View style={styles.bookingCard}>
               <View style={styles.bookingDetails}>
                 <Text style={styles.bookingLabel}>Upasana Booking Date:</Text>
-                <Text style={styles.bookingText}>{item.booking_date}</Text>
+                <Text style={styles.bookingText}>
+                    {new Date(item.booking_date).toLocaleDateString()} 
+                </Text>
               </View>
               <View style={styles.bookingDetails}>
                 <Text style={styles.bookingLabel}>Mahaprasad:</Text>

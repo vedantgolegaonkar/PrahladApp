@@ -82,10 +82,31 @@ const HomeScreen = ({ navigation, onLogout }) => {
       {/* Button at the bottom */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Upasana_Booking")}
+        onPress={() => {
+          Alert.alert(
+            "Warning!", // Title of the alert
+            "Book only one Upasana per house.\nIf more than one Upasana is booked, all the booked Upasana for the user will be cancelled by the administrator.", // Message
+            [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Booking cancelled"), // Stay on the same screen
+                style: "cancel",
+              },
+              {
+                text: "Continue",
+                onPress: () => navigation.navigate("Upasana_Booking"), // Navigate to the booking screen
+              },
+            ],
+            { cancelable: false } // User must select an option
+          );
+        }}
       >
         <Text style={styles.buttonText}>Upasana booking</Text>
       </TouchableOpacity>
+       {/* Footer with "Developed by Innervation IT Solutions" */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>@Innervation IT Solutions</Text>
+      </View>
     </View>
   );
 };
@@ -145,6 +166,16 @@ const styles = StyleSheet.create({
     right: 15,
     shadowOpacity: 1,
   },
+  footer: {
+    position: "absolute",
+    bottom: 5, // Adjust distance from the bottom
+    right: 10, // Adjust distance from the right
+  },
+  footerText: {
+    fontSize: 12,
+    color: "grey",
+  },
+  
 });
 
 export default HomeScreen;
