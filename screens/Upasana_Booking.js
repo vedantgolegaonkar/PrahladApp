@@ -121,9 +121,6 @@ const Upasana_Booking = ({ navigation }) => {
     }
   };
 
-  const toggleMahaPrasadAvailability = () => {
-    setIsMahaPrasadAvailable((previousState) => !previousState);
-  };
 
   const handleConfirmBooking = () => {
     if (!selectedOption) {
@@ -151,6 +148,19 @@ const Upasana_Booking = ({ navigation }) => {
         {
           text: "Yes",
           onPress: async () => {
+            
+            const selectedTimestamp = new Date(selectedDate).getTime();
+            const startTimestamp = new Date("2025-01-01").getTime();
+            const endTimestamp = new Date("2025-12-31").getTime();
+
+            // Validate the selectedDate
+            if (selectedTimestamp < startTimestamp || selectedTimestamp > endTimestamp) {
+              Alert.alert(
+                "Invalid Date",
+                "Selected date must be between 1st January 2025 and 31st December 2025."
+              );
+              return; // Stop further execution
+            }
             if (!userId) {
               Alert.alert("User ID Error", "User ID is not available.");
               return;
@@ -258,15 +268,21 @@ const Upasana_Booking = ({ navigation }) => {
           const year = parseInt(month.year);
           const monthNumber = parseInt(month.month);
 
-          if (year === 2025 && monthNumber === 12) {
-            return;
-          }
-          if (year > 2025 || (year === 2025 && monthNumber > 12)) {
-            Alert.alert(
-              "Date Out of Range",
-              "You cannot Book past December 2025"
-            );
-          }
+          // Prevent navigation to years before 2025 or beyond December 2025
+        if (year < 2025 || (year === 2025 && monthNumber < 1)) {
+          Alert.alert("Date Out of Range", "You cannot navigate to the year 2024.");
+          return;
+        }
+
+        if (year === 2025 && monthNumber === 12) {
+          return;
+        }
+        if (year > 2025 || (year === 2025 && monthNumber > 12)) {
+          Alert.alert(
+            "Date Out of Range",
+            "You cannot book past December 2025."
+          );
+        }
         }}
         dayComponent={({ date, state }) => {
           const dateKey = date.dateString;
