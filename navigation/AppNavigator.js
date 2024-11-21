@@ -11,6 +11,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import MembersScreen from "../screens/MembersScreen";
 import MembersDetailsScreen from "../screens/MembersDetailsScreen";
 import EditBookingScreen from "../screens/EditBookingScreen";
+import ContactScreen from "../screens/ContactScreen";
 import { View, ActivityIndicator } from "react-native";
 import Toast from "react-native-toast-message";
 
@@ -131,6 +132,12 @@ const AppNavigator = () => {
           >
             {(props) => <HomeScreen {...props} onLogout={handleLogout} />} 
           </Stack.Screen>
+          <Stack.Screen
+            name="Contact"
+          >
+            {(props) => <HomeScreen {...props} onLogout={handleLogout} />} 
+          </Stack.Screen>
+
           <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       )}

@@ -6,6 +6,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 // import PdfScreen from "../screens/PdfScreen"; // New PDF screen
 import { Ionicons } from "@expo/vector-icons";
 import BookingsScreen from "./BookingsScreen";
+import ContactScreen from "./ContactScreen";
 
 
 const Tab = createBottomTabNavigator();
@@ -30,6 +31,8 @@ const UserDashboard = ({ bookings, handleLogout }) => {
             iconName = "person";
           }else if (route.name === "All Bookings") {
             iconName = "folder";
+          }else if (route.name === "Contact") {
+            iconName = "call";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -50,6 +53,9 @@ const UserDashboard = ({ bookings, handleLogout }) => {
       <Tab.Screen name="All Bookings" component={BookingsScreen} />
       <Tab.Screen name="Profile">
         {(props) => <ProfileScreen {...props} onLogout={handleLogout} />}
+      </Tab.Screen>
+      <Tab.Screen name="Contact">
+        {(props) => <ContactScreen {...props} onLogout={handleLogout} />}
       </Tab.Screen>
     </Tab.Navigator>
   );
