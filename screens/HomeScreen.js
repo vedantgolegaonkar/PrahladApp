@@ -103,10 +103,7 @@ const HomeScreen = ({ navigation, onLogout }) => {
       >
         <Text style={styles.buttonText}>Upasana booking</Text>
       </TouchableOpacity>
-       {/* Footer with "Developed by Innervation IT Solutions" */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>@Innervation IT Solutions</Text>
-      </View>
+       
     </View>
   );
 };
@@ -165,16 +162,7 @@ const styles = StyleSheet.create({
     top: 15,
     right: 15,
     shadowOpacity: 1,
-  },
-  footer: {
-    position: "absolute",
-    bottom: 5, // Adjust distance from the bottom
-    right: 10, // Adjust distance from the right
-  },
-  footerText: {
-    fontSize: 12,
-    color: "grey",
-  },
+  }
   
 });
 

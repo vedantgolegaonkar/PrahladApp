@@ -6,10 +6,13 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
+  TextInput, // Added for search functionality
 } from "react-native";
 
 const MembersScreen = ({ navigation }) => {
   const [members, setMembers] = useState([]);
+  const [filteredMembers, setFilteredMembers] = useState([]); // Added state for filtered members
+  const [searchQuery, setSearchQuery] = useState(""); // Added state for search query
   const [loading, setLoading] = useState(true);
 
   const fetchMembers = async () => {
@@ -17,7 +20,8 @@ const MembersScreen = ({ navigation }) => {
       setLoading(true); // Show loading indicator during data fetch
       const response = await fetch("https://upasana-app-gdm2p.ondigitalocean.app/users");
       const data = await response.json();
-      setMembers(data);
+      setMembers(data); // Set original members data
+      setFilteredMembers(data); // Initialize filtered members with full list
     } catch (error) {
       console.error("Failed to fetch members:", error);
     } finally {
@@ -30,6 +34,19 @@ const MembersScreen = ({ navigation }) => {
 
     return unsubscribe; // Clean up the listener on unmount
   }, [navigation]);
+
+  // Filter members whenever the search query changes
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredMembers(members); // Reset to all members if the query is empty
+    } else {
+      const lowercasedQuery = searchQuery.toLowerCase();
+      const filtered = members.filter((item) =>
+        `${item.first_name} ${item.last_name}`.toLowerCase().includes(lowercasedQuery)
+      );
+      setFilteredMembers(filtered);
+    }
+  }, [searchQuery, members]); // Dependencies: searchQuery and members
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -55,11 +72,19 @@ const MembersScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {members.length === 0 ? (
-        <Text style={styles.noMembersText}>Awaiting for new members to join!</Text>
+      {/* Search Bar */}
+      <TextInput
+        style={styles.searchInput} // Added style for search bar
+        placeholder="Search by member name..."
+        value={searchQuery} // Controlled input
+        onChangeText={(text) => setSearchQuery(text)} // Update search query state
+      />
+
+      {filteredMembers.length === 0 ? (
+        <Text style={styles.noMembersText}>No matching members found!</Text>
       ) : (
         <FlatList
-          data={members}
+          data={filteredMembers} // Use filtered members here
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderItem}
           contentContainerStyle={styles.listContainer}
@@ -74,6 +99,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: "#f4f4f4",
+  },
+  searchInput: { // Added styles for search input
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 10,
+    paddingHorizontal: 10,
   },
   listContainer: {
     paddingBottom: 16,

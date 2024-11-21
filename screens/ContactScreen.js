@@ -25,12 +25,12 @@ const ContactScreen = ({ navigation, onLogout }) => {
 
   return (
     <View style={styles.container}>
+      
+      <Text style={styles.title}>Contact Us</Text>
       {/* Logout Button */}
       <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
         <Ionicons name="log-out-outline" size={30} color="#ff4500" />
       </TouchableOpacity>
-
-      <Text style={styles.title}>Contact Us</Text>
 
       {/* Contact Information */}
       <View style={styles.contactContainer}>
@@ -76,10 +76,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
   },
   title: {
-    fontSize: 28,
-    textAlign: "center",
-    marginBottom: 30, // Reduced space below the title
+    fontSize: 24,
     fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
     color: "#ff4500",
   },
   contactContainer: {

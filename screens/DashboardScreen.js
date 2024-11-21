@@ -20,7 +20,7 @@ const DashboardScreen = ({ navigation, onLogout }) => {
         "https://upasana-app-gdm2p.ondigitalocean.app/upasanaUsersSummary"
       );
       const data = await response.json();
-      console.log("####Summary Details ", JSON.stringify(data));
+      //console.log("####Summary Details ", JSON.stringify(data));
       setUsersSummary(data); // Assuming data includes the necessary fields
     } catch (error) {
       console.error("Failed to fetch upasana Users Summary:", error);

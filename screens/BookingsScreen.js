@@ -160,14 +160,23 @@ const BookingsScreen = () => {
                       >
                         <Text style={styles.editButtonText}>Edit</Text>
                       </TouchableOpacity>
-                     {/* Below Text is for an empty space between button and first line */}
+                      {/* Below Text is for an empty space between button and first line */}
                       <Text style={styles.fieldName}></Text>
                       {Object.keys(booking).map((field, index) => (
                         <View key={index} style={styles.fieldRow}>
                           <Text style={styles.fieldName}>
                             {formatFieldName(field)}:
                           </Text>
-                          <Text style={styles.fieldValue}>
+                          <Text
+                            style={[
+                              styles.fieldValue,
+                              field === "is_active" && booking[field] === false
+                                ? styles.inactiveField
+                                : field === "is_active" && booking[field] === true
+                                ? styles.activeField
+                                : null,
+                            ]}
+                          >
                             {String(booking[field])}
                           </Text>
                         </View>
@@ -177,6 +186,7 @@ const BookingsScreen = () => {
                   showsHorizontalScrollIndicator={false}
                 />
               </View>
+
 
               <View style={styles.bookingDetails}>
                 <Text style={styles.bookingLabel}>Mobile Number:</Text>
@@ -241,6 +251,14 @@ const styles = StyleSheet.create({
   fieldRow: { flexDirection: "row", marginBottom: 5 },
   fieldName: { fontWeight: "bold", color: "#333", marginRight: 5 },
   fieldValue: { color: "#555" },
+  inactiveField: {
+    fontWeight: "bold",
+    color: "red",
+  },
+  activeField: {
+    fontWeight: "bold",
+    color: "green",
+  },
 });
 
 export default BookingsScreen;
