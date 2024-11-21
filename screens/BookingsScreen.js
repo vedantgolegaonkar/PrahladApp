@@ -146,7 +146,7 @@ const BookingsScreen = () => {
                   renderItem={({ item: booking }) => (
                     <View style={styles.bookingCard}>
                       {/* Edit Button */}
-                      <Text style={styles.fieldName}>ssss {isAdmin ? "Yes" : "No"}</Text>
+                      <Text style={styles.fieldName}></Text>
 
                       <TouchableOpacity
                         style={[
