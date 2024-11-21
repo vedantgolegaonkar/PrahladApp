@@ -162,7 +162,7 @@ const BookingsScreen = () => {
                       </TouchableOpacity>
                       {/* Below Text is for an empty space between button and first line */}
                       <Text style={styles.fieldName}></Text>
-                      {["id", "booking_date", "is_active", "mahaprasad"].map((field, index) => (
+                      {["booking_id", "booking_date", "is_active", "mahaprasad"].map((field, index) => (
                           <View key={index} style={styles.fieldRow}>
                             <Text style={styles.fieldName}>
                               {formatFieldName(field)}:
