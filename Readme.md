@@ -89,9 +89,11 @@ npx expo-doctor
 npx expo-doctor --fix-dependencies
 npx expo install --check
 ## After every build make sure to run the check so that build is always successfull
+
+## Always Execute Below Steps Befor Build
 ## npm install -g npm-check
 npm-check
-
+npx expo-doctor
 ## generate APK 
 eas build --profile prod --platform android
 eas build --profile prod --platform ios
