@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { json } from "react-router-dom";
 
 const BookingsScreen = () => {
   const [bookings, setBookings] = useState([]);
@@ -44,36 +45,50 @@ const BookingsScreen = () => {
 
   const fetchBookings = async () => {
     try {
+      setLoading(true); // Set loading state at the start
+  
+      // Fetch logged-in user ID
+      const loggedInUserId = await getData("userId");
+  
+      // Fetch user details
+      const userResponse = await fetch(
+        `https://upasana-app-gdm2p.ondigitalocean.app/users/${loggedInUserId}`
+      );
+  
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+        const isadmin = userData.isadmin;
+        console.log("******",JSON.stringify(userData))
+        // Check if user is an admin and set the state
+        if (isadmin !== undefined) {
+          setIsAdmin(isadmin);
+        } 
+      } else {
+        console.error("Failed to fetch user data.");
+        setLoading(false);
+        return; // Exit function early if user data fetch fails
+      }
+  
+      // Fetch bookings for the user
       const response = await fetch(
         "https://upasana-app-gdm2p.ondigitalocean.app/bookings/users"
       );
-
+  
       if (response.ok) {
-        const data = await response.json();
-        setBookings(data.users); // Set original bookings
-        setFilteredBookings(data.users); // Set filtered bookings initially
-
-        const loggedInUserId = await getData("userId");
-        const loggedInUser = data.users.find(
-          (user) => user.id.toString() === loggedInUserId
-        );
-
-        if (loggedInUser) {
-          setIsAdmin(loggedInUser.isadmin);
-        } else {
-          console.error("Logged-in user not found in the fetched data.");
-        }
+        const bookingsData = await response.json();
+        setBookings(bookingsData.users); // Set original bookings
+        setFilteredBookings(bookingsData.users); // Set filtered bookings initially
       } else {
         Alert.alert("No bookings to display");
-        setLoading(false);
       }
     } catch (error) {
       Alert.alert("Error", "An error occurred while fetching bookings");
       console.error("Error fetching bookings:", error);
     } finally {
-      setLoading(false);
+      setLoading(false); // Ensure loading state is turned off after all async actions
     }
   };
+  
 
   useEffect(() => {
     fetchBookings();
@@ -167,9 +182,7 @@ const BookingsScreen = () => {
                       <Text style={styles.fieldName}></Text>
                       {["booking_id", "booking_date", "is_active", "mahaprasad"].map((field, index) => (
                           <View key={index} style={styles.fieldRow}>
-                            <Text style={styles.fieldName}>
-                              {formatFieldName(field)}:
-                            </Text>
+                            <Text style={styles.fieldName}>{formatFieldName(field)}:</Text>
                             <Text
                               style={[
                                 styles.fieldValue,
@@ -180,7 +193,15 @@ const BookingsScreen = () => {
                                   : null,
                               ]}
                             >
-                              {field === "is_active" ? (booking[field] ? "Booked" : "Cancelled") : String(booking[field])}
+                              {field === "is_active"
+                                  ? booking[field]
+                                    ? "Booked"
+                                    : "Cancelled"
+                                  : field === "mahaprasad"
+                                  ? booking[field]
+                                    ? "Yes"
+                                    : "No"
+                                  : String(booking[field])}
                             </Text>
                           </View>
                         ))}
