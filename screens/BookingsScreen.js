@@ -162,25 +162,25 @@ const BookingsScreen = () => {
                       </TouchableOpacity>
                       {/* Below Text is for an empty space between button and first line */}
                       <Text style={styles.fieldName}></Text>
-                      {Object.keys(booking).map((field, index) => (
-                        <View key={index} style={styles.fieldRow}>
-                          <Text style={styles.fieldName}>
-                            {formatFieldName(field)}:
-                          </Text>
-                          <Text
-                            style={[
-                              styles.fieldValue,
-                              field === "is_active" && booking[field] === false
-                                ? styles.inactiveField
-                                : field === "is_active" && booking[field] === true
-                                ? styles.activeField
-                                : null,
-                            ]}
-                          >
-                            {String(booking[field])}
-                          </Text>
-                        </View>
-                      ))}
+                      {["id", "booking_date", "is_active", "mahaprasad"].map((field, index) => (
+                          <View key={index} style={styles.fieldRow}>
+                            <Text style={styles.fieldName}>
+                              {formatFieldName(field)}:
+                            </Text>
+                            <Text
+                              style={[
+                                styles.fieldValue,
+                                field === "is_active" && booking[field] === false
+                                  ? styles.inactiveField
+                                  : field === "is_active" && booking[field] === true
+                                  ? styles.activeField
+                                  : null,
+                              ]}
+                            >
+                              {String(booking[field])}
+                            </Text>
+                          </View>
+                        ))}
                     </View>
                   )}
                   showsHorizontalScrollIndicator={false}
