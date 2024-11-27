@@ -64,10 +64,10 @@ const DashboardScreen = ({ navigation, onLogout }) => {
       ) : (
         // Display the card with summary data
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Upasana booking and user summary</Text>
-          <Text style={styles.cardText}>Total Users: {usersSummary.total_users || 0}</Text>
-          <Text style={styles.cardText}>Total Bookings: {usersSummary.total_bookings || 0}</Text>
-          <Text style={styles.cardText}>Total Booking Users: {usersSummary.total_booking_users || 0}</Text>
+          <Text style={styles.cardTitle}>Summary Panel</Text>
+          <Text style={[styles.cardText, styles.leftAlign]}>Total Anugrahit Users: {usersSummary.total_anugrahit_users || 0}</Text>
+          <Text style={[styles.cardText, styles.leftAlign]}>{`Total Bookings            :`.padEnd(28, ' ')}{usersSummary.total_bookings || 0}</Text>
+          <Text style={[styles.cardText, styles.leftAlign]}>{'Total Users                  :' .padEnd(31, ' ')}{usersSummary.total_users || 0}</Text>
         </View>
       )}
 
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   cardTitle: {
-    fontSize: 20,
+    fontSize: 21,
     fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",
@@ -120,6 +120,10 @@ const styles = StyleSheet.create({
     top: 15,
     right: 15,
     shadowOpacity: 1,
+  },
+  leftAlign: {
+    textAlign: 'left', // Ensures text alignment to the left
+    alignSelf: 'stretch', // Makes the Text stretch to the parent width
   },
 });
 

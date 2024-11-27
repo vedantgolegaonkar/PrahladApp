@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { json } from "react-router-dom";
+
 
 const BookingsScreen = () => {
   const [bookings, setBookings] = useState([]);
@@ -43,30 +43,39 @@ const BookingsScreen = () => {
       .replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
+  const adminCredentials = {
+    mobileNumber: "1234567890",
+    password: "ShriRam@13",
+  };
+
   const fetchBookings = async () => {
     try {
-      setLoading(true); // Set loading state at the start
-  
-      // Fetch logged-in user ID
-      const loggedInUserId = await getData("userId");
-  
-      // Fetch user details
-      const userResponse = await fetch(
-        `https://upasana-app-gdm2p.ondigitalocean.app/users/${loggedInUserId}`
-      );
-  
-      if (userResponse.ok) {
-        const userData = await userResponse.json();
-        const isadmin = userData.isadmin;
-        console.log("******",JSON.stringify(userData))
-        // Check if user is an admin and set the state
-        if (isadmin !== undefined) {
-          setIsAdmin(isadmin);
-        } 
-      } else {
-        console.error("Failed to fetch user data.");
-        setLoading(false);
-        return; // Exit function early if user data fetch fails
+     // setLoading(true); // Set loading state at the start
+        // Fetch logged-in user ID
+        const loggedInUserId = await getData("userId");
+
+        if (loggedInUserId === adminCredentials.mobileNumber ) {
+          setIsAdmin(true);
+        }else{ 
+          
+            // Fetch user details
+            const userResponse = await fetch(
+              `https://upasana-app-gdm2p.ondigitalocean.app/users/${loggedInUserId}`
+            );
+
+            if (userResponse.ok) {
+              const userData = await userResponse.json();
+              const isadmin = userData.isadmin;
+              console.log("******",JSON.stringify(userData))
+              // Check if user is an admin and set the state
+              if (isadmin !== undefined) {
+                setIsAdmin(isadmin);
+              } 
+            } else {
+              console.error("Failed to fetch user data.");
+              setLoading(false);
+              //We will still go ahead to make sure we function on admin screen
+            }
       }
   
       // Fetch bookings for the user
@@ -270,6 +279,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#007bff",
     padding: 5,
     borderRadius: 4,
+    width:50,
   },
   editButtonText: { color: "#fff", fontSize: 12, fontWeight: "bold" },
   fieldRow: { flexDirection: "row", marginBottom: 5 },

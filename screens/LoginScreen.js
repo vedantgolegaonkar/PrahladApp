@@ -28,6 +28,17 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
   };
   const apiUrl = envConfig.apiUrl;
 
+  const storeData = async (key, value) => {
+    try {
+      console.log("valueeee",value)
+      console.log("value.toString()",value.toString())
+
+      await AsyncStorage.setItem(key, value.toString());
+    } catch (e) {
+      console.error('Failed to save data to AsyncStorage:', e);
+    }
+  };
+
   const handleLogin = async () => {
     if (!mobileNumber.trim()) {
       Alert.alert("Error", "Mobile Number is Required");
@@ -42,6 +53,7 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
       mobileNumber === adminCredentials.mobileNumber &&
       password === adminCredentials.password
     ) {
+     await storeData("userId",adminCredentials.mobileNumber)
       onAdminLogin();
       return;
     }
@@ -70,16 +82,7 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
       const data = await response.json();
       const userId = data?.user_id  // Store user ID from response
       console.log('dataffff',data)
-      const storeData = async (key, value) => {
-        try {
-          console.log("valueeee",value)
-          console.log("value.toString()",value.toString())
-
-          await AsyncStorage.setItem(key, value.toString());
-        } catch (e) {
-          console.error('Failed to save data to AsyncStorage:', e);
-        }
-      };
+      
       await storeData("userId",userId)
       
       Toast.show({
@@ -107,11 +110,13 @@ const LoginScreen = ({ navigation, onLogin, onAdminLogin }) => {
         placeholder="Mobile Number"
         value={mobileNumber}
         onChangeText={setMobileNumber}
+        maxLength={10}
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
         value={password}
+        maxLength={10}
         onChangeText={setPassword}
         secureTextEntry
       />

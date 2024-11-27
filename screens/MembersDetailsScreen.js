@@ -82,7 +82,7 @@ const MembersDetailsScreen = ({ route, navigation }) => {
                   <TextInput
                     style={styles.input}
                     value={editableMember.last_name}
-                    onChangeText={(value) => handleChange("filast_namerst_name", value)}
+                    onChangeText={(value) => handleChange("last_name", value)}
                   />
               </View>
               {/* Editable Address Fields */}
@@ -151,15 +151,6 @@ const MembersDetailsScreen = ({ route, navigation }) => {
                 />
               </View>
 
-              <View style={styles.detailRow}>
-                <Text style={styles.label}>Pincode:</Text>
-                <TextInput
-                  style={styles.input}
-                  value={editableMember.pincode}
-                  onChangeText={(value) => handleChange("pincode", value)}
-                />
-              </View>
-
               {/* Other editable fields */}
               <View style={styles.detailRow}>
                 <Text style={styles.label}>Gender:</Text>
@@ -196,6 +187,7 @@ const MembersDetailsScreen = ({ route, navigation }) => {
                   style={styles.input}
                   value={editableMember.mobile_number}
                   onChangeText={(value) => handleChange("mobile_number", value)}
+                  maxLength={10}
                 />
               </View>
 
@@ -248,11 +240,6 @@ const MembersDetailsScreen = ({ route, navigation }) => {
               <View style={styles.detailRow}>
                 <Text style={styles.label}>State:</Text>
                 <Text style={styles.value}>{editableMember.state}</Text>
-              </View>
-
-              <View style={styles.detailRow}>
-                <Text style={styles.label}>Pincode:</Text>
-                <Text style={styles.value}>{editableMember.pincode}</Text>
               </View>
 
               {/* Non-editable fields */}
