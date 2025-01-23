@@ -14,7 +14,7 @@
     },
     "prod": {
       "android": {
-        "buildType": "apk"
+        "buildType": "app-bundle"
       },
       "env": {
         "APP_ENV": "prod"
