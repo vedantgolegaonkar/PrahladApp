@@ -104,6 +104,14 @@ const HomeScreen = ({ navigation, onLogout }) => {
         <Text style={styles.buttonText}>Upasana booking</Text>
       </TouchableOpacity>
        
+             {/* जन्मोत्सव 2025 Button */}
+      <TouchableOpacity
+        style={styles.janmotsavButton}
+        onPress={() => navigation.navigate("Janmotsav_2025")}
+      >
+        <Text style={styles.buttonText}>जन्मोत्सव 2025</Text>
+      </TouchableOpacity>
+
     </View>
   );
 };
@@ -144,6 +152,14 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 45,
     backgroundColor: "#ff4500",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+  },
+  janmotsavButton: {
+    width: "100%",
+    height: 45,
+    backgroundColor: "#008080",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 5,
