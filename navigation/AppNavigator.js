@@ -12,6 +12,7 @@ import MembersScreen from "../screens/MembersScreen";
 import MembersDetailsScreen from "../screens/MembersDetailsScreen";
 import EditBookingScreen from "../screens/EditBookingScreen";
 import ContactScreen from "../screens/ContactScreen";
+import JanmotsavDetails from "../screens/JanmotsavDetails";
 import { View, ActivityIndicator } from "react-native";
 import Toast from "react-native-toast-message";
 
@@ -107,6 +108,7 @@ const AppNavigator = () => {
           <Stack.Screen name="Members" component={MembersScreen} />
           <Stack.Screen name="MembersDetailsScreen" component={MembersDetailsScreen} />
           <Stack.Screen name="EditBooking" component={EditBookingScreen} />
+          <Stack.Screen name="Janmotsav" component={JanmotsavDetails} />
         </Stack.Navigator>
       ) : (
         <Stack.Navigator>
