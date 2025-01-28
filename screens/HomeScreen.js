@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from "react";
 import { View, Text, StyleSheet, Alert, TouchableOpacity, Animated } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -107,9 +108,9 @@ const HomeScreen = ({ navigation, onLogout }) => {
              {/* जन्मोत्सव 2025 Button */}
       <TouchableOpacity
         style={styles.janmotsavButton}
-        onPress={() => navigation.navigate("Janmotsav_2025")}
+        onPress={() => navigation.navigate("Janmotsav")}
       >
-        <Text style={styles.buttonText}>जन्मोत्सव 2025</Text>
+        <Text style={styles.buttonText}>Janmotsav 2025</Text>
       </TouchableOpacity>
 
     </View>

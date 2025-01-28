@@ -12,6 +12,8 @@ import MembersScreen from "../screens/MembersScreen";
 import MembersDetailsScreen from "../screens/MembersDetailsScreen";
 import EditBookingScreen from "../screens/EditBookingScreen";
 import ContactScreen from "../screens/ContactScreen";
+import JanmotsavDetails from "../screens/JanmotsavDetails";
+import AttendanceScreen from "../screens/AttendanceScreen";
 import { View, ActivityIndicator } from "react-native";
 import Toast from "react-native-toast-message";
 
@@ -90,6 +92,8 @@ const AppNavigator = () => {
           <Stack.Screen name="EditBooking" component={EditBookingScreen} />
           <Stack.Screen name="Members" component={MembersScreen} />
           <Stack.Screen name="MembersDetailsScreen" component={MembersDetailsScreen} />
+          <Stack.Screen name="Janmotsav" component={JanmotsavDetails} />
+        <Stack.Screen name="AttendanceScreen" component={AttendanceScreen} />
         </Stack.Navigator>
       ) : isAdminLoggedIn ? (
         <Stack.Navigator>
@@ -140,6 +144,7 @@ const AppNavigator = () => {
 
           <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
+        
       )}
       <Toast />
     </NavigationContainer>
