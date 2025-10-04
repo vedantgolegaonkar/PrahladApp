@@ -74,9 +74,9 @@ const SlotBookingScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Book Your Upasana Slot</Text>
       <Calendar
-        minDate={"2025-01-01"}
-        maxDate={"2025-12-31"}
-        current={"2025-01-01"}
+        minDate={"2026-01-01"}
+        maxDate={"2026-12-31"}
+        current={"2026-01-01"}
         onDayPress={handleDayPress}
         theme={{
           calendarBackground: "#f8f8ff",
@@ -101,13 +101,13 @@ const SlotBookingScreen = ({ navigation }) => {
           const year = parseInt(month.year);
           const monthNumber = parseInt(month.month);
 
-          if (year === 2025 && monthNumber === 12) {
+          if (year === 2026 && monthNumber === 12) {
             return;
           }
-          if (year > 2025 || (year === 2025 && monthNumber > 12)) {
+          if (year > 2026 || (year === 2026 && monthNumber > 12)) {
             Alert.alert(
               "Date Out of Range",
-              "You cannot Book past December 2025"
+              "You cannot Book past December 2026"
             );
           }
         }}
